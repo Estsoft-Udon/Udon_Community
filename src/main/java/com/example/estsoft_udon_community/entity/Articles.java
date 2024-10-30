@@ -1,5 +1,6 @@
 package com.example.estsoft_udon_community.entity;
 
+import com.example.estsoft_udon_community.enums.ArticleCategory;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

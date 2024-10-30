@@ -1,5 +1,7 @@
 package com.example.estsoft_udon_community.entity;
 
+import com.example.estsoft_udon_community.enums.Grade;
+import com.example.estsoft_udon_community.enums.PasswordHint;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -68,21 +70,16 @@ public class Users {
     private Boolean isDeleted = Boolean.FALSE;
 
     // 연관관계 추가
-    // Articles
-    // Articles_like
-    // comments_like
-
-    // 연관관계 추가
     @OneToMany(mappedBy = "users")  // Articles와의 1:N 관계
     private List<Articles> articles;
 
-//    @OneToMany(mappedBy = "user")  // Comments와의 1:N 관계
-//    private List<Comment> comments;
+    @OneToMany(mappedBy = "users")  // Comments와의 1:N 관계
+    private List<Comments> comments;
 
     @OneToMany(mappedBy = "users")  // Articles_like와의 1:N 관계
     private List<ArticlesLike> articleLikes;
 
-//    @OneToMany(mappedBy = "user")  // Comments_like와의 1:N 관계
-//    private List<CommentLike> commentLikes;
-//
+    @OneToMany(mappedBy = "user")  // Comments_like와의 1:N 관계
+    private List<CommentsLike> commentLikes;
+
 }
