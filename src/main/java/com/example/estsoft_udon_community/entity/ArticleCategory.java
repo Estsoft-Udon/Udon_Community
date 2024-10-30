@@ -1,4 +1,4 @@
-package com.example.estsoft_udon_community.Entity;
+package com.example.estsoft_udon_community.entity;
 
 public enum ArticleCategory {
     RESTAURANT,
