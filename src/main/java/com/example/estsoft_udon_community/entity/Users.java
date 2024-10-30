@@ -8,7 +8,9 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -69,4 +71,18 @@ public class Users {
     // Articles
     // Articles_like
     // comments_like
+
+    // 연관관계 추가
+    @OneToMany(mappedBy = "users")  // Articles와의 1:N 관계
+    private List<Articles> articles;
+
+//    @OneToMany(mappedBy = "user")  // Comments와의 1:N 관계
+//    private List<Comment> comments;
+
+    @OneToMany(mappedBy = "users")  // Articles_like와의 1:N 관계
+    private List<ArticlesLike> articleLikes;
+
+//    @OneToMany(mappedBy = "user")  // Comments_like와의 1:N 관계
+//    private List<CommentLike> commentLikes;
+//
 }
