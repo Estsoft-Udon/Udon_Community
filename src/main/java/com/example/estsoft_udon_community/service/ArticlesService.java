@@ -48,4 +48,10 @@ public class ArticlesService {
     public void deleteArticle(Long id) {
         articlesRepository.deleteById(id);
     }
+
+    public List<ArticleResponse> findByLocationId(Long locationId) {
+        return articlesRepository.findByLocationId(locationId).stream()
+                .map(ArticleResponse::new)
+                .toList();
+    }
 }
