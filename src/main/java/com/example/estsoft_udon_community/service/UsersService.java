@@ -2,7 +2,10 @@ package com.example.estsoft_udon_community.service;
 
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.entity.request.UsersRequest;
+import com.example.estsoft_udon_community.enums.PasswordHint;
 import com.example.estsoft_udon_community.repository.UsersRepository;
+import java.time.LocalDateTime;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,11 @@ public class UsersService {
     // 로그인 ->
     public Users loginUser(String loginId, String password) {
         Users users = usersRepository.findByLoginId(loginId);
+        // 로그인 시간 추가
+
+        users.updateLastLoginAt();
+        usersRepository.save(users);
+
         if (!password.equals(users.getPassword())) {
             throw new IllegalArgumentException("Wrong password");
         }
@@ -27,6 +35,7 @@ public class UsersService {
 
     // 유저 정보 조회
     public Users findUserById(Long id) {
+        Users users = usersRepository.findById(id).orElseThrow();
         return usersRepository.findById(id).orElse(null);
     }
 
@@ -49,7 +58,7 @@ public class UsersService {
     }
 
     // 비밀번호 찾기
-    public Users searchPassword(String loginId, String passwordHint, String passwordAnswer) {
+    public Users searchPassword(String loginId, PasswordHint passwordHint, String passwordAnswer) {
         return usersRepository.findByLoginIdAndPasswordHintAndPasswordAnswer(loginId, passwordHint, passwordAnswer);
 
     }

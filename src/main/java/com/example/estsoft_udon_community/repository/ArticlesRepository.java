@@ -9,5 +9,7 @@ import java.util.List;
 @Repository
 public interface ArticlesRepository extends JpaRepository<Articles, Long> {
     List<Articles> findByLocationId(Long locationId);
-    List<Articles> findByLikesDesc();
+
+
+    // articles - articles_like - like~
 }

@@ -69,9 +69,9 @@ public class ArticlesController {
         return ResponseEntity.ok(locationByIdArticle);
     }
 
-    @GetMapping("/articles/likes")
-    public ResponseEntity<List<ArticleResponse>> findAllByLikes() {
-        List<ArticleResponse> articlesByLikes = articlesService.findAllByLikes();
-        return ResponseEntity.ok(articlesByLikes);
-    }
+//    @GetMapping("/articles/likes")
+//    public ResponseEntity<List<ArticleResponse>> findAllByLikes() {
+//        List<ArticleResponse> articlesByLikes = articlesService.findAllByLikes();
+//        return ResponseEntity.ok(articlesByLikes);
+//    }
 }
