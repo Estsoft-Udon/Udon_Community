@@ -2,9 +2,9 @@ package com.example.estsoft_udon_community.service;
 
 import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Users;
-import com.example.estsoft_udon_community.entity.dto.AddArticleRequest;
-import com.example.estsoft_udon_community.entity.dto.ArticleResponse;
-import com.example.estsoft_udon_community.entity.dto.UpdateArticleRequest;
+import com.example.estsoft_udon_community.entity.request.AddArticleRequest;
+import com.example.estsoft_udon_community.entity.response.ArticleResponse;
+import com.example.estsoft_udon_community.entity.request.UpdateArticleRequest;
 import com.example.estsoft_udon_community.repository.ArticlesRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,7 +1,7 @@
 package com.example.estsoft_udon_community.controller;
 
 import com.example.estsoft_udon_community.entity.Users;
-import com.example.estsoft_udon_community.entity.dto.UsersRequest;
+import com.example.estsoft_udon_community.entity.request.UsersRequest;
 import com.example.estsoft_udon_community.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +35,7 @@ public class UsersController {
         return ResponseEntity.ok(users);
     }
 
-    // 유저정보조회
+    // 유저 정보 조회
     @GetMapping("/users/{userId}")
     public ResponseEntity<Users> findUserById(@PathVariable Long userId) {
         return ResponseEntity.ok(usersService.findUserById(userId));

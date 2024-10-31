@@ -19,13 +19,6 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http.authorizeRequests()
-//                .authorizeRequests()
-//                .requestMatchers("/api/register", "/api/login").permitAll() // Allow access to register and login endpoints
-//                .anyRequest().authenticated() // Secure all other endpoints
-//                .and()
-//                .csrf().disable(); // Disable CSRF for testing (remove this in production)
-
         return http.authorizeHttpRequests(
                         custom -> custom.requestMatchers("/api/**").permitAll()
                                 .anyRequest().permitAll()

@@ -6,6 +6,7 @@ import com.example.estsoft_udon_community.entity.CommentsLike;
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.repository.CommentsLikeRepository;
 import com.example.estsoft_udon_community.repository.CommentsRepository;
+import com.example.estsoft_udon_community.repository.UsersRepository;
 import org.springframework.stereotype.Service;
 
 @Service
