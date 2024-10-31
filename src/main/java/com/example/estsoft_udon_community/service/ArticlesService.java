@@ -44,4 +44,8 @@ public class ArticlesService {
         article.update(request.getTitle(), request.getContent(), request.getHashtags());
         return articlesRepository.save(article);
     }
+
+    public void deleteArticle(Long id) {
+        articlesRepository.deleteById(id);
+    }
 }
