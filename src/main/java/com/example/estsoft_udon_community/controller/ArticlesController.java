@@ -64,4 +64,10 @@ public class ArticlesController {
         List<ArticleResponse> locationByIdArticle = articlesService.findByLocationId(locationId);
         return ResponseEntity.ok(locationByIdArticle);
     }
+
+    @GetMapping("/articles/likes")
+    public ResponseEntity<List<ArticleResponse>> findAllByLikes() {
+        List<ArticleResponse> articlesByLikes = articlesService.findAllByLikes();
+        return ResponseEntity.ok(articlesByLikes);
+    }
 }

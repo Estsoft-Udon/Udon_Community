@@ -54,4 +54,10 @@ public class ArticlesService {
                 .map(ArticleResponse::new)
                 .toList();
     }
+
+    public List<ArticleResponse> findAllByLikes() {
+        return articlesRepository.findByLikesDesc().stream()
+                .map(ArticleResponse::new)
+                .toList();
+    }
 }
