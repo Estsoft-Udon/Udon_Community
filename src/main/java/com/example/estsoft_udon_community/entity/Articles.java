@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -29,6 +30,9 @@ public class Articles {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ArticleCategory category;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Hashtag> hashtagName;
 
     @Column(name = "view_count", nullable = false)
     private Long viewCount = 0L;
@@ -57,5 +61,13 @@ public class Articles {
     @PreUpdate
     public void preUpdate() {
         this.updatedAt = LocalDateTime.now();
+    }
+
+    public Articles (Users userId, String title, String content, ArticleCategory category, List<Hashtag> hashtagName) {
+        this.userId = userId;
+        this.title = title;
+        this.content = content;
+        this.category = category;
+        this.hashtagName = hashtagName;
     }
 }
