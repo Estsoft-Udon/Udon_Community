@@ -15,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommentsArticlesResponse {
+    private String userNickname;
     private String title;
     private String content;
     private LocalDateTime createdAt;
@@ -22,6 +23,7 @@ public class CommentsArticlesResponse {
     private List<CommentsResponse> comments = new ArrayList<>();
 
     public CommentsArticlesResponse(Articles articles, List<CommentsResponse> comments) {
+        this.userNickname = articles.getUserId().getNickname();
         this.title = articles.getTitle();
         this.content = articles.getContent();
         this.createdAt = articles.getCreatedAt();

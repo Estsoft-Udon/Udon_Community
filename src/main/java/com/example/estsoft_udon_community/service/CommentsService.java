@@ -38,7 +38,7 @@ public class CommentsService {
         articlesRepository.findById(articleId)
                 .orElseThrow(() -> new IllegalArgumentException("not found article id : " + articleId));
 
-        return commentsRepository.findByArticleId(articleId);
+        return commentsRepository.findByArticlesId(articleId);
     }
 
     // 댓글 수정
