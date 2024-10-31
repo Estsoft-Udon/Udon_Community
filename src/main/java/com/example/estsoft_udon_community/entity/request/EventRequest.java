@@ -1,7 +1,6 @@
-package com.example.estsoft_udon_community.entity.dto;
+package com.example.estsoft_udon_community.entity.request;
 
 import com.example.estsoft_udon_community.enums.EventType;
-import jakarta.persistence.Column;
 import lombok.Data;
 
 import java.time.LocalDateTime;

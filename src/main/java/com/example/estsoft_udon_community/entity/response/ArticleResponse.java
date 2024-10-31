@@ -1,7 +1,8 @@
-package com.example.estsoft_udon_community.entity.dto;
+package com.example.estsoft_udon_community.entity.response;
 
 import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Hashtag;
+import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.enums.ArticleCategory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,6 +27,7 @@ public class ArticleResponse {
     private LocalDateTime updatedAt;
 
     public ArticleResponse(Articles article) {
+        // pk primary Key
         this.id = article.getId();
         this.title = article.getTitle();
         this.content = article.getContent();
@@ -34,5 +36,9 @@ public class ArticleResponse {
         this.viewCount = article.getViewCount();
         this.createdAt = article.getCreatedAt();
         this.updatedAt = article.getUpdatedAt();
+    }
+
+    public Articles convertToArticles(Users users) {
+        return new Articles(users, title, content, category, hashtags);
     }
 }

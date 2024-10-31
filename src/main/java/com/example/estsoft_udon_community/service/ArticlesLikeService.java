@@ -2,6 +2,8 @@ package com.example.estsoft_udon_community.service;
 
 import com.example.estsoft_udon_community.entity.*;
 import com.example.estsoft_udon_community.repository.ArticlesLikeRepository;
+import com.example.estsoft_udon_community.repository.ArticlesRepository;
+import com.example.estsoft_udon_community.repository.UsersRepository;
 import org.springframework.stereotype.Service;
 
 @Service

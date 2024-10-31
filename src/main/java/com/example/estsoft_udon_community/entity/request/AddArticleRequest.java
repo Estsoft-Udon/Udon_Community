@@ -1,6 +1,5 @@
-package com.example.estsoft_udon_community.entity.dto;
+package com.example.estsoft_udon_community.entity.request;
 
-import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Hashtag;
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.enums.ArticleCategory;

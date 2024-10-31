@@ -1,8 +1,6 @@
-package com.example.estsoft_udon_community.entity.dto;
+package com.example.estsoft_udon_community.entity.response;
 
-import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Comments;
-import com.example.estsoft_udon_community.entity.Users;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

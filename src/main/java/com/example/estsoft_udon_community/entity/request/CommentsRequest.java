@@ -1,4 +1,4 @@
-package com.example.estsoft_udon_community.entity.dto;
+package com.example.estsoft_udon_community.entity.request;
 
 import com.example.estsoft_udon_community.entity.Comments;
 import lombok.AllArgsConstructor;
