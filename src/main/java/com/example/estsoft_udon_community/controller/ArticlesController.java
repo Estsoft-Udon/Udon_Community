@@ -58,4 +58,10 @@ public class ArticlesController {
         articlesService.deleteArticle(id);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/locations/{locationId}/articles")
+    public ResponseEntity<List<ArticleResponse>> findByLocationId(@PathVariable Long locationId) {
+        List<ArticleResponse> locationByIdArticle = articlesService.findByLocationId(locationId);
+        return ResponseEntity.ok(locationByIdArticle);
+    }
 }
