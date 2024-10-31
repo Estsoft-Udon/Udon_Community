@@ -38,4 +38,8 @@ public class Event {
     @ManyToOne
     @JoinColumn(name = "location_id")
     private Location location;
+
+    @ManyToOne // 작성자와의 관계 설정
+    @JoinColumn(name = "user_id")
+    private Users users; // 작성한 사용자 정보 추가
 }
