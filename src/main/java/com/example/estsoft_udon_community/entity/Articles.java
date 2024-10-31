@@ -21,6 +21,10 @@ public class Articles {
     @JoinColumn(name = "user_id", nullable = false)
     private Users userId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "location_id")
+    private Location location;
+
     @Column(nullable = false)
     private String title;
 
@@ -63,12 +67,13 @@ public class Articles {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public Articles (Users userId, String title, String content, ArticleCategory category, List<Hashtag> hashtags) {
+    public Articles (Users userId, String title, String content, ArticleCategory category, List<Hashtag> hashtags, Location location) {
         this.userId = userId;
         this.title = title;
         this.content = content;
         this.category = category;
         this.hashtags = hashtags;
+        this.location = location;
     }
 
     public void update(String title, String content, List<Hashtag> hashtags) {

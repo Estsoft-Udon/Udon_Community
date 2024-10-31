@@ -51,7 +51,7 @@ public class UsersController {
     @DeleteMapping("/users/{userId}")
     public ResponseEntity<Users> deleteUser(@PathVariable Long userId) {
         usersService.deleteUser(userId);
-        return ResponseEntity.ok(usersService.findUserById(userId));
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/searchId")
@@ -65,12 +65,12 @@ public class UsersController {
 
     @PostMapping("/searchPassword")
     public ResponseEntity<String> findUserByPassword(@RequestBody UsersRequest user) {
-        Users foundUser = usersService.searchPassword(user.getLoginId(), user.getPasswordHint().toString(),
+        Users foundUser = usersService.searchPassword(user.getLoginId(), user.getPasswordHint(),
                 user.getPasswordAnswer());
 
         // 예외 상황은 아직 생각 안함
 
-        return ResponseEntity.ok(foundUser.getLoginId());
+        return ResponseEntity.ok(foundUser.getPassword());
     }
 
 }
