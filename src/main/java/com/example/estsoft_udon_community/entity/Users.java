@@ -14,14 +14,28 @@ import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Data
 @Entity
+@NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Users {
+
+    public Users(String loginId, String password, String name, String nickname, String email, Grade grade,
+                 PasswordHint passwordHint, String passwordAnswer) {
+        this.loginId = loginId;
+        this.password = password;
+        this.name = name;
+        this.nickname = nickname;
+        this.email = email;
+        this.grade = grade;
+        this.passwordHint = passwordHint;
+        this.passwordAnswer = passwordAnswer;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
