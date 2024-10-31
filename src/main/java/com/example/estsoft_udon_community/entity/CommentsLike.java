@@ -31,4 +31,9 @@ public class CommentsLike {
         this.comments = comments;
         this.users = users;
     }
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+    }
 }
