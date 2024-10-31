@@ -1,4 +1,4 @@
-package com.example.estsoft_udon_community.entity;
+package com.example.estsoft_udon_community.enums;
 
 public enum PasswordHint {
     FAVORITE_COLOR("좋아하는 색상은?"),

@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Comments_like {
+public class CommentsLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,7 +27,7 @@ public class Comments_like {
     @JoinColumn(name = "user_id")
     private Users users;
 
-    public Comments_like(Comments comments, Users users) {
+    public CommentsLike(Comments comments, Users users) {
         this.comments = comments;
         this.users = users;
     }
