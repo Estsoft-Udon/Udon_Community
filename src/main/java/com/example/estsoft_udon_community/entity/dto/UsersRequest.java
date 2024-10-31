@@ -1,0 +1,28 @@
+package com.example.estsoft_udon_community.entity.dto;
+
+import com.example.estsoft_udon_community.entity.Users;
+import com.example.estsoft_udon_community.enums.Grade;
+import com.example.estsoft_udon_community.enums.PasswordHint;
+import lombok.Data;
+
+@Data
+public class UsersRequest {
+    private String name;
+
+    private String loginId;
+
+    private String password;
+
+    // 비밀번호 확인 입력 박스
+    private PasswordHint passwordHint;
+    // 비밀번호 찾기용 문답 입력박스
+    private String passwordAnswer;
+
+    private String nickname;
+
+    private String email;
+
+    public Users convert() {
+        return new Users(loginId, password, name, nickname, email, Grade.UDON, passwordHint, passwordAnswer);
+    }
+}
