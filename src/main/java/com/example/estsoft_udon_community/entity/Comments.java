@@ -19,11 +19,11 @@ public class Comments {
     @Column(nullable = false)
     private String content;
 
-    @CreatedDate
+    //@CreatedDate
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @LastModifiedDate
+    //@LastModifiedDate
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
@@ -41,8 +41,25 @@ public class Comments {
     @JoinColumn(name = "user_id")
     private Users users;
 
-    public Comments(Articles articles, Users users) {
+    public Comments(Articles articles, String content) {
         this.articles = articles;
-        this.users = users;
+        this.content = content;
+    }
+
+    public void updateCommentsContent(String content) {
+        if(!content.isBlank()) {
+            this.content = content;
+        }
+    }
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 }
