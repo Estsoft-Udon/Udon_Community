@@ -3,13 +3,18 @@ package com.example.estsoft_udon_community.controller;
 import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.entity.dto.AddArticleRequest;
+import com.example.estsoft_udon_community.entity.dto.ArticleResponse;
+import com.example.estsoft_udon_community.repository.ArticlesRepository;
 import com.example.estsoft_udon_community.service.ArticlesService;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -28,5 +33,18 @@ public class ArticlesController {
         Articles articles = articlesService.saveArticle(request, currentUser);
         return ResponseEntity.created(URI.create("/api/locations/" + locationId + "/articles/" + articles.getId()))
                 .body(articles);
+    }
+
+    @GetMapping("/articles")
+    public ResponseEntity<List<ArticleResponse>> findAll() {
+        List<ArticleResponse> articles = articlesService.findAll();
+        return ResponseEntity.ok(articles);
+    }
+
+    @GetMapping("/articles/{id}")
+    public ResponseEntity<ArticleResponse> findByArticleId(@PathVariable Long id) {
+        Optional<ArticleResponse> article = articlesService.findByArticleId(id);
+        return article.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }

@@ -3,8 +3,12 @@ package com.example.estsoft_udon_community.service;
 import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.entity.dto.AddArticleRequest;
+import com.example.estsoft_udon_community.entity.dto.ArticleResponse;
 import com.example.estsoft_udon_community.repository.ArticlesRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ArticlesService {
@@ -18,5 +22,16 @@ public class ArticlesService {
     public Articles saveArticle(AddArticleRequest request, Users currentUser) {
         Articles articles = new Articles(currentUser, request.getTitle(), request.getContent(), request.getCategory(), request.getHashtagName());
         return articlesRepository.save(articles);
+    }
+
+    public List<ArticleResponse> findAll() {
+        return articlesRepository.findAll().stream()
+                .map(ArticleResponse::new)
+                .toList();
+    }
+
+    public Optional<ArticleResponse> findByArticleId(Long id) {
+        return articlesRepository.findById(id)
+                .map(ArticleResponse::new);
     }
 }

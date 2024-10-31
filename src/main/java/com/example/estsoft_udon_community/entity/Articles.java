@@ -32,7 +32,7 @@ public class Articles {
     private ArticleCategory category;
 
     @OneToMany(fetch = FetchType.LAZY)
-    private List<Hashtag> hashtagName;
+    private List<Hashtag> hashtags;
 
     @Column(name = "view_count", nullable = false)
     private Long viewCount = 0L;
@@ -63,11 +63,11 @@ public class Articles {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public Articles (Users userId, String title, String content, ArticleCategory category, List<Hashtag> hashtagName) {
+    public Articles (Users userId, String title, String content, ArticleCategory category, List<Hashtag> hashtags) {
         this.userId = userId;
         this.title = title;
         this.content = content;
         this.category = category;
-        this.hashtagName = hashtagName;
+        this.hashtags = hashtags;
     }
 }
