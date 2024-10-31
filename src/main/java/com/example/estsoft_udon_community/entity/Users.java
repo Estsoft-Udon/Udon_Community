@@ -11,6 +11,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Data;
@@ -25,7 +27,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class Users {
 
-    public Users(String loginId, String password, String name, String nickname, String email, Grade grade,
+    public Users(String loginId, String password, String name, String nickname,
+                 String email, Grade grade,
                  PasswordHint passwordHint, String passwordAnswer) {
         this.loginId = loginId;
         this.password = password;
@@ -66,34 +69,29 @@ public class Users {
     @Column(name = "password_answer", nullable = false)
     private String passwordAnswer;
 
-    @CreatedDate
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    @Column(name = "last_login", nullable = false)
+    @Column(name = "last_login")
     private LocalDateTime lastLoginAt;
 
     @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted = Boolean.FALSE;
 
-    // 연관관계 추가
-    @OneToMany(mappedBy = "users")  // Articles와의 1:N 관계
-    private List<Articles> articles;
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
 
-    @OneToMany(mappedBy = "users")  // Comments와의 1:N 관계
-    private List<Comments> comments;
-
-    @OneToMany(mappedBy = "users")  // Articles_like와의 1:N 관계
-    private List<ArticlesLike> articleLikes;
-
-    @OneToMany(mappedBy = "user")  // Comments_like와의 1:N 관계
-    private List<CommentsLike> commentLikes;
-
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }
