@@ -25,4 +25,28 @@ public class UsersRequest {
     public Users convert() {
         return new Users(loginId, password, name, nickname, email, Grade.UDON, passwordHint, passwordAnswer);
     }
+    public Users updateEntity(Users user) {
+        if (loginId != null) {
+            user.setLoginId(loginId);
+        }
+        if (password != null) {
+            user.setPassword(password); // Consider encoding the password in UsersService
+        }
+        if (name != null) {
+            user.setName(name);
+        }
+        if (nickname != null) {
+            user.setNickname(nickname);
+        }
+        if (email != null) {
+            user.setEmail(email);
+        }
+        if (passwordHint != null) {
+            user.setPasswordHint(passwordHint);
+        }
+        if (passwordAnswer != null) {
+            user.setPasswordAnswer(passwordAnswer);
+        }
+        return user;
+    }
 }
