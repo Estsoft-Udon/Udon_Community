@@ -4,10 +4,9 @@ import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.entity.dto.AddArticleRequest;
 import com.example.estsoft_udon_community.entity.dto.ArticleResponse;
-import com.example.estsoft_udon_community.repository.ArticlesRepository;
+import com.example.estsoft_udon_community.entity.dto.UpdateArticleRequest;
 import com.example.estsoft_udon_community.service.ArticlesService;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -46,5 +45,11 @@ public class ArticlesController {
         Optional<ArticleResponse> article = articlesService.findByArticleId(id);
         return article.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/articles/{id}")
+    public ResponseEntity<Articles> updateArticle(@PathVariable Long id, @RequestBody UpdateArticleRequest request) {
+        Articles updateArticle = articlesService.updateArticle(id, request);
+        return ResponseEntity.ok(updateArticle);
     }
 }
