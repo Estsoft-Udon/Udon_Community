@@ -26,4 +26,14 @@ public class ArticlesLike {
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreatedDate
     private LocalDateTime createdAt;
+
+    public ArticlesLike(Articles article, Users user) {
+        this.articleId = article;
+        this.userId = user;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+    }
 }
