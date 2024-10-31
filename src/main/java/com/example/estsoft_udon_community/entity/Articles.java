@@ -70,4 +70,10 @@ public class Articles {
         this.category = category;
         this.hashtags = hashtags;
     }
+
+    public void update(String title, String content, List<Hashtag> hashtags) {
+        this.title = title;
+        this.content = content;
+        this.hashtags = hashtags;
+    }
 }
