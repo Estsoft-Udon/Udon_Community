@@ -8,7 +8,6 @@ import com.example.estsoft_udon_community.dto.response.ArticleResponse;
 import com.example.estsoft_udon_community.dto.request.UpdateArticleRequest;
 import com.example.estsoft_udon_community.repository.ArticlesLikeRepository;
 import com.example.estsoft_udon_community.repository.ArticlesRepository;
-import com.example.estsoft_udon_community.repository.HashtagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +22,6 @@ public class ArticlesService {
     private final ArticlesRepository articlesRepository;
     private final ArticlesLikeRepository articlesLikeRepository;
     private final UsersService usersService;
-    private final HashtagRepository hashtagRepository;
 
     // 게시글 등록
 //    public Articles saveArticle(AddArticleRequest request, Users currentUser) {
