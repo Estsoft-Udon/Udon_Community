@@ -33,13 +33,11 @@ public class CommentsController {
     }
 
     @GetMapping("/articles/{articleId}/comments")
-    public ResponseEntity<CommentsArticlesResponse> getCommentByArticleId(@PathVariable Long articleId) {
+    public ResponseEntity<CommentsArticlesResponse> getCommentsByArticleId(@PathVariable Long articleId) {
 
-        // 형식이 다른거라 한번 확인
         ArticleResponse articles = articlesService.findByArticleId(articleId)
                 .orElseThrow(() -> new IllegalArgumentException("게시글 id에 해당하는 게시글이 없습니다."));
 
-        // 게시글에 달린 댓글 정보
         List<Comments> commentsList = commentsService.findCommentsByArticleId(articleId);
 
         List<CommentsResponse> commentsResponseList = commentsList.stream()
@@ -47,6 +45,20 @@ public class CommentsController {
 
         return ResponseEntity.ok(
                 new CommentsArticlesResponse(articles.convertToArticles(new Users()), commentsResponseList));
+    }
+
+    @GetMapping("/articles/{articleId}/commentsonly")
+    public ResponseEntity<List<CommentsResponse>> getOnlyCommentsByArticleId(@PathVariable Long articleId) {
+
+        ArticleResponse articles = articlesService.findByArticleId(articleId)
+                .orElseThrow(() -> new IllegalArgumentException("게시글 id에 해당하는 게시글이 없습니다."));
+
+        List<Comments> commentsList = commentsService.findCommentsByArticleId(articleId);
+
+        List<CommentsResponse> commentsResponseList = commentsList.stream()
+                .map(CommentsResponse::new).toList();
+
+        return ResponseEntity.ok(commentsResponseList);
     }
 
     @PutMapping("/comments/{commentId}")
@@ -66,12 +78,7 @@ public class CommentsController {
 }
 /*
 댓글 추가	POST	/api/articles/{articleId}/comments
-
-댓글목록조회	GET	/api/articles/{articleId}/comments	200 OK	400 Bad Request,
-404 Not Found
-댓글 수정	PUT	/api/comments/{commentId}	200 OK	400 Bad Request,
-404 Not Found
-댓글 삭제	DELETE	/api/comments/{commentId}	204 NO Content	400 Bad Request,
-404 Not Found
-
+댓글목록조회	GET	/api/articles/{articleId}/comments
+댓글 수정	PUT	/api/comments/{commentId}
+댓글 삭제	DELETE	/api/comments/{commentId}
  */

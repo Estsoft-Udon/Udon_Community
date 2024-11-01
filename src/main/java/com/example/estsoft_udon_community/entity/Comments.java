@@ -27,7 +27,7 @@ public class Comments {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    @Column(name = "deleted_at", nullable = false)
+    @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
     @Column(nullable = false)
@@ -41,8 +41,9 @@ public class Comments {
     @JoinColumn(name = "user_id")
     private Users users;
 
-    public Comments(Articles articles, String content) {
+    public Comments(Articles articles, Users users, String content) {
         this.articles = articles;
+        this.users = users;
         this.content = content;
     }
 
