@@ -1,8 +1,10 @@
 package com.example.estsoft_udon_community.controller;
 
+import com.example.estsoft_udon_community.dto.response.UsersResponse;
 import com.example.estsoft_udon_community.entity.Users;
-import com.example.estsoft_udon_community.entity.request.UsersRequest;
+import com.example.estsoft_udon_community.dto.request.UsersRequest;
 import com.example.estsoft_udon_community.service.UsersService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,9 +25,8 @@ public class UsersController {
 
     // 회원가입
     @PostMapping("/register")
-    public ResponseEntity<Users> registerUser(@RequestBody UsersRequest user) {
-        usersService.registerUser(user);
-        return ResponseEntity.ok(user.convert());
+    public ResponseEntity<UsersResponse> registerUser(@RequestBody UsersRequest user) {
+        return ResponseEntity.ok(usersService.registerUser(user));
     }
 
     // 로그인
@@ -35,9 +36,14 @@ public class UsersController {
         return ResponseEntity.ok(users);
     }
 
+    @GetMapping("/users")
+    public ResponseEntity<List<UsersResponse>> getAllUsers() {
+        return ResponseEntity.ok(usersService.getAllUsers());
+    }
+
     // 유저 정보 조회
     @GetMapping("/users/{userId}")
-    public ResponseEntity<Users> findUserById(@PathVariable Long userId) {
+    public ResponseEntity<UsersResponse> findUserById(@PathVariable Long userId) {
         return ResponseEntity.ok(usersService.findUserById(userId));
     }
 
