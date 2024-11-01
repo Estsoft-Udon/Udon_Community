@@ -47,11 +47,11 @@ public class ArticlesController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/articles/{id}")
-    public ResponseEntity<Articles> updateArticle(@PathVariable Long id, @RequestBody UpdateArticleRequest request) {
-        Articles updateArticle = articlesService.updateArticle(id, request);
-        return ResponseEntity.ok(updateArticle);
-    }
+//    @PutMapping("/articles/{id}")
+//    public ResponseEntity<Articles> updateArticle(@PathVariable Long id, @RequestBody UpdateArticleRequest request) {
+//        Articles updateArticle = articlesService.updateArticle(id, request);
+//        return ResponseEntity.ok(updateArticle);
+//    }
 
     @DeleteMapping("/articles/{id}")
     public ResponseEntity<Void> deleteByAritlceId(@PathVariable Long id) {
