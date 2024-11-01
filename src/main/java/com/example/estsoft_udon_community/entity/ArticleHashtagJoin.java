@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "articles_hashtags")
 @IdClass(ArticleHashtagJoinId.class)
 public class ArticleHashtagJoin {
     @Id

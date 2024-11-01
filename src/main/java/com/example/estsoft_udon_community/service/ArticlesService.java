@@ -1,5 +1,6 @@
 package com.example.estsoft_udon_community.service;
 
+import com.example.estsoft_udon_community.dto.response.UsersResponse;
 import com.example.estsoft_udon_community.entity.ArticleHashtagJoin;
 import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Hashtag;
@@ -30,19 +31,22 @@ public class ArticlesService {
         Long userId = request.getUserId();
         Users user = usersRepository.findById(userId).orElseThrow();
 
+
+        // 해시태그 저장?
         List<Hashtag> hashtagList = new ArrayList<>();
-        for(String hashtag : request.getHashtagName()) {
+        for (String hashtag : request.getHashtagName()) {
             Hashtag newHashtag = hashtagRepository.findByName(hashtag)
                     .orElseGet(() -> hashtagRepository.save(new Hashtag(hashtag)));
 
             hashtagList.add(newHashtag);
         }
+
         Articles articles = new Articles(user, request.getTitle(), request.getContent(), request.getCategory(),
                 hashtagList, user.getLocation());
 
         Articles savedArticle = articlesRepository.save(articles);
 
-        for(Hashtag hashtag : hashtagList) {
+        for (Hashtag hashtag : hashtagList) {
             articleHashtagJoinRepository.save(new ArticleHashtagJoin(savedArticle, hashtag));
         }
 
