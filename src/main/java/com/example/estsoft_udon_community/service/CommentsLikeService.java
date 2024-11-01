@@ -1,6 +1,5 @@
 package com.example.estsoft_udon_community.service;
 
-import com.example.estsoft_udon_community.entity.ArticlesLike;
 import com.example.estsoft_udon_community.entity.Comments;
 import com.example.estsoft_udon_community.entity.CommentsLike;
 import com.example.estsoft_udon_community.entity.Users;
@@ -8,6 +7,8 @@ import com.example.estsoft_udon_community.repository.CommentsLikeRepository;
 import com.example.estsoft_udon_community.repository.CommentsRepository;
 import com.example.estsoft_udon_community.repository.UsersRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class CommentsLikeService {
@@ -23,17 +24,24 @@ public class CommentsLikeService {
         this.commentsRepository = commentsRepository;
     }
 
-    public CommentsLike saveCommentsLike(Long commentsId, Long userId) {
+    public CommentsLike pressCommentsLike(Long commentsId, Long userId) {
         Comments comment = commentsRepository.findById(commentsId)
-                .orElseThrow(() -> new IllegalArgumentException("comments id: "+ commentsId + "not found"));
+                .orElseThrow(() -> new IllegalArgumentException("comments id: " + commentsId + " not found"));
 
         Users user = usersRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("users id: "+ userId + "not found"));
+                .orElseThrow(() -> new IllegalArgumentException("users id: " + userId + " not found"));
 
-        return commentsLikeRepository.save(new CommentsLike(comment, user));
-    }
+        // 코멘트, 유저로 좋아요가 존재하는지 검색 후 없으면 저장, 있으면 삭제
+        Optional<CommentsLike> foundLike = commentsLikeRepository.findByCommentsAndUsers(comment, user);
 
-    public void deleteCommentsLike(Long commentsLikeId) {
-        commentsLikeRepository.deleteById(commentsLikeId);
+        if (foundLike.isPresent()) {
+            // 좋아요가 이미 존재할 경우 삭제하고 null을 반환
+            commentsLikeRepository.delete(foundLike.get());
+            return null;
+        } else {
+            // 좋아요가 없을 경우 새로 저장하고 저장된 객체 반환
+            CommentsLike newLike = new CommentsLike(comment, user);
+            return commentsLikeRepository.save(newLike);
+        }
     }
 }
