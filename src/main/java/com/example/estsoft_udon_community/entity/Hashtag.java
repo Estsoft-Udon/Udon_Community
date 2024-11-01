@@ -17,8 +17,4 @@ public class Hashtag {
 
     @Column(name = "hashtag_name", nullable = false, length = 100)
     private String name;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "article_id")
-    private Articles articles;
 }

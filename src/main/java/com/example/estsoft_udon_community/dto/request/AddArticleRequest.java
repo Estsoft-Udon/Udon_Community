@@ -1,6 +1,7 @@
 package com.example.estsoft_udon_community.dto.request;
 
 import com.example.estsoft_udon_community.entity.Hashtag;
+import com.example.estsoft_udon_community.entity.Location;
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.enums.ArticleCategory;
 import lombok.AllArgsConstructor;
@@ -16,6 +17,7 @@ public class AddArticleRequest {
     private Users userId;
     private ArticleCategory category;
     private String title;
-    private List<Hashtag> hashtagName;
+    private List<String> hashtagName;
     private String content;
+    private Location location;
 }
