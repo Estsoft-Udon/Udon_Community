@@ -25,5 +25,7 @@ public class EventRequest {
 
     private Boolean isAccepted; // 수락여부
 
-    private Long userId; // 작성한 사용자의 ID 추가
+    private Long usersId; // 작성한 사용자의 ID 추가
+
+
 }
