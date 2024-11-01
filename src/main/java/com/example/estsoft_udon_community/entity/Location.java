@@ -22,6 +22,7 @@ public class Location {
     @Column(name = "location_id")
     private Long id;
 
+    @Column
     private String name;
 
     @Column(name = "upper_location")

@@ -15,10 +15,6 @@ public class CommentsLike {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @CreatedDate
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
     @ManyToOne
     @JoinColumn(name = "comment_id")
     private Comments comments;
@@ -26,6 +22,10 @@ public class CommentsLike {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private Users users;
+
+    @CreatedDate
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 
     public CommentsLike(Comments comments, Users users) {
         this.comments = comments;
