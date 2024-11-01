@@ -1,4 +1,4 @@
-package com.example.estsoft_udon_community.entity.request;
+package com.example.estsoft_udon_community.dto.request;
 
 import com.example.estsoft_udon_community.entity.Hashtag;
 import com.example.estsoft_udon_community.entity.Users;

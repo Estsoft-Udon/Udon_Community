@@ -1,7 +1,7 @@
 package com.example.estsoft_udon_community.controller;
 
 import com.example.estsoft_udon_community.entity.Event;
-import com.example.estsoft_udon_community.entity.request.EventRequest;
+import com.example.estsoft_udon_community.dto.request.EventRequest;
 import com.example.estsoft_udon_community.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

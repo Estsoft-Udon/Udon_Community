@@ -2,7 +2,7 @@ package com.example.estsoft_udon_community.service;
 
 import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Comments;
-import com.example.estsoft_udon_community.entity.request.CommentsRequest;
+import com.example.estsoft_udon_community.dto.request.CommentsRequest;
 import com.example.estsoft_udon_community.repository.ArticlesRepository;
 import com.example.estsoft_udon_community.repository.CommentsRepository;
 import org.springframework.stereotype.Service;

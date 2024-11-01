@@ -1,4 +1,4 @@
-package com.example.estsoft_udon_community.entity.request;
+package com.example.estsoft_udon_community.dto.request;
 
 import com.example.estsoft_udon_community.entity.Location;
 import com.example.estsoft_udon_community.entity.Users;
@@ -23,12 +23,21 @@ public class UsersRequest {
 
     private String email;
 
-    private Location location;
+    private Long locationId;
 
-    public Users convert() {
-        return new Users(loginId, password, name, nickname, email, Grade.UDON, passwordHint, passwordAnswer, location);
+    // UserRequest -> Users
+    public Users convert(Location location) {
+        return new Users(loginId,
+                password,
+                name,
+                nickname,
+                email,
+                Grade.UDON,
+                passwordHint,
+                passwordAnswer, location);
     }
 
+    // 수정
     public Users updateEntity(Users user) {
         if (loginId != null) {
             user.setLoginId(loginId);
@@ -50,9 +59,6 @@ public class UsersRequest {
         }
         if (passwordAnswer != null) {
             user.setPasswordAnswer(passwordAnswer);
-        }
-        if (location != null) {
-            user.setLocation(location);
         }
         return user;
     }
