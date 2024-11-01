@@ -51,6 +51,9 @@ public class UsersRequest {
         if (passwordAnswer != null) {
             user.setPasswordAnswer(passwordAnswer);
         }
+        if (location != null) {
+            user.setLocation(location);
+        }
         return user;
     }
 }
