@@ -47,4 +47,15 @@ public class Event {
     @Column(name = "is_accepted")
     private Boolean isAccepted;
 
+    @PrePersist
+    public void prePersist() {
+        this.requestedAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
 }

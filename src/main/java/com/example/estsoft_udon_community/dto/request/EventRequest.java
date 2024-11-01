@@ -1,6 +1,7 @@
 package com.example.estsoft_udon_community.dto.request;
 
 import com.example.estsoft_udon_community.entity.Event;
+import com.example.estsoft_udon_community.entity.Location;
 import com.example.estsoft_udon_community.enums.EventType;
 import lombok.Data;
 
@@ -22,7 +23,9 @@ public class EventRequest {
 
     private Long usersId; // 작성한 사용자의 ID 추가
 
-    public Event toEvent(){
+    private Long locationId;
+
+    public Event toEvent(Location location) {
         Event event = new Event();
 
         event.setTitle(this.getTitle());
@@ -30,6 +33,7 @@ public class EventRequest {
         event.setContent(this.getContent());
         event.setRequestedAt(LocalDateTime.now());
         event.setEventType(this.getEventType());
+        event.setLocation(location);
 
         return event;
     }
