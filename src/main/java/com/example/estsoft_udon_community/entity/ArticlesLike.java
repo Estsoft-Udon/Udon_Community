@@ -13,23 +13,24 @@ import java.time.LocalDateTime;
 public class ArticlesLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "article_like_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id", nullable = false)
-    private Articles articleId;
+    private Articles articles;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private Users userId;
+    private Users users;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreatedDate
     private LocalDateTime createdAt;
 
     public ArticlesLike(Articles article, Users user) {
-        this.articleId = article;
-        this.userId = user;
+        this.articles = article;
+        this.users = user;
     }
 
     @PrePersist
