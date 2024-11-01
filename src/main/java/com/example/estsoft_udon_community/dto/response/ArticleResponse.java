@@ -19,6 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ArticleResponse {
     private Long id;
+    private Long userId;
     private String title;
     private String content;
     private ArticleCategory category;
@@ -31,10 +32,10 @@ public class ArticleResponse {
     public ArticleResponse(Articles article) {
         // pk primary Key
         this.id = article.getId();
+        this.userId = article.getUserId().getId();
         this.title = article.getTitle();
         this.content = article.getContent();
         this.category = article.getCategory();
-        this.hashtags = article.getHashtags();
         this.viewCount = article.getViewCount();
         this.createdAt = article.getCreatedAt();
         this.updatedAt = article.getUpdatedAt();
@@ -42,6 +43,6 @@ public class ArticleResponse {
     }
 
     public Articles convertToArticles(Users users) {
-        return new Articles(users, title, content, category, hashtags, location);
+        return new Articles(users, title, content, category, location);
     }
 }

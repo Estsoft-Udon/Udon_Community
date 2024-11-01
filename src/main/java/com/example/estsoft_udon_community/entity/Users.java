@@ -44,11 +44,12 @@ public class Users {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "location_id")
+    private Location location;
+
     @Column(name = "login_id", nullable = false)
     private String loginId;
-
-    @Column(nullable = false)
-    private String password;
 
     @Column(nullable = false)
     private String name;
@@ -59,12 +60,11 @@ public class Users {
     @Column(nullable = false)
     private String email;
 
-    @ManyToOne
-    @JoinColumn(name = "location_id")
-    private Location location;
-
     @Enumerated(EnumType.STRING)  // Enum을 문자열로 저장
     private Grade grade;
+
+    @Column(nullable = false)
+    private String password;
 
     @Enumerated(EnumType.STRING)  // Enum을 문자열로 저장
     @Column(name = "password_hint", nullable = false)
@@ -82,11 +82,11 @@ public class Users {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    @Column(name = "last_login")
-    private LocalDateTime lastLoginAt;
-
     @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted = Boolean.FALSE;
+
+    @Column(name = "last_login")
+    private LocalDateTime lastLoginAt;
 
     @PrePersist
     public void prePersist() {

@@ -16,23 +16,6 @@ public class Comments {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String content;
-
-    //@CreatedDate
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
-    //@LastModifiedDate
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
-
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
-
-    @Column(nullable = false)
-    private Boolean isDeleted = Boolean.FALSE;
-
     @ManyToOne
     @JoinColumn(name = "article_id")
     private Articles articles;
@@ -40,6 +23,21 @@ public class Comments {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private Users users;
+
+    @Column(nullable = false)
+    private String content;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    @Column(name = "is_deleted", nullable = false)
+    private Boolean isDeleted = Boolean.FALSE;
 
     public Comments(Articles articles, Users users, String content) {
         this.articles = articles;

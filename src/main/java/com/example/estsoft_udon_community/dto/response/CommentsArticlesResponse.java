@@ -15,8 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommentsArticlesResponse {
-
-
     private String userNickname;
 
     private String title;
