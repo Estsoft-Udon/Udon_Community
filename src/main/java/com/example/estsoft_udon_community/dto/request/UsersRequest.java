@@ -23,6 +23,20 @@ public class UsersRequest {
 
     private String email;
 
+    private Long locationId;
+
+    // UserRequest -> Users
+    public Users convert(Location location) {
+        return new Users(loginId,
+                password,
+                name,
+                nickname,
+                email,
+                Grade.UDON,
+                passwordHint,
+                passwordAnswer, location);
+    }
+
     public Users updateEntity(Users user) {
         if (loginId != null) {
             user.setLoginId(loginId);
