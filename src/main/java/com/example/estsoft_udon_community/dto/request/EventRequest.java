@@ -1,5 +1,6 @@
 package com.example.estsoft_udon_community.dto.request;
 
+import com.example.estsoft_udon_community.entity.Event;
 import com.example.estsoft_udon_community.enums.EventType;
 import lombok.Data;
 
@@ -17,13 +18,27 @@ public class EventRequest {
 
     private EventType eventType;
 
-    private LocalDateTime requestedAt; // 요청시각
-
-    private LocalDateTime updatedAt; // 수정시각
-
-    private LocalDateTime deletedAt; // 삭제시각
-
     private Boolean isAccepted; // 수락여부
 
     private Long usersId; // 작성한 사용자의 ID 추가
+
+    public Event toEvent(){
+        Event event = new Event();
+
+        event.setTitle(this.getTitle());
+        event.setDateTime(this.getDateTime());
+        event.setContent(this.getContent());
+        event.setRequestedAt(LocalDateTime.now());
+        event.setEventType(this.getEventType());
+
+        return event;
+    }
+
+    public void updateEvent(Event event) {
+        event.setTitle(this.title);
+        event.setDateTime(this.dateTime);
+        event.setContent(this.content);
+        event.setEventType(this.eventType);
+        event.setRequestedAt(LocalDateTime.now());
+    }
 }
