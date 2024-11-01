@@ -1,7 +1,7 @@
 package com.example.estsoft_udon_community.controller;
 
 import com.example.estsoft_udon_community.entity.Users;
-import com.example.estsoft_udon_community.entity.request.UsersRequest;
+import com.example.estsoft_udon_community.dto.request.UsersRequest;
 import com.example.estsoft_udon_community.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

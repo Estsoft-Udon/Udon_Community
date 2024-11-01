@@ -1,18 +1,14 @@
 package com.example.estsoft_udon_community.controller;
 
 import com.example.estsoft_udon_community.entity.Articles;
-import com.example.estsoft_udon_community.entity.Users;
-import com.example.estsoft_udon_community.entity.request.AddArticleRequest;
-import com.example.estsoft_udon_community.entity.response.ArticleResponse;
-import com.example.estsoft_udon_community.entity.request.UpdateArticleRequest;
+import com.example.estsoft_udon_community.dto.response.ArticleResponse;
+import com.example.estsoft_udon_community.dto.request.UpdateArticleRequest;
 import com.example.estsoft_udon_community.service.ArticlesService;
 import com.example.estsoft_udon_community.service.UsersService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 

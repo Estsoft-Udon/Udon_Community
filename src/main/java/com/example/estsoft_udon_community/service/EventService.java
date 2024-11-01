@@ -1,14 +1,14 @@
 package com.example.estsoft_udon_community.service;
 
+import com.example.estsoft_udon_community.dto.response.EventResponse;
 import com.example.estsoft_udon_community.entity.Event;
 import com.example.estsoft_udon_community.entity.Users;
-import com.example.estsoft_udon_community.entity.request.EventRequest;
+import com.example.estsoft_udon_community.dto.request.EventRequest;
 import com.example.estsoft_udon_community.repository.EventRepository;
 import com.example.estsoft_udon_community.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -24,36 +24,28 @@ public class EventService {
     }
 
     // 캘린더 추가
-    public Event addEvent(EventRequest eventRequest){
-        Event event = new Event();
-        event.setTitle(eventRequest.getTitle());
-        event.setDateTime(eventRequest.getDateTime());
-        event.setContent(eventRequest.getContent());
-        event.setRequestedAt(LocalDateTime.now());
-        event.setEventType(eventRequest.getEventType()); // 축제 종류
+    public EventResponse addEvent(EventRequest eventRequest){
+        Event event = eventRequest.toEvent();
 
-        // 작성자 설정(임시) pk
+        // 작성자
         Users users = usersRepository.findById(eventRequest.getUsersId())
                  .orElseThrow(() -> new IllegalArgumentException("User not found"));
          event.setUsers(users);
 
-        return eventRepository.save(event);
+         Event saveEvent = eventRepository.save(event);
+         return new EventResponse(saveEvent);
     }
 
     // 캘린더 수정
-    public Event updateEvent(Long eventId, EventRequest eventRequest){
+    public EventResponse updateEvent(Long eventId, EventRequest eventRequest){
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new IllegalArgumentException("Event not found"));
-        // 추후에  updateEvent()
-        event.setTitle(eventRequest.getTitle());
-        event.setDateTime(eventRequest.getDateTime());
-        event.setContent(eventRequest.getContent());
-        event.setRequestedAt(LocalDateTime.now());
-        event.setEventType(eventRequest.getEventType()); // 축제 종류
 
-        return eventRepository.save(event);
+        eventRequest.updateEvent(event);
+
+        Event updateEvent = eventRepository.save(event);
+        return new EventResponse(updateEvent);
     }
-
 
     // 캘린더 삭제
     public void deleteEvent(Long eventId) {

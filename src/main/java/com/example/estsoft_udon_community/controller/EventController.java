@@ -1,7 +1,8 @@
 package com.example.estsoft_udon_community.controller;
 
+import com.example.estsoft_udon_community.dto.response.EventResponse;
 import com.example.estsoft_udon_community.entity.Event;
-import com.example.estsoft_udon_community.entity.request.EventRequest;
+import com.example.estsoft_udon_community.dto.request.EventRequest;
 import com.example.estsoft_udon_community.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,15 +26,15 @@ public class EventController {
 
     // 캘린더 추가
     @PostMapping
-    public ResponseEntity<Event> addEvent(@RequestBody EventRequest eventRequest){
-        Event createEvent = eventService.addEvent(eventRequest);
+    public ResponseEntity<EventResponse> addEvent(@RequestBody EventRequest eventRequest){
+        EventResponse createEvent = eventService.addEvent(eventRequest);
         return ResponseEntity.status(201).body(createEvent);
     }
 
     // 캘린더 수정
     @PutMapping("/{eventId}")
-    public ResponseEntity<Event> updateEvent(@PathVariable Long eventId, @RequestBody EventRequest eventRequest){
-        Event updateEvent = eventService.updateEvent(eventId, eventRequest);
+    public ResponseEntity<EventResponse> updateEvent(@PathVariable Long eventId, @RequestBody EventRequest eventRequest){
+        EventResponse updateEvent = eventService.updateEvent(eventId, eventRequest);
         return ResponseEntity.ok(updateEvent);
     }
 
