@@ -24,20 +24,21 @@ public class EventService {
     }
 
     // 캘린더 추가
-    public EventResponse addEvent(EventRequest eventRequest){
-        Event event = eventRequest.toEvent();
-
+    public EventResponse addEvent(EventRequest eventRequest) {
         // 작성자
         Users users = usersRepository.findById(eventRequest.getUsersId())
-                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
-         event.setUsers(users);
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-         Event saveEvent = eventRepository.save(event);
-         return new EventResponse(saveEvent);
+        // Location 정보를 넣어야 함
+        Event event = eventRequest.toEvent(users.getLocation());
+        event.setUsers(users);
+
+        Event saveEvent = eventRepository.save(event);
+        return new EventResponse(saveEvent);
     }
 
     // 캘린더 수정
-    public EventResponse updateEvent(Long eventId, EventRequest eventRequest){
+    public EventResponse updateEvent(Long eventId, EventRequest eventRequest) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new IllegalArgumentException("Event not found"));
 
