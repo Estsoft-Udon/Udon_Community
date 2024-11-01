@@ -3,29 +3,32 @@ package com.example.estsoft_udon_community.service;
 import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Comments;
 import com.example.estsoft_udon_community.dto.request.CommentsRequest;
+import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.repository.ArticlesRepository;
 import com.example.estsoft_udon_community.repository.CommentsRepository;
+import com.example.estsoft_udon_community.repository.UsersRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CommentsService {
     private final CommentsRepository commentsRepository;
     private final ArticlesRepository articlesRepository;
-
-    public CommentsService(CommentsRepository commentsRepository, ArticlesRepository articlesRepository) {
-        this.commentsRepository = commentsRepository;
-        this.articlesRepository = articlesRepository;
-    }
+    private final UsersRepository usersRepository;
 
     // 댓글 추가
     public Comments saveComment(Long articleId, CommentsRequest request) {
         Articles articles = articlesRepository.findById(articleId)
                 .orElseThrow(() -> new IllegalArgumentException("not found article id : " + articleId));
 
-        return commentsRepository.save(new Comments(articles, request.getContent()));
+        Users users = usersRepository.findById(request.getUser_id())
+                .orElseThrow(() -> new IllegalArgumentException("not found user id : " + request.getUser_id()));
+
+        return commentsRepository.save(new Comments(articles, users, request.getContent()));
     }
 
     // 댓글 목록 조회
