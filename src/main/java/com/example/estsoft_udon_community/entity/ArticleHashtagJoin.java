@@ -1,28 +1,21 @@
 package com.example.estsoft_udon_community.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @IdClass(ArticleHashtagJoinId.class)
 public class ArticleHashtagJoin {
-
     @Id
-    @Column(name = "article_id") // 외래 키 컬럼 지정
-    private Long articleId; // Articles의 ID
-
-    @Id
-    @Column(name = "hashtag_id") // 외래 키 컬럼 지정
-    private Long hashtagId; // Hashtag의 ID
-
     @ManyToOne
-    @JoinColumn(name = "article_id", insertable = false, updatable = false) // 외래 키 매핑
+    @JoinColumn(name = "article_id")
     private Articles articles;
 
+    @Id
     @ManyToOne
-    @JoinColumn(name = "hashtag_id", insertable = false, updatable = false) // 외래 키 매핑
+    @JoinColumn(name = "hashtag_id")
     private Hashtag hashtag;
 }

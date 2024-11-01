@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,36 +21,33 @@ import java.util.Optional;
 public class ArticlesService {
     private final ArticlesRepository articlesRepository;
     private final ArticlesLikeRepository articlesLikeRepository;
+    private final UsersService usersService;
     private final HashtagRepository hashtagRepository;
     private final ArticleHashtagJoinRepository articleHashtagJoinRepository;
     private final UsersRepository usersRepository;
 
-    // 게시글 등록
-    public Articles addArticle(AddArticleRequest request) {
-        // 새 글 생성
-        Users user = usersRepository.findById(request.getUserId().getId())
-                .orElseThrow(() -> new RuntimeException("User not found")); // 유저 검증
-        Articles article = new Articles(
-                user, // Users 객체로 변환
-                request.getTitle(),
-                request.getContent(),
-                request.getCategory(),
-                request.getLocation()
-        );
-        articlesRepository.save(article);
+    public Articles saveArticle(AddArticleRequest request) {
+        Long userId = request.getUserId();
+        Users user = usersRepository.findById(userId).orElseThrow();
 
-        // 해시태그와 글 연결
-        for (String hashtagName : request.getHashtagName()) {
-            Hashtag hashtag = hashtagRepository.findByName(hashtagName)
-                    .orElseGet(() -> hashtagRepository.save(new Hashtag(null, hashtagName)));
-            ArticleHashtagJoin articleHashtagJoin = new ArticleHashtagJoin();
-            articleHashtagJoin.setArticles(article);
-            articleHashtagJoin.setHashtag(hashtag);
-            articleHashtagJoinRepository.save(articleHashtagJoin);
+        List<Hashtag> hashtagList = new ArrayList<>();
+        for(String hashtag : request.getHashtagName()) {
+            Hashtag newHashtag = hashtagRepository.findByName(hashtag)
+                    .orElseGet(() -> hashtagRepository.save(new Hashtag(hashtag)));
+
+            hashtagList.add(newHashtag);
         }
-        return article;
-    }
+        Articles articles = new Articles(user, request.getTitle(), request.getContent(), request.getCategory(),
+                hashtagList, user.getLocation());
 
+        Articles savedArticle = articlesRepository.save(articles);
+
+        for(Hashtag hashtag : hashtagList) {
+            articleHashtagJoinRepository.save(new ArticleHashtagJoin(savedArticle, hashtag));
+        }
+
+        return savedArticle;
+    }
 
     public List<ArticleResponse> findAll() {
         return articlesRepository.findAll().stream()
@@ -62,13 +60,13 @@ public class ArticlesService {
                 .map(ArticleResponse::new);
     }
 
-//    @Transactional
-//    public Articles updateArticle(Long id, UpdateArticleRequest request) {
-//        Articles article = articlesRepository.findById(id)
-//                .orElseThrow(() -> new IllegalArgumentException("Article not found"));
-//        article.update(request.getTitle(), request.getContent(), request.getHashtags());
-//        return articlesRepository.save(article);
-//    }
+    @Transactional
+    public Articles updateArticle(Long id, UpdateArticleRequest request) {
+        Articles article = articlesRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Article not found"));
+        article.update(request.getTitle(), request.getContent(), request.getHashtags());
+        return articlesRepository.save(article);
+    }
 
     public void deleteArticle(Long id) {
         articlesRepository.deleteById(id);
@@ -86,4 +84,5 @@ public class ArticlesService {
 //                .map(ArticleResponse::new)
 //                .toList();
 //    }
+
 }

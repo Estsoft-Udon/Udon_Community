@@ -27,40 +27,40 @@ public class ArticlesController {
     // 게시글 작성
     @PostMapping("/articles")
     public ResponseEntity<ArticleResponse> addArticle(@RequestBody AddArticleRequest request) {
-        Articles article = articlesService.addArticle(request);
+        Articles article = articlesService.saveArticle(request);
         return new ResponseEntity<>(new ArticleResponse(article), HttpStatus.CREATED);
     }
 
-    @GetMapping("/articles")
-    public ResponseEntity<List<ArticleResponse>> findAll() {
-        List<ArticleResponse> articles = articlesService.findAll();
-        return ResponseEntity.ok(articles);
-    }
-
-    @GetMapping("/articles/{id}")
-    public ResponseEntity<ArticleResponse> findByArticleId(@PathVariable Long id) {
-        Optional<ArticleResponse> article = articlesService.findByArticleId(id);
-        return article.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-//    @PutMapping("/articles/{id}")
-//    public ResponseEntity<Articles> updateArticle(@PathVariable Long id, @RequestBody UpdateArticleRequest request) {
-//        Articles updateArticle = articlesService.updateArticle(id, request);
-//        return ResponseEntity.ok(updateArticle);
+//    @GetMapping("/articles")
+//    public ResponseEntity<List<ArticleResponse>> findAll() {
+//        List<ArticleResponse> articles = articlesService.findAll();
+//        return ResponseEntity.ok(articles);
 //    }
-
-    @DeleteMapping("/articles/{id}")
-    public ResponseEntity<Void> deleteByAritlceId(@PathVariable Long id) {
-        articlesService.deleteArticle(id);
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/locations/{locationId}/articles")
-    public ResponseEntity<List<ArticleResponse>> findByLocationId(@PathVariable Long locationId) {
-        List<ArticleResponse> locationByIdArticle = articlesService.findByLocationId(locationId);
-        return ResponseEntity.ok(locationByIdArticle);
-    }
+//
+//    @GetMapping("/articles/{id}")
+//    public ResponseEntity<ArticleResponse> findByArticleId(@PathVariable Long id) {
+//        Optional<ArticleResponse> article = articlesService.findByArticleId(id);
+//        return article.map(ResponseEntity::ok)
+//                .orElse(ResponseEntity.notFound().build());
+//    }
+//
+////    @PutMapping("/articles/{id}")
+////    public ResponseEntity<Articles> updateArticle(@PathVariable Long id, @RequestBody UpdateArticleRequest request) {
+////        Articles updateArticle = articlesService.updateArticle(id, request);
+////        return ResponseEntity.ok(updateArticle);
+////    }
+//
+//    @DeleteMapping("/articles/{id}")
+//    public ResponseEntity<Void> deleteByAritlceId(@PathVariable Long id) {
+//        articlesService.deleteArticle(id);
+//        return ResponseEntity.ok().build();
+//    }
+//
+//    @GetMapping("/locations/{locationId}/articles")
+//    public ResponseEntity<List<ArticleResponse>> findByLocationId(@PathVariable Long locationId) {
+//        List<ArticleResponse> locationByIdArticle = articlesService.findByLocationId(locationId);
+//        return ResponseEntity.ok(locationByIdArticle);
+//    }
 
 //    @GetMapping("/articles/likes")
 //    public ResponseEntity<List<ArticleResponse>> findAllByLikes() {

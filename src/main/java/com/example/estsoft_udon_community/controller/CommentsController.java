@@ -32,20 +32,20 @@ public class CommentsController {
 //        return ResponseEntity.status(HttpStatus.CREATED).body(new CommentsResponse(comments));
 //    }
 
-    @GetMapping("/articles/{articleId}/comments")
-    public ResponseEntity<CommentsArticlesResponse> getCommentsByArticleId(@PathVariable Long articleId) {
-
-        ArticleResponse articles = articlesService.findByArticleId(articleId)
-                .orElseThrow(() -> new IllegalArgumentException("게시글 id에 해당하는 게시글이 없습니다."));
-
-        List<Comments> commentsList = commentsService.findCommentsByArticleId(articleId);
-
-        List<CommentsResponse> commentsResponseList = commentsList.stream()
-                .map(CommentsResponse::new).toList();
-
-        return ResponseEntity.ok(
-                new CommentsArticlesResponse(articles.convertToArticles(new Users()), commentsResponseList));
-    }
+//    @GetMapping("/articles/{articleId}/comments")
+//    public ResponseEntity<CommentsArticlesResponse> getCommentsByArticleId(@PathVariable Long articleId) {
+//
+//        ArticleResponse articles = articlesService.findByArticleId(articleId)
+//                .orElseThrow(() -> new IllegalArgumentException("게시글 id에 해당하는 게시글이 없습니다."));
+//
+//        List<Comments> commentsList = commentsService.findCommentsByArticleId(articleId);
+//
+//        List<CommentsResponse> commentsResponseList = commentsList.stream()
+//                .map(CommentsResponse::new).toList();
+//
+//        return ResponseEntity.ok(
+//                new CommentsArticlesResponse(articles.convertToArticles(new Users()), commentsResponseList));
+//    }
 
     @GetMapping("/articles/{articleId}/commentsonly")
     public ResponseEntity<List<CommentsResponse>> getOnlyCommentsByArticleId(@PathVariable Long articleId) {

@@ -14,7 +14,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class AddArticleRequest {
-    private Users userId;
+    private Long userId;
     private ArticleCategory category;
     private String title;
     private List<String> hashtagName;

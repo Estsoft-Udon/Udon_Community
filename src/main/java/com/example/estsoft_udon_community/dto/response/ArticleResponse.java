@@ -42,7 +42,7 @@ public class ArticleResponse {
         this.location = article.getLocation();
     }
 
-    public Articles convertToArticles(Users users) {
-        return new Articles(users, title, content, category, location);
-    }
+//    public Articles convertToArticles(Users users) {
+//        return new Articles(users, title, content, category, location);
+//    }
 }

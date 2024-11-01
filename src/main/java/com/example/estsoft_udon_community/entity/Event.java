@@ -14,14 +14,6 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne // 작성자와의 관계 설정
-    @JoinColumn(name = "user_id")
-    private Users users; // 작성한 사용자 정보 추가
-
-    @ManyToOne
-    @JoinColumn(name = "location_id")
-    private Location location;
-
     @Column(name = "date_time")
     private LocalDateTime dateTime; // 이벤트 날짜
 
@@ -47,15 +39,11 @@ public class Event {
     @Column(name = "is_accepted")
     private Boolean isAccepted;
 
-    @PrePersist
-    public void prePersist() {
-        this.requestedAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
+    @ManyToOne
+    @JoinColumn(name = "location_id")
+    private Location location;
 
-    @PreUpdate
-    public void preUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
-
+    @ManyToOne // 작성자와의 관계 설정
+    @JoinColumn(name = "users_id")
+    private Users users; // 작성한 사용자 정보 추가
 }
