@@ -14,13 +14,17 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "date_time")
     private LocalDateTime dateTime; // 이벤트 날짜
 
+    @Column(name = "title", nullable = false, length = 100)
     private String title;
 
+    @Column(name = "content")
     private String content;
 
-    @Enumerated(EnumType.STRING) // Enum 값을 문자열로 저장
+    @Enumerated(EnumType.STRING)
+    @Column(name = "event_type", nullable = false, length = 50)
     private EventType eventType; // 이벤트 종류
 
     @Column(name = "requested_at")
@@ -40,7 +44,6 @@ public class Event {
     private Location location;
 
     @ManyToOne // 작성자와의 관계 설정
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "users_id")
     private Users users; // 작성한 사용자 정보 추가
-
 }
