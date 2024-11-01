@@ -26,6 +26,7 @@ public class EventService {
     // 캘린더 추가
     public Event addEvent(EventRequest eventRequest){
         Event event = new Event();
+
         event.setTitle(eventRequest.getTitle());
         event.setDateTime(eventRequest.getDateTime());
         event.setContent(eventRequest.getContent());

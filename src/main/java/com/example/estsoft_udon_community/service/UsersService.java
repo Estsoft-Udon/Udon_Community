@@ -1,9 +1,15 @@
 package com.example.estsoft_udon_community.service;
 
+import com.example.estsoft_udon_community.dto.LocationDTO;
+import com.example.estsoft_udon_community.dto.response.UsersResponse;
+import com.example.estsoft_udon_community.entity.Location;
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.dto.request.UsersRequest;
 import com.example.estsoft_udon_community.enums.PasswordHint;
+import com.example.estsoft_udon_community.repository.LocationRepository;
 import com.example.estsoft_udon_community.repository.UsersRepository;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,10 +17,18 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UsersService {
     private final UsersRepository usersRepository;
+    private final LocationRepository locationRepository;
 
     // 회원가입
-    public void registerUser(UsersRequest request) {
-        usersRepository.save(request.convert());
+    public UsersResponse registerUser(UsersRequest request) {
+        Location location = locationRepository.findById(request.getLocationId()).orElseThrow();
+        return new UsersResponse(usersRepository.save(request.convert(location)));
+    }
+
+    // 전체조회
+    public List<UsersResponse> getAllUsers() {
+        List<Users> users = usersRepository.findAll();
+        return users.stream().map(UsersResponse::new).toList();
     }
 
     // 로그인 ->
@@ -32,9 +46,16 @@ public class UsersService {
     }
 
     // 유저 정보 조회
-    public Users findUserById(Long id) {
+    public UsersResponse findUserById(Long id) {
         Users users = usersRepository.findById(id).orElseThrow();
-        return usersRepository.findById(id).orElse(null);
+
+        Location location = users.getLocation(); // location 정보 가져오기
+
+        LocationDTO locationDTO = new LocationDTO(location);
+        UsersResponse usersResponse = new UsersResponse(users);
+        usersResponse.setLocation(locationDTO);
+
+        return usersResponse;
     }
 
     // 유저 정보 수정
@@ -46,7 +67,7 @@ public class UsersService {
 
     // Delete
     public void deleteUser(Long userId) {
-        Users user = findUserById(userId);
+        Users user = usersRepository.findById(userId).orElseThrow();
         usersRepository.delete(user);
     }
 
@@ -58,7 +79,6 @@ public class UsersService {
     // 비밀번호 찾기
     public Users searchPassword(String loginId, PasswordHint passwordHint, String passwordAnswer) {
         return usersRepository.findByLoginIdAndPasswordHintAndPasswordAnswer(loginId, passwordHint, passwordAnswer);
-
     }
 
 }
