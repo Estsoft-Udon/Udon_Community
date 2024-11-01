@@ -9,11 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommentsRequest {
-    private long article_id;
+    private long user_id;
     private String content;
-
-    public CommentsRequest(Comments comments) {
-        this.article_id = comments.getArticles().getId();
-        this.content = comments.getContent();
-    }
 }

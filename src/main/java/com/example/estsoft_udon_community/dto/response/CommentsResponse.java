@@ -14,14 +14,8 @@ public class CommentsResponse {
     private String content;
     private LocalDateTime createdAt;
 
-    private long articleId;
-    private long userId;
-
     public CommentsResponse(Comments comments) {
         this.content = comments.getContent();
         this.createdAt = comments.getCreatedAt();
-
-        this.articleId = comments.getArticles().getId();
-        this.userId = comments.getArticles().getUserId().getId();
     }
 }

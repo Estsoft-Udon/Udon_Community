@@ -21,15 +21,17 @@ public class CommentsService {
     private final UsersRepository usersRepository;
 
     // 댓글 추가
-//    public Comments saveComment(Long articleId, CommentsRequest request) {
-//        Articles articles = articlesRepository.findById(articleId)
-//                .orElseThrow(() -> new IllegalArgumentException("not found article id : " + articleId));
-//
-//        Users users = usersRepository.findById(request.getUser_id())
-//                .orElseThrow(() -> new IllegalArgumentException("not found user id : " + request.getUser_id()));
-//
-//        return commentsRepository.save(new Comments(articles, users, request.getContent()));
-//    }
+    public Comments saveComment(Long articleId, CommentsRequest request) {
+        Long userId = request.getUser_id();
+
+        Users users = usersRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("not found user id : " + userId));
+
+        Articles articles = articlesRepository.findById(articleId)
+                .orElseThrow(() -> new IllegalArgumentException("not found article id : " + articleId));
+
+        return commentsRepository.save(new Comments(articles, users, request.getContent()));
+    }
 
     // 댓글 목록 조회
     public Comments findComment(Long commentsId) {
