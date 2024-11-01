@@ -34,7 +34,7 @@ public class EventService {
         event.setEventType(eventRequest.getEventType()); // 축제 종류
 
         // 작성자 설정(임시) pk
-        Users users = usersRepository.findById(eventRequest.getUserId())
+        Users users = usersRepository.findById(eventRequest.getUsersId())
                  .orElseThrow(() -> new IllegalArgumentException("User not found"));
          event.setUsers(users);
 
@@ -44,7 +44,7 @@ public class EventService {
     // 캘린더 수정
     public Event updateEvent(Long eventId, EventRequest eventRequest){
         Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new IllegalArgumentException("Event not fount"));
+                .orElseThrow(() -> new IllegalArgumentException("Event not found"));
         // 추후에  updateEvent()
         event.setTitle(eventRequest.getTitle());
         event.setDateTime(eventRequest.getDateTime());

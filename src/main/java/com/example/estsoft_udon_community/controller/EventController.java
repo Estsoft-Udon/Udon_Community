@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EventController {
 
-    private EventService eventService;
+    private final EventService eventService;
 
     // 캘린더 메인(이벤트 전체 조회)
     @GetMapping
