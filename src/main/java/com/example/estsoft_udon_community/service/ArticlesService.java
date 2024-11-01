@@ -2,9 +2,9 @@ package com.example.estsoft_udon_community.service;
 
 import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Users;
-import com.example.estsoft_udon_community.entity.request.AddArticleRequest;
-import com.example.estsoft_udon_community.entity.response.ArticleResponse;
-import com.example.estsoft_udon_community.entity.request.UpdateArticleRequest;
+import com.example.estsoft_udon_community.dto.request.AddArticleRequest;
+import com.example.estsoft_udon_community.dto.response.ArticleResponse;
+import com.example.estsoft_udon_community.dto.request.UpdateArticleRequest;
 import com.example.estsoft_udon_community.repository.ArticlesLikeRepository;
 import com.example.estsoft_udon_community.repository.ArticlesRepository;
 import lombok.RequiredArgsConstructor;

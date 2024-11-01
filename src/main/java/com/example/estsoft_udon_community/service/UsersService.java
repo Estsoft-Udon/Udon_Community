@@ -1,11 +1,9 @@
 package com.example.estsoft_udon_community.service;
 
 import com.example.estsoft_udon_community.entity.Users;
-import com.example.estsoft_udon_community.entity.request.UsersRequest;
+import com.example.estsoft_udon_community.dto.request.UsersRequest;
 import com.example.estsoft_udon_community.enums.PasswordHint;
 import com.example.estsoft_udon_community.repository.UsersRepository;
-import java.time.LocalDateTime;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

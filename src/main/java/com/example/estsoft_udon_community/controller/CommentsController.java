@@ -2,10 +2,10 @@ package com.example.estsoft_udon_community.controller;
 
 import com.example.estsoft_udon_community.entity.Comments;
 import com.example.estsoft_udon_community.entity.Users;
-import com.example.estsoft_udon_community.entity.response.ArticleResponse;
-import com.example.estsoft_udon_community.entity.response.CommentsArticlesResponse;
-import com.example.estsoft_udon_community.entity.request.CommentsRequest;
-import com.example.estsoft_udon_community.entity.response.CommentsResponse;
+import com.example.estsoft_udon_community.dto.response.ArticleResponse;
+import com.example.estsoft_udon_community.dto.response.CommentsArticlesResponse;
+import com.example.estsoft_udon_community.dto.request.CommentsRequest;
+import com.example.estsoft_udon_community.dto.response.CommentsResponse;
 import com.example.estsoft_udon_community.repository.UsersRepository;
 import com.example.estsoft_udon_community.service.ArticlesService;
 import com.example.estsoft_udon_community.service.CommentsService;
@@ -47,7 +47,7 @@ public class CommentsController {
                 new CommentsArticlesResponse(articles.convertToArticles(new Users()), commentsResponseList));
     }
 
-    @GetMapping("/articles/{articleId}/comments")
+    @GetMapping("/articles/{articleId}/commentsonly")
     public ResponseEntity<List<CommentsResponse>> getOnlyCommentsByArticleId(@PathVariable Long articleId) {
 
         ArticleResponse articles = articlesService.findByArticleId(articleId)
