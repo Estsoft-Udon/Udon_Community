@@ -23,10 +23,18 @@ public class UsersRequest {
 
     private String email;
 
-    private Location location;
+    private Long locationId;
 
-    public Users convert() {
-        return new Users(loginId, password, name, nickname, email, Grade.UDON, passwordHint, passwordAnswer, location);
+    // UserRequest -> Users
+    public Users convert(Location location) {
+        return new Users(loginId,
+                password,
+                name,
+                nickname,
+                email,
+                Grade.UDON,
+                passwordHint,
+                passwordAnswer, location);
     }
 
     public Users updateEntity(Users user) {
