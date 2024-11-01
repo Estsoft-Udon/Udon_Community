@@ -17,4 +17,8 @@ public class Hashtag {
 
     @Column(name = "hashtag_name", nullable = false, length = 100)
     private String name;
+
+    public Hashtag(String name) {
+        this.name = name;
+    }
 }

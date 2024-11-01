@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class ArticleHashtagJoinId implements Serializable {
-    private Long articleId;
-    private Long hashtagId;
+    private Long articles;  // Articles 엔티티의 필드명과 일치시킴
+    private Long hashtag;   // Hashtag 엔티티의 필드명과 일치시킴
 
     // 기본 생성자
     public ArticleHashtagJoinId() {}
@@ -16,13 +16,13 @@ public class ArticleHashtagJoinId implements Serializable {
         if (this == o) return true;
         if (!(o instanceof ArticleHashtagJoinId)) return false;
         ArticleHashtagJoinId that = (ArticleHashtagJoinId) o;
-        return Objects.equals(articleId, that.articleId) &&
-                Objects.equals(hashtagId, that.hashtagId);
+        return Objects.equals(articles, that.articles) &&
+                Objects.equals(hashtag, that.hashtag);
     }
 
     // hashCode 메서드
     @Override
     public int hashCode() {
-        return Objects.hash(articleId, hashtagId);
+        return Objects.hash(articles, hashtag);
     }
 }

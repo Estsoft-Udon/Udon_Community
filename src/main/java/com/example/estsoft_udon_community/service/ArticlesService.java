@@ -1,13 +1,13 @@
 package com.example.estsoft_udon_community.service;
 
+import com.example.estsoft_udon_community.entity.ArticleHashtagJoin;
 import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Hashtag;
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.dto.request.AddArticleRequest;
 import com.example.estsoft_udon_community.dto.response.ArticleResponse;
 import com.example.estsoft_udon_community.dto.request.UpdateArticleRequest;
-import com.example.estsoft_udon_community.repository.ArticlesLikeRepository;
-import com.example.estsoft_udon_community.repository.ArticlesRepository;
+import com.example.estsoft_udon_community.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,28 +22,31 @@ public class ArticlesService {
     private final ArticlesRepository articlesRepository;
     private final ArticlesLikeRepository articlesLikeRepository;
     private final UsersService usersService;
+    private final HashtagRepository hashtagRepository;
+    private final ArticleHashtagJoinRepository articleHashtagJoinRepository;
+    private final UsersRepository usersRepository;
 
-    // 게시글 등록
-//    public Articles saveArticle(AddArticleRequest request, Users currentUser) {
-//        Articles articles = new Articles(currentUser, request.getTitle(), request.getContent(), request.getCategory(),
-//                request.getHashtagName(), request.getUserId().getLocation());
-//        return articlesRepository.save(articles);
-//    }
-
-    public Articles saveArticle(AddArticleRequest request, Users currentUser) {
+    public Articles saveArticle(AddArticleRequest request) {
         Long userId = request.getUserId();
-        Users user = usersService.findUserById(userId);
-        if (user == null) {
-            throw new IllegalArgumentException("유저가 없음");
-        }
+        Users user = usersRepository.findById(userId).orElseThrow();
+
         List<Hashtag> hashtagList = new ArrayList<>();
         for(String hashtag : request.getHashtagName()) {
-            hashtagList.add(new Hashtag(hashtag));
+            Hashtag newHashtag = hashtagRepository.findByName(hashtag)
+                    .orElseGet(() -> hashtagRepository.save(new Hashtag(hashtag)));
+
+            hashtagList.add(newHashtag);
         }
-        Articles articles = new Articles(currentUser, request.getTitle(), request.getContent(), request.getCategory(),
+        Articles articles = new Articles(user, request.getTitle(), request.getContent(), request.getCategory(),
                 hashtagList, user.getLocation());
 
-        return articlesRepository.save(articles);
+        Articles savedArticle = articlesRepository.save(articles);
+
+        for(Hashtag hashtag : hashtagList) {
+            articleHashtagJoinRepository.save(new ArticleHashtagJoin(savedArticle, hashtag));
+        }
+
+        return savedArticle;
     }
 
     public List<ArticleResponse> findAll() {
