@@ -14,6 +14,7 @@ import java.util.List;
 public class Articles {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "article_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -33,6 +34,9 @@ public class Articles {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ArticleCategory category;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Hashtag> hashtags;
 
     @Column(name = "view_count", nullable = false)
     private Long viewCount = 0L;
@@ -63,16 +67,18 @@ public class Articles {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public Articles (Users userId, String title, String content, ArticleCategory category, Location location) {
+    public Articles (Users userId, String title, String content, ArticleCategory category, List<Hashtag> hashtags, Location location) {
         this.userId = userId;
         this.title = title;
         this.content = content;
         this.category = category;
+        this.hashtags = hashtags;
         this.location = location;
     }
 
-    public void update(String title, String content) {
+    public void update(String title, String content, List<Hashtag> hashtags) {
         this.title = title;
         this.content = content;
+        this.hashtags = hashtags;
     }
 }
