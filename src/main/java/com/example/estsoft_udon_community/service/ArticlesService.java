@@ -1,12 +1,13 @@
 package com.example.estsoft_udon_community.service;
 
+import com.example.estsoft_udon_community.entity.ArticleHashtagJoin;
 import com.example.estsoft_udon_community.entity.Articles;
+import com.example.estsoft_udon_community.entity.Hashtag;
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.dto.request.AddArticleRequest;
 import com.example.estsoft_udon_community.dto.response.ArticleResponse;
 import com.example.estsoft_udon_community.dto.request.UpdateArticleRequest;
-import com.example.estsoft_udon_community.repository.ArticlesLikeRepository;
-import com.example.estsoft_udon_community.repository.ArticlesRepository;
+import com.example.estsoft_udon_community.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,13 +20,36 @@ import java.util.Optional;
 public class ArticlesService {
     private final ArticlesRepository articlesRepository;
     private final ArticlesLikeRepository articlesLikeRepository;
+    private final HashtagRepository hashtagRepository;
+    private final ArticleHashtagJoinRepository articleHashtagJoinRepository;
+    private final UsersRepository usersRepository;
 
     // 게시글 등록
-//    public Articles saveArticle(AddArticleRequest request, Users currentUser) {
-//        Articles articles = new Articles(currentUser, request.getTitle(), request.getContent(), request.getCategory(),
-//                request.getHashtagName(), request.getUserId().getLocation());
-//        return articlesRepository.save(articles);
-//    }
+    public Articles addArticle(AddArticleRequest request) {
+        // 새 글 생성
+        Users user = usersRepository.findById(request.getUserId().getId())
+                .orElseThrow(() -> new RuntimeException("User not found")); // 유저 검증
+        Articles article = new Articles(
+                user, // Users 객체로 변환
+                request.getTitle(),
+                request.getContent(),
+                request.getCategory(),
+                request.getLocation()
+        );
+        articlesRepository.save(article);
+
+        // 해시태그와 글 연결
+        for (String hashtagName : request.getHashtagName()) {
+            Hashtag hashtag = hashtagRepository.findByName(hashtagName)
+                    .orElseGet(() -> hashtagRepository.save(new Hashtag(null, hashtagName)));
+            ArticleHashtagJoin articleHashtagJoin = new ArticleHashtagJoin();
+            articleHashtagJoin.setArticles(article);
+            articleHashtagJoin.setHashtag(hashtag);
+            articleHashtagJoinRepository.save(articleHashtagJoin);
+        }
+        return article;
+    }
+
 
     public List<ArticleResponse> findAll() {
         return articlesRepository.findAll().stream()
