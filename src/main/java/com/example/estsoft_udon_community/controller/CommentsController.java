@@ -24,13 +24,13 @@ public class CommentsController {
     private final CommentsService commentsService;
     private final UsersRepository usersRepository;
 
-    @PostMapping("/articles/{articleId}/comments")
-    public ResponseEntity<CommentsResponse> saveCommentByArticleId(@PathVariable Long articleId,
-                                                                   @RequestBody CommentsRequest request) {
-        Comments comments = commentsService.saveComment(articleId, request);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(new CommentsResponse(comments));
-    }
+//    @PostMapping("/articles/{articleId}/comments")
+//    public ResponseEntity<CommentsResponse> saveCommentByArticleId(@PathVariable Long articleId,
+//                                                                   @RequestBody CommentsRequest request) {
+//        Comments comments = commentsService.saveComment(articleId, request);
+//
+//        return ResponseEntity.status(HttpStatus.CREATED).body(new CommentsResponse(comments));
+//    }
 
     @GetMapping("/articles/{articleId}/comments")
     public ResponseEntity<CommentsArticlesResponse> getCommentsByArticleId(@PathVariable Long articleId) {

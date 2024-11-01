@@ -15,7 +15,7 @@ public class Event {
     private Long id;
 
     @ManyToOne // 작성자와의 관계 설정
-    @JoinColumn(name = "users_id")
+    @JoinColumn(name = "user_id")
     private Users users; // 작성한 사용자 정보 추가
 
     @ManyToOne
