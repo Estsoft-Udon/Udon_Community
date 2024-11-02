@@ -76,6 +76,13 @@ public class ArticlesService {
         article.setDeletedAt(LocalDateTime.now());
     }
 
+    // 특정 지역 게시글 조회
+    public List<ArticleResponse> findByLocationId(Long locationId) {
+        return articlesRepository.findByLocationIdAndIsDeletedFalse(locationId).stream()
+                .map(ArticleResponse::new)
+                .toList();
+    }
+
     // 새로운 해시태그를 생성하거나 기존 해시태그를 가져오는 메서드
     private List<Hashtag> getOrCreateHashtags(List<String> hashtagNames) {
         return hashtagNames.stream()
@@ -104,13 +111,6 @@ public class ArticlesService {
         hashtagRepository.deleteUnusedHashtags();
     }
 
-
-//    public List<ArticleResponse> findByLocationId(Long locationId) {
-//        return articlesRepository.findByLocationId(locationId).stream()
-//                .map(ArticleResponse::new)
-//                .toList();
-//    }
-//
 //    public List<ArticleResponse> findAllByLikes() {
 //        // article에는 직접적으로 Like 관련이 없다.
 //        return articlesRepository.findByLikesDesc().stream()

@@ -56,12 +56,13 @@ public class ArticlesController {
         return ResponseEntity.ok().build();
     }
 
-//    @GetMapping("/locations/{locationId}/articles")
-//    public ResponseEntity<List<ArticleResponse>> findByLocationId(@PathVariable Long locationId) {
-//        List<ArticleResponse> locationByIdArticle = articlesService.findByLocationId(locationId);
-//        return ResponseEntity.ok(locationByIdArticle);
-//    }
-//
+    // 특정 지역 게시글 조회하기
+    @GetMapping("/locations/{locationId}/articles")
+    public ResponseEntity<List<ArticleResponse>> findByLocationId(@PathVariable Long locationId) {
+        List<ArticleResponse> locationByIdArticle = articlesService.findByLocationId(locationId);
+        return ResponseEntity.ok(locationByIdArticle);
+    }
+
 //    @GetMapping("/articles/likes")
 //    public ResponseEntity<List<ArticleResponse>> findAllByLikes() {
 //        List<ArticleResponse> articlesByLikes = articlesService.findAllByLikes();
