@@ -6,6 +6,7 @@ import com.example.estsoft_udon_community.repository.ArticlesRepository;
 import com.example.estsoft_udon_community.repository.UsersRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,5 +40,9 @@ public class ArticlesLikeService {
             ArticlesLike newLike = new ArticlesLike(article, user);
             return articlesLikeRepository.save(newLike);
         }
+    }
+
+    public List<Articles> findArticlesOrderByLikesCountDesc() {
+        return articlesLikeRepository.findArticlesOrderByLikesCountDesc();
     }
 }
