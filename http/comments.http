@@ -1,0 +1,199 @@
+### 회원가입 (User Registration)
+POST http://localhost:8080/api/register
+Content-Type: application/json
+
+{
+  "name": "test",
+  "email": "test@naver.com",
+  "loginId": "test123",
+  "password": "1234",
+  "passwordHint": "FAVORITE_COLOR",
+  "passwordAnswer": "blue",
+  "nickname": "test",
+  "locationId": 13
+}
+
+### 로그인 (User Login)
+POST http://localhost:8080/api/login
+Content-Type: application/x-www-form-urlencoded
+
+loginId=songjuhwan33&password=1234
+
+### 전체조회
+GET http://localhost:8080/api/users
+Content-Type: application/json
+
+### 회원정보조회
+@userId = 1
+GET http://localhost:8080/api/users/{{userId}}
+Content-Type: application/json
+
+### 유저 아이디로 데이터 삭제
+DELETE http://localhost:8080/api/users/{{userId}}
+Content-Type: application/json
+
+### 아이디 찾기 테스트
+POST http://localhost:8080/api/searchId
+Content-Type: application/json
+
+{
+  "name": "test",
+  "email": "test@naver.com"
+}
+
+### 비밀번호 찾기 테스트
+POST http://localhost:8080/api/searchPassword
+Content-Type: application/json
+
+{
+  "loginId": "test123",
+  "passwordHint": "FAVORITE_COLOR",
+  "passwordAnswer": "blue"
+}
+
+
+
+### 전체 이벤트 조회
+GET http://localhost:8080/api/event
+Content-Type: application/json
+
+### 새로운 이벤트 추가
+POST http://localhost:8080/api/event
+Content-Type: application/json
+
+{
+  "dateTime": "2024-10-31T12:00:00",
+  "title": "eventTitle",
+  "content": "eventContent",
+  "locationId": 13,
+  "eventType": "FESTIVAL",
+  "userId": 1
+}
+
+### 특정 이벤트 수정
+PUT http://localhost:8080/api/event/5
+Content-Type: application/json
+
+{
+  "title": "Updated Event",
+  "dateTime": "2024-11-01T15:00:00",
+  "content": "이벤트 내용",
+  "eventType": "FESTIVAL"
+}
+
+### 특정 이벤트 삭제
+DELETE http://localhost:8080/api/event/1
+Content-Type: application/json
+
+
+### 유저 조회
+@id=3
+GET http://localhost:8080/api/users/{{id}}
+
+
+### 게시글 추가
+POST localhost:8080/api/articles
+Content-Type: application/json
+
+{
+  "userId": 3,
+  "category": "RESTAURANT",
+  "title": "게시글 제목입니다",
+  "hashtagName": ["해시태그5", "해시태그6"],
+  "content": "게시글 내용입니다",
+  "locationId": 13
+}
+
+### 코멘트 추가
+@articleId=8
+POST localhost:8080/api/articles/{{articleId}}/comments
+Content-Type: application/json
+
+{
+  "user_id": 5,
+  "article_id": {{articleId}},
+  "content": "댓글 내용입니다"
+}
+
+
+### 코멘트 조회
+GET localhost:8080/api/articles/{{articleId}}/comments
+
+
+### 코멘트 조회 (코멘트만)
+GET localhost:8080/api/articles/{{articleId}}/commentsonly
+
+
+### 코멘트 수정
+@commentId = 2
+PUT localhost:8080/api/comments/{{commentId}}
+Content-Type: application/json
+
+{
+  "content": "수정한 댓글입니다2"
+}
+
+### 코멘트 삭제
+DELETE localhost:8080/api/comments/{{commentId}}
+
+
+
+### 게시글 좋아요 등록
+POST localhost:8080/api/like/articles
+Content-Type: application/json
+
+{
+  "articleId": 8,
+  "userId": 5
+}
+
+
+### 게시글 좋아요 삭제
+DELETE localhost:8080/api/like/articles
+Content-Type: application/json
+
+{
+  "articleId": 8,
+  "userId": 5
+}
+
+
+### 코멘트 좋아요 등록
+POST localhost:8080/api/like/Comments
+Content-Type: application/json
+
+{
+  "commentId": 8,
+  "userId": 5
+}
+
+
+### 코멘트 좋아요 삭제
+DELETE localhost:8080/api/like/articles
+Content-Type: application/json
+
+{
+  "commentId": 3,
+  "userId": 5
+}
+
+
+### 게시글 좋아요 등록 / 삭제
+POST localhost:8080/api/like/ArticlesLike
+Content-Type: application/json
+
+{
+  "articleId": 8,
+  "userId": 5
+}
+
+
+
+### 코멘트 좋아요 등록 / 삭제
+POST localhost:8080/api/like/CommentsLike
+Content-Type: application/json
+
+{
+  "commentId": 3,
+  "userId": 5
+}
