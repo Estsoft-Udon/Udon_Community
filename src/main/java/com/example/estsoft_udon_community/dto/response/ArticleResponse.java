@@ -2,8 +2,6 @@ package com.example.estsoft_udon_community.dto.response;
 
 import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Hashtag;
-import com.example.estsoft_udon_community.entity.Location;
-import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.enums.ArticleCategory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,11 +21,11 @@ public class ArticleResponse {
     private String title;
     private String content;
     private ArticleCategory category;
-    private List<Hashtag> hashtags;
+    private List<String> hashtags;
     private Long viewCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private Location location;
+    private String location;
 
     public ArticleResponse(Articles article) {
         // pk primary Key
@@ -39,7 +37,11 @@ public class ArticleResponse {
         this.viewCount = article.getViewCount();
         this.createdAt = article.getCreatedAt();
         this.updatedAt = article.getUpdatedAt();
-        this.location = article.getLocation();
+        this.location = article.getLocation().getName();
+        // Hashtags 변환
+        this.hashtags = article.getHashtags().stream()
+                .map(Hashtag::getName)
+                .toList();
     }
 
 //    public Articles convertToArticles(Users users) {
