@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,23 +29,15 @@ public class ArticlesService {
         Long userId = request.getUserId();
         Users user = usersRepository.findById(userId).orElseThrow();
 
-        List<Hashtag> hashtagList = new ArrayList<>();
-        for (String hashtag : request.getHashtagName()) {
-            Hashtag newHashtag = hashtagRepository.findByName(hashtag)
-                    .orElseGet(() -> hashtagRepository.save(new Hashtag(hashtag)));
-
-            hashtagList.add(newHashtag);
-        }
+        List<Hashtag> hashtagList = getOrCreateHashtags(request.getHashtagName());
 
         Articles articles = new Articles(user, request.getTitle(), request.getContent(), request.getCategory(),
                 hashtagList, user.getLocation());
-
         Articles savedArticle = articlesRepository.save(articles);
 
         for (Hashtag hashtag : hashtagList) {
             articleHashtagJoinRepository.save(new ArticleHashtagJoin(savedArticle, hashtag));
         }
-
         return savedArticle;
     }
 
@@ -66,55 +57,14 @@ public class ArticlesService {
     // 특정 게시글 수정
     @Transactional
     public Articles updateArticle(Long id, UpdateArticleRequest request) {
-        // 게시글 조회
         Articles article = articlesRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없음"));
 
-        // 새로운 해시태그 리스트 생성
-        List<Hashtag> newHashtags = request.getHashtagName().stream()
-                .map(hashtagName -> hashtagRepository.findByName(hashtagName)
-                        .orElseGet(() -> {
-                            Hashtag newHashtag = new Hashtag(hashtagName);
-                            return hashtagRepository.save(newHashtag);
-                        }))
-                .toList();
+        List<Hashtag> newHashtags = getOrCreateHashtags(request.getHashtagName());
 
         updateArticleDetails(article, request.getTitle(), request.getContent(), newHashtags);
-
+        removeUnusedHashtags();
         return articlesRepository.save(article);
-    }
-
-    // 게시글 수정 시 사용하지않는 해시태그 제거
-    private void updateArticleDetails(Articles article, String title, String content, List<Hashtag> newHashtags) {
-        article.setTitle(title);
-        article.setContent(content);
-
-        // 기존 해시태그 유지 및 새 해시태그 추가
-        List<Hashtag> existingHashtags = article.getHashtags();
-
-        // 기존 해시태그에서 새로운 해시태그에 없는 것을 제거
-        existingHashtags.removeIf(existing -> !newHashtags.contains(existing));
-
-        // 새로운 해시태그 추가
-        for (Hashtag newHashtag : newHashtags) {
-            if (!existingHashtags.contains(newHashtag)) {
-                existingHashtags.add(newHashtag);
-            }
-        }
-
-        // 불필요한 해시태그 삭제
-        List<Hashtag> hashtagsToRemove = new ArrayList<>(existingHashtags);
-        for (Hashtag existing : hashtagsToRemove) {
-            if (!newHashtags.contains(existing) && !isHashtagUsedInOtherArticles(existing)) {
-                articleHashtagJoinRepository.deleteByHashtag(existing);  // 관계 삭제
-                hashtagRepository.delete(existing);
-            }
-        }
-    }
-
-    // 사용되는 해시태그 확인
-    private boolean isHashtagUsedInOtherArticles(Hashtag hashtag) {
-        return articlesRepository.countByHashtagsContains(hashtag) > 0;
     }
 
     // 특정 게시글 삭제
@@ -125,6 +75,35 @@ public class ArticlesService {
         article.setDeleted(true);
         article.setDeletedAt(LocalDateTime.now());
     }
+
+    // 새로운 해시태그를 생성하거나 기존 해시태그를 가져오는 메서드
+    private List<Hashtag> getOrCreateHashtags(List<String> hashtagNames) {
+        return hashtagNames.stream()
+                .map(hashtagName -> hashtagRepository.findByName(hashtagName)
+                        .orElseGet(() -> hashtagRepository.save(new Hashtag(hashtagName))))
+                .toList();
+    }
+
+    // 게시글 업데이트
+    private void updateArticleDetails(Articles article, String title, String content, List<Hashtag> newHashtags) {
+        article.setTitle(title);
+        article.setContent(content);
+        // 새로운 해시태그로 기존 해시태그 필터링
+        List<Hashtag> existingHashtags = article.getHashtags();
+        existingHashtags.retainAll(newHashtags);
+        // 새로운 해시태그 추가
+        for (Hashtag newHashtag : newHashtags) {
+            if (!existingHashtags.contains(newHashtag)) {
+                existingHashtags.add(newHashtag);
+            }
+        }
+    }
+
+    // 사용안하는 해시태그 제거
+    private void removeUnusedHashtags() {
+        hashtagRepository.deleteUnusedHashtags();
+    }
+
 
 //    public List<ArticleResponse> findByLocationId(Long locationId) {
 //        return articlesRepository.findByLocationId(locationId).stream()

@@ -5,7 +5,6 @@ import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.dto.response.ArticleResponse;
 import com.example.estsoft_udon_community.dto.request.UpdateArticleRequest;
 import com.example.estsoft_udon_community.service.ArticlesService;
-import com.example.estsoft_udon_community.service.UsersService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +18,6 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class ArticlesController {
     private final ArticlesService articlesService;
-    private final UsersService usersService;
 
     // 게시글 작성
     @PostMapping("/articles")
