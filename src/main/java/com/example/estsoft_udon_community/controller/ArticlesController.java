@@ -63,9 +63,10 @@ public class ArticlesController {
         return ResponseEntity.ok(locationByIdArticle);
     }
 
-//    @GetMapping("/articles/likes")
-//    public ResponseEntity<List<ArticleResponse>> findAllByLikes() {
-//        List<ArticleResponse> articlesByLikes = articlesService.findAllByLikes();
-//        return ResponseEntity.ok(articlesByLikes);
-//    }
+    // 해시태그로 게시글 조회
+    @GetMapping("/hashtag/{hashtagId}/articles")
+    public ResponseEntity<List<ArticleResponse>> findByHashtag(@PathVariable Long hashtagId) {
+        List<ArticleResponse> hashtagByArticle = articlesService.findByHashtag(hashtagId);
+        return ResponseEntity.ok(hashtagByArticle);
+    }
 }

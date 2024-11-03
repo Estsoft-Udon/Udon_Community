@@ -83,6 +83,13 @@ public class ArticlesService {
                 .toList();
     }
 
+    // 해시태그로 게시글 조회
+    public List<ArticleResponse> findByHashtag(Long hashtagId) {
+        return hashtagRepository.findArticlesByHashtagIdAndIsDeletedFalse(hashtagId).stream()
+                .map(ArticleResponse::new)
+                .toList();
+    }
+
     // 새로운 해시태그를 생성하거나 기존 해시태그를 가져오는 메서드
     private List<Hashtag> getOrCreateHashtags(List<String> hashtagNames) {
         return hashtagNames.stream()
@@ -110,11 +117,4 @@ public class ArticlesService {
     private void removeUnusedHashtags() {
         hashtagRepository.deleteUnusedHashtags();
     }
-
-//    public List<ArticleResponse> findAllByLikes() {
-//        // article에는 직접적으로 Like 관련이 없다.
-//        return articlesRepository.findByLikesDesc().stream()
-//                .map(ArticleResponse::new)
-//                .toList();
-//    }
 }
