@@ -136,3 +136,87 @@ select option:checked {
     font-size: 1.5rem;
     color: red;
 }
+
+.id_box{
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 1rem;
+}
+
+.id_box button{
+    padding: 1rem;
+    font-size: 1.4rem;
+    height: auto;
+    margin-bottom: 1.5rem;
+}
+
+.success_cont p{
+    text-align: center;
+    line-height: 9rem;
+    font-size: 2rem;
+    font-weight: 500;
+    border-radius: 1rem;
+}
+
+.warning{
+    font-size: 1.7rem;
+    text-align: center;
+    font-weight: 500;
+}
+
+.info-section span{
+    width: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    border-radius: 1rem;
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: 1.5rem;
+}
+
+.info-section label{
+    font-size: 1.3rem;
+    padding-left: 0.5rem;
+}
+
+.grade_box{
+    display: grid;
+    grid-template-columns: 4fr 1fr;
+    gap: 1rem;
+}
+
+.grade_box .reversal_btn{
+    padding: 1rem;
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    border-color: rgba(0,0,0,0.5);
+    color: rgba(0,0,0,0.5);
+    cursor: not-allowed;
+}
+
+.grade_box .reversal_btn.on{
+    cursor: pointer;
+    border-color: rgba(0, 133, 249, 1);
+}
+
+.info-section span.grade_info{
+    font-size: 1.2rem;
+    border: none;
+    display: inline;
+    padding: 0;
+    vertical-align: top;
+}
+
+.pw_change_btn{
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+.bot{
+    text-align: right;
+    margin-top: 10rem;
+}
+
+.delete_btn{
+    color: #aaa;
+}

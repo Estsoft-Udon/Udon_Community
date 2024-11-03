@@ -1,4 +1,4 @@
-const selectBoxes = document.querySelectorAll('.securityQuestion');
+const selectBoxes = document.querySelectorAll('.securityQuestion, #location');
 
 selectBoxes.forEach(selectBox => {
     selectBox.addEventListener('change', function() {
