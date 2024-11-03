@@ -170,3 +170,8 @@ dialog{
     text-align: center;
     display: block;
 }
+
+.mw_50{
+    max-width: 50rem;
+    margin: 0 auto 5rem;
+}
