@@ -7,9 +7,11 @@ import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.repository.ArticlesRepository;
 import com.example.estsoft_udon_community.repository.CommentsRepository;
 import com.example.estsoft_udon_community.repository.UsersRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,8 +37,9 @@ public class CommentsService {
 
     // 댓글 목록 조회
     public Comments findComment(Long commentsId) {
-        Optional<Comments> optionalComments = commentsRepository.findById(commentsId);
-        return optionalComments.orElse(new Comments());
+        return commentsRepository.findById(commentsId)
+                .filter(comment -> !comment.getIsDeleted()) // 삭제되지 않은 댓글만 반환
+                .orElseThrow(() -> new EntityNotFoundException("댓글을 찾을 수 없습니다. ID: " + commentsId));
     }
 
     public List<Comments> findCommentsByArticleId(Long articleId) {
@@ -57,6 +60,25 @@ public class CommentsService {
     // 댓글 삭제
     public void deleteBy(Long commentsId) {
         commentsRepository.deleteById(commentsId);
+    }
+
+
+    // 댓글 soft delete
+    public Comments softDelete(Long commentsId) {
+        Comments comments = findComment(commentsId);
+        comments.setIsDeleted(true);
+        comments.setDeletedAt(LocalDateTime.now());
+
+        return commentsRepository.save(comments);
+    }
+
+
+    // 댓글 삭제 여부 검사
+    public boolean isDeleted(Comments comments) {
+        if(comments.getIsDeleted()) {
+            return true;
+        }
+        return false;
     }
 }
 

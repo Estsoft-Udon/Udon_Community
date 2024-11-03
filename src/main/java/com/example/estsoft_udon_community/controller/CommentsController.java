@@ -71,10 +71,18 @@ public class CommentsController {
     }
 
     @DeleteMapping("/comments/{commentId}")
-    public ResponseEntity<Void> deletedComment(@PathVariable Long commentId) {
+    public ResponseEntity<Void> deleteComment(@PathVariable Long commentId) {
         commentsService.deleteBy(commentId);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/comments/{commentId}")
+    public ResponseEntity<Void> softDelete(@PathVariable Long commentId) {
+        commentsService.softDelete(commentId);
+        return ResponseEntity.ok().build();
+    }
+
+
 }
 /*
 댓글 추가	POST	/api/articles/{articleId}/comments
