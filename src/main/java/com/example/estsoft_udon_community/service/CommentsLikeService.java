@@ -1,5 +1,6 @@
 package com.example.estsoft_udon_community.service;
 
+import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Comments;
 import com.example.estsoft_udon_community.entity.CommentsLike;
 import com.example.estsoft_udon_community.entity.Users;
@@ -8,6 +9,7 @@ import com.example.estsoft_udon_community.repository.CommentsRepository;
 import com.example.estsoft_udon_community.repository.UsersRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -43,5 +45,13 @@ public class CommentsLikeService {
             CommentsLike newLike = new CommentsLike(comment, user);
             return commentsLikeRepository.save(newLike);
         }
+    }
+
+    public List<Comments> findCommentsOrderByLikesCountDesc() {
+        return commentsLikeRepository.findCommentsOrderByLikesCountDesc();
+    }
+
+    public List<Object[]> findCommentsByArticleIdOrderByLikesCountDesc(Long articleId) {
+        return commentsLikeRepository.findCommentsByArticleIdOrderByLikesCountDesc(articleId);
     }
 }
