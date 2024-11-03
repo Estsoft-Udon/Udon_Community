@@ -42,7 +42,7 @@ public class ArticlesLikeService {
         }
     }
 
-    public List<Articles> findArticlesOrderByLikesCountDesc() {
-        return articlesLikeRepository.findArticlesOrderByLikesCountDesc();
+    public List<Object[]> findArticlesOrderByLikesCountDesc() {
+        return articlesLikeRepository.findArticlesOrderByLikesCountDescWithCount();
     }
 }

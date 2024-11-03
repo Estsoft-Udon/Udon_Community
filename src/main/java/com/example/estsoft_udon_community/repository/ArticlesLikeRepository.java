@@ -10,9 +10,10 @@ import java.util.Optional;
 public interface ArticlesLikeRepository extends JpaRepository<ArticlesLike, Long> {
     Optional<ArticlesLike> findByArticlesAndUsers(Articles article, Users user);
 
-    @Query("SELECT a FROM Articles a " +
+    @Query("SELECT a, COUNT(al.id) FROM Articles a " +
             "LEFT JOIN ArticlesLike al ON a = al.articles " +
             "GROUP BY a " +
             "ORDER BY COUNT(al.id) DESC")
-    List<Articles> findArticlesOrderByLikesCountDesc();
+    List<Object[]> findArticlesOrderByLikesCountDescWithCount();
+
 }
