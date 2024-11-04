@@ -1,5 +1,6 @@
 package com.example.estsoft_udon_community.service;
 
+import com.example.estsoft_udon_community.dto.request.UpdateArticleRequest;
 import com.example.estsoft_udon_community.dto.response.ArticleResponse;
 import com.example.estsoft_udon_community.dto.response.UsersResponse;
 import com.example.estsoft_udon_community.entity.Articles;
@@ -9,6 +10,7 @@ import com.example.estsoft_udon_community.repository.ArticlesRepository;
 import com.example.estsoft_udon_community.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,6 +19,7 @@ import java.util.List;
 public class AdminService {
     private final UsersRepository usersRepository;
     private final ArticlesRepository articlesRepository;
+    private final ArticlesService articlesService;
 
     // 관리자 로그인
     public Users adminLogin(String loginId, String password) {
@@ -50,5 +53,11 @@ public class AdminService {
         return articles.stream()
                 .map(ArticleResponse::new)
                 .toList();
+    }
+
+    // 관리자 게시글 수정
+    @Transactional
+    public Articles updateArticle(Long articleId, UpdateArticleRequest request) {
+        return articlesService.updateArticle(articleId, request);
     }
 }

@@ -1,8 +1,10 @@
 package com.example.estsoft_udon_community.controller;
 
+import com.example.estsoft_udon_community.dto.request.UpdateArticleRequest;
 import com.example.estsoft_udon_community.dto.request.UsersRequest;
 import com.example.estsoft_udon_community.dto.response.ArticleResponse;
 import com.example.estsoft_udon_community.dto.response.UsersResponse;
+import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.enums.Grade;
 import com.example.estsoft_udon_community.service.AdminService;
@@ -45,5 +47,12 @@ public class AdminController {
     public ResponseEntity<List<ArticleResponse>> getAdminArticles() {
         List<ArticleResponse> adminArticles = adminService.getAdminArticles();
         return ResponseEntity.ok(adminArticles);
+    }
+
+    // 관리자 게시글 수정
+    @PutMapping("/articles/{articleId}")
+    public ResponseEntity<ArticleResponse> updateAdminArticle(@PathVariable Long articleId, @RequestBody UpdateArticleRequest request) {
+        Articles updatedArticle = adminService.updateArticle(articleId, request);
+        return ResponseEntity.ok(new ArticleResponse(updatedArticle));
     }
 }
