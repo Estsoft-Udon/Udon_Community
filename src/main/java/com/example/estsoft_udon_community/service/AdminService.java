@@ -30,4 +30,13 @@ public class AdminService {
                 .map(UsersResponse::new)
                 .toList();
     }
+
+    // 회원 등급 수정
+    public UsersResponse updateUserGrade(Long userId, Grade grade) {
+        Users user = usersRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("없는 유저"));
+        user.setGrade(grade);
+        usersRepository.save(user);
+        return new UsersResponse(user);
+    }
 }
