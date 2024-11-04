@@ -1,8 +1,11 @@
 package com.example.estsoft_udon_community.service;
 
+import com.example.estsoft_udon_community.dto.response.ArticleResponse;
 import com.example.estsoft_udon_community.dto.response.UsersResponse;
+import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.enums.Grade;
+import com.example.estsoft_udon_community.repository.ArticlesRepository;
 import com.example.estsoft_udon_community.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminService {
     private final UsersRepository usersRepository;
+    private final ArticlesRepository articlesRepository;
 
     // 관리자 로그인
     public Users adminLogin(String loginId, String password) {
@@ -38,5 +42,13 @@ public class AdminService {
         user.setGrade(grade);
         usersRepository.save(user);
         return new UsersResponse(user);
+    }
+
+    // 관리자 게시글 조회
+    public List<ArticleResponse> getAdminArticles() {
+        List<Articles> articles = articlesRepository.findByAuthorGrade(Grade.UDON_ADMIN);
+        return articles.stream()
+                .map(ArticleResponse::new)
+                .toList();
     }
 }

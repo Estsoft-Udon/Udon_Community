@@ -1,6 +1,7 @@
 package com.example.estsoft_udon_community.controller;
 
 import com.example.estsoft_udon_community.dto.request.UsersRequest;
+import com.example.estsoft_udon_community.dto.response.ArticleResponse;
 import com.example.estsoft_udon_community.dto.response.UsersResponse;
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.enums.Grade;
@@ -37,5 +38,12 @@ public class AdminController {
     public ResponseEntity<UsersResponse> updateUserGrade(@PathVariable Long userId, @RequestBody Grade grade) {
         UsersResponse updateUser = adminService.updateUserGrade(userId, grade);
         return ResponseEntity.ok(updateUser);
+    }
+
+    // 관리자 게시글 조회
+    @GetMapping("/articles")
+    public ResponseEntity<List<ArticleResponse>> getAdminArticles() {
+        List<ArticleResponse> adminArticles = adminService.getAdminArticles();
+        return ResponseEntity.ok(adminArticles);
     }
 }
