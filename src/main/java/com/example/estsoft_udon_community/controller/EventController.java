@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -27,9 +28,9 @@ public class EventController {
 
     // 캘린더 추가
     @PostMapping
-    public ResponseEntity<EventResponse> addEvent(@RequestBody EventRequest eventRequest) {
+    public ResponseEntity<String> addEvent(@ModelAttribute EventRequest eventRequest) {
         EventResponse createEvent = eventService.addEvent(eventRequest);
-        return ResponseEntity.status(201).body(createEvent);
+        return ResponseEntity.ok("등록 요청이 완료되었습니다."); // 성공 메시지 반환
     }
 
     // 캘린더 수정
