@@ -65,10 +65,10 @@ public class ViewController {
     public String signup(Model model) {
         List<String> upperLocations = locationService.getDistinctUpperLocations();
         model.addAttribute("upperLocations", upperLocations);
-
         model.addAttribute("passwordHints", PasswordHint.values());
 
         if (!upperLocations.isEmpty()) {
+
             String firstUpperLocation = upperLocations.get(0);
             List<Location> lowerLocations = locationService.getLowerLocation(firstUpperLocation);
             model.addAttribute("locations", lowerLocations);
@@ -80,10 +80,17 @@ public class ViewController {
     public String signup(@ModelAttribute UsersRequest request,
                          Model model) {
         try {
+            // 전송된 데이터 로깅
             // 사용자의 Location 정보를 가져와야합니다.
+
             //
-            Long locationId = request.getLocationId();
+            Long locationId = locationService.getLocationIdByUpperLocationAndName(request.getUpperLocation(),
+                    request.getLocationName());
+            request.setLocationId(locationId);
+
             usersService.registerUser(request);
+            System.out.println("Received signup request: " + request);
+
             return "redirect:/success";
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());

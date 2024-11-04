@@ -24,6 +24,12 @@ public class UsersRequest {
 
     private Long locationId;
 
+
+    // 추가된 필드
+    private String upperLocation; // UpperLocation 정보
+
+    private String locationName; // Location 이름
+
     // UserRequest -> Users
     public Users convert(Location location) {
         return new Users(loginId,

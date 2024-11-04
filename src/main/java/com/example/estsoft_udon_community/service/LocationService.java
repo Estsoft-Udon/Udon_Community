@@ -26,4 +26,12 @@ public class LocationService {
         UpperLocationEnum upperLocationEnum = UpperLocationEnum.fromString(locationName);
         return locationRepository.findByUpperLocation(upperLocationEnum);
     }
+
+    // UpperLocation과 name을 통해 Location id를 리턴하는 메서드
+    public Long getLocationIdByUpperLocationAndName(String upperLocation, String name) {
+        UpperLocationEnum upperLocationEnum = UpperLocationEnum.fromString(upperLocation);
+        Location location = locationRepository.findByUpperLocationAndName(upperLocationEnum, name);
+
+        return location.getId();
+    }
 }

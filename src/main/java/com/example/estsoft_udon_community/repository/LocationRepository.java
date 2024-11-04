@@ -13,5 +13,9 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
     List<String> findDistinctUpperLocations();
 
     List<Location> findByUpperLocation(UpperLocationEnum upperLocation);
+
+    // UpperLocation과 name을 통해 Location을 찾는 메서드
+    Location findByUpperLocationAndName(UpperLocationEnum upperLocation, String name);
+
 }
 

@@ -18,7 +18,7 @@ selectBoxes.forEach(selectBox => {
 
 function updateLowerLocations() {
     const upperLocation = document.getElementById('upperLocation').value;
-    const locationSelect = document.getElementById('location');
+    const locationSelect = document.getElementById('locationName');
 
     // 선택된 상위 지역이 없으면 하위 지역을 초기화
     if (!upperLocation) {
@@ -41,7 +41,6 @@ function updateLowerLocations() {
 
             data.forEach(location => {
                 const option = document.createElement('option');
-                option.value = location.id; // location의 id 값으로 설정
                 option.textContent = location.name; // location의 name 값으로 설정
                 locationSelect.appendChild(option);
             });

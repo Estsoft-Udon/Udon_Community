@@ -22,6 +22,7 @@ public class UsersService {
     // 회원가입
     public Users registerUser(UsersRequest request) {
         Location location = locationRepository.findById(request.getLocationId()).orElseThrow();
+
         return usersRepository.save(request.convert(location));
     }
 
