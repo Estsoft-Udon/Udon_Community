@@ -175,3 +175,91 @@ dialog{
     max-width: 50rem;
     margin: 0 auto 5rem;
 }
+
+.icon {
+    width: 1.6rem;
+    height: 1.6rem;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: filter 0.3s;
+}
+
+/* 좋아요 (엄지) 아이콘 */
+.thumb_icon {
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M1 21h4V9H1v12zm22-11c0-.83-.67-1.5-1.5-1.5h-6.38l.94-4.57.02-.32c0-.41-.17-.79-.44-1.06L14 2 7.59 8.59C7.22 8.96 7 9.46 7 10v9c0 .83.67 1.5 1.5 1.5h9.29c.72 0 1.38-.38 1.72-.97l3.38-6.03c.11-.21.18-.45.18-.7v-2z" fill="%23007bff"/></svg>');
+    filter: grayscale(100%);
+}
+
+.thumb_icon:hover {
+    filter: grayscale(0%);
+}
+
+.thumb_icon.on{
+    filter: grayscale(0%);
+}
+
+/* 댓글 아이콘 */
+.comment_icon {
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 6h-2V4H5v2H3c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h6l3 3 3-3h6c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12h-7.17L12 20.17 9.17 18H3V8h18v10z" fill="%2328a745"/></svg>');
+    filter: grayscale(100%);
+}
+
+.comment_icon:hover {
+    filter: grayscale(0%);
+}
+
+.comment_icon.on {
+    filter: grayscale(0%);
+}
+
+/* 셀렉트 박스 */
+select{
+    width: 100%;
+    padding: 1rem 3rem 1rem 1rem;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 1rem;
+    box-sizing: border-box;
+    font-size: 1.5rem;
+    appearance: none;
+    background-color: #fff;
+    margin-bottom: 1.5rem;
+    color: rgba(0, 0, 0, 0.6);
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23666" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+}
+
+select:focus {
+    border-color: rgba(0,133,249,1);
+    outline: none;
+    color: #000;
+}
+
+select.selected {
+    color: #000;
+}
+
+select option:checked {
+    color: #000;
+}
+
+/* 인풋 박스 */
+input{
+    width: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    border-radius: 1rem;
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: 1.5rem;
+}
+
+input:last-child{
+    margin-bottom: 2.5rem;
+}
+
+input:focus{
+    border: 1px solid rgba(0,133,249,1);
+}

@@ -1,0 +1,269 @@
+.location_filter{
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 10rem;
+    padding: 0 3.2rem;
+}
+
+.location_filter select{
+    margin-bottom: 0;
+}
+
+.location_filter button{
+    height: 4rem;
+    padding: 1rem;
+}
+
+.main main{
+    padding: 0 3.2rem;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    gap: 3rem;
+}
+
+main section{
+    padding: 0;
+}
+
+.main h2{
+    border-radius: 1rem;
+    background: rgba(240, 246, 250, 1);
+    padding: 2rem;
+    font-size: clamp(1.4rem, 2vw, 2rem);
+}
+
+aside h2 a{
+    cursor: default;
+}
+
+.post_list li{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 2rem;
+}
+
+.left_sec .post_list li{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.post_list li:last-child{
+    border: none;
+}
+
+.left_sec .l_box{
+    display: flex;
+    align-items: center;
+}
+
+.post_stats{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.post_stats .likes{
+    font-size: 1.2rem;
+    color: #595959;
+}
+
+.right_sec h2 a:hover {
+    text-decoration: underline;
+}
+
+.l_box .top{
+    margin-bottom: 1rem;
+}
+
+.l_box .top span{
+    font-size: clamp(1.1rem, 0.9vw, 1.3rem);
+}
+
+.w_id{
+    position: relative;
+    display: inline-block;
+    padding-right: 1rem;
+    margin-right: 0.7rem;
+}
+
+.w_id:before{
+    content: "";
+    width: 1px;
+    height: 70%;
+    background: rgba(0, 0, 0, 0.4);
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.l_box .bot{
+    display: flex;
+    justify-content: space-between;
+}
+
+.right_sec .thumb_icon:hover{
+    filter: grayscale(100%);
+}
+
+.title {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    max-width: clamp(20rem, 20vw, 30rem);
+}
+
+.l_box div{
+    font-size: clamp(1.2rem,1.1vw,1.6rem);
+}
+
+.board_list{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+}
+
+.btn_sec{
+    text-align: right;
+    margin: 2rem 0;
+}
+
+.btn_sec .event_apply_btn{
+    padding: 1rem;
+    font-size: 1.4rem;
+}
+
+/* 모달 */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 3rem;
+    width: 30%;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+.modal-header {
+    margin-bottom: 3rem;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-weight: 500;
+}
+
+.modal-header p{
+    font-size: 1.3rem;
+    color: rgba(0,133,249,1);
+    margin-top: 3rem;
+    font-weight: 500;
+}
+
+.close-btn {
+    cursor: pointer;
+    font-size: clamp(1.2rem, 2vw, 6rem);
+}
+
+textarea {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    resize: none;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 1rem;
+    padding: 1rem;
+}
+
+textarea:focus {
+    border-color: rgba(0,133,249,1);
+    outline: none;
+}
+
+#modal h2{
+    margin: 0;
+    text-align: center;
+    padding: 0;
+    width: 100%;
+    background: none;
+}
+
+#modal .btn_sec{
+    text-align: center;
+}
+
+#modal label{
+    font-size: 1.3rem;
+    padding-left: 0.5rem;
+}
+
+.close-btn{
+    position: absolute;
+    right: 3rem;
+    top: 1.5rem;
+}
+
+/* 캘린더 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    width: 14.28%;
+    height: 8rem;
+    text-align: center;
+    border: 1px solid #ccc;
+    padding: 1rem;
+}
+
+.calendar-header{
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 3rem;
+    font-size: 1.7rem;
+}
+
+.calendar-header button{
+    width: 3rem;
+    height: 3rem;
+    font-size: 2rem;
+}
+
+.today{
+    position: relative;
+    color: #fff;
+}
+
+.today:before{
+    content: "";
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: rgba(0, 133, 249, 1);
+    position: absolute;
+    top: 0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: -1;
+}
