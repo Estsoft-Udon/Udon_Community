@@ -31,8 +31,8 @@ public class ViewController {
 
     // 로그인은 수정해서
     @PostMapping("/login")
-    public String loginPost(@RequestParam String loginId,
-                            @RequestParam String password,
+    public String loginPost(String loginId,
+                            String password,
                             Model model) {
         try {
             Users users = usersService.loginUser(loginId, password);
@@ -41,17 +41,48 @@ public class ViewController {
             return "redirect:/mypage";
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
+            model.addAttribute("loginError", true);
             return "member/login"; // 로그인 실패 시 로그인 페이지로 다시 이동
         }
     }
 
     @GetMapping("/find_id")
-    public String findId() {
+    public String findId(Model model) {
+        model.addAttribute("isIdFound", false);
+        return "member/find_id";
+    }
+
+    @PostMapping("/find_id")
+    public String findId(String name, String email, Model model) {
+
+        // 아이디 검색 서비스 호출
+        Users foundUser = usersService.searchId(name, email);
+
+        if (foundUser != null) {
+            String loginId = foundUser.getLoginId();
+            // 아이디가 발견된 경우
+            model.addAttribute("foundId", loginId);
+            model.addAttribute("isIdFound", true);
+            // 아이디 발견 여부 플래그
+        } else {
+            model.addAttribute("isIdFound", false);
+        }
         return "member/find_id";
     }
 
     @GetMapping("/find_pw")
-    public String findPw() {
+    public String findPw(Model model) {
+        model.addAttribute("passwordHints", PasswordHint.values());
+        return "member/find_pw";
+    }
+
+    @PostMapping("/find_pw")
+    public String findPw(Model model, String loginId, PasswordHint passwordHint, String passwordAnswer) {
+        Users users = usersService.searchPassword(loginId, passwordHint, passwordAnswer);
+        if (users != null) {
+            return changePw();
+        }
+        model.addAttribute("errorMessage", "일치하는 정보가 없습니다.");
         return "member/find_pw";
     }
 
