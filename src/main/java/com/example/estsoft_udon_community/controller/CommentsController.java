@@ -76,7 +76,7 @@ public class CommentsController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/comments/{commentId}")
+    @DeleteMapping("/comments/{commentId}/soft")
     public ResponseEntity<Void> softDelete(@PathVariable Long commentId) {
         commentsService.softDelete(commentId);
         return ResponseEntity.ok().build();
