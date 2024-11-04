@@ -31,9 +31,8 @@ public class UsersController {
 
     // 로그인
     @PostMapping("/login")
-    public ResponseEntity<Users> loginUser(String loginId, String password) {
-        Users users = usersService.loginUser(loginId, password);
-        return ResponseEntity.ok(users);
+    public ResponseEntity<UsersResponse> loginUser(String loginId, String password) {
+        return ResponseEntity.ok(new UsersResponse(usersService.loginUser(loginId, password)));
     }
 
     @GetMapping("/users")

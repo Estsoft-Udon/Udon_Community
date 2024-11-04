@@ -13,7 +13,6 @@ public class UsersRequest {
     private String loginId;
 
     private String password;
-
     // 비밀번호 확인 입력 박스
     private PasswordHint passwordHint;
     // 비밀번호 찾기용 문답 입력박스
