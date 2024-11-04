@@ -4,12 +4,14 @@ import com.example.estsoft_udon_community.enums.ArticleCategory;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class Articles {
     @Id
@@ -77,11 +79,5 @@ public class Articles {
         this.category = category;
         this.hashtags = hashtags;
         this.location = location;
-    }
-
-    public void update(String title, String content, List<Hashtag> hashtags) {
-        this.title = title;
-        this.content = content;
-        this.hashtags = hashtags;
     }
 }
