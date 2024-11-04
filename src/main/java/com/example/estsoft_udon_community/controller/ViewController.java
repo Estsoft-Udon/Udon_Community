@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
 public class ViewController {
     private final UsersService usersService;
     private final LocationService locationService;
-    Long userId;
+
+    private Long userId;
 
 
     @GetMapping("/login")
@@ -29,16 +29,15 @@ public class ViewController {
         return "member/login";
     }
 
-    // 로그인
+    // 로그인은 수정해서
     @PostMapping("/login")
     public String loginPost(@RequestParam String loginId,
                             @RequestParam String password,
-                            Model model,
-                            RedirectAttributes redirectAttributes) {
+                            Model model) {
         try {
             Users users = usersService.loginUser(loginId, password);
             userId = users.getId();
-            redirectAttributes.addFlashAttribute("successMessage", "로그인 성공!");
+
             return "redirect:/mypage";
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
@@ -83,12 +82,10 @@ public class ViewController {
             // 전송된 데이터 로깅
             // 사용자의 Location 정보를 가져와야합니다.
 
-            //
             Long locationId = locationService.getLocationIdByUpperLocationAndName(request.getUpperLocation(),
                     request.getLocationName());
             request.setLocationId(locationId);
 
-            usersService.registerUser(request);
             System.out.println("Received signup request: " + request);
 
             return "redirect:/success";
@@ -117,9 +114,41 @@ public class ViewController {
 
     @GetMapping("/edit_profile")
     public String editProfile(Model model) {
+        // 사용자의 정보
         Users users = usersService.findUserById(getLoggedInUserId());
         model.addAttribute("user", users);
+
+        model.addAttribute("passwordHints", PasswordHint.values());
+
+        // upperLocation의 정보
+        List<String> upperLocations = locationService.getDistinctUpperLocations();
+        model.addAttribute("upperLocations", upperLocations);
+
+        // 사용자의 현재 Location 정보 - 회원정보 수정을 누르면 원래 내 값을 가져오고 싶었으나 실패
+        Location userLocation = users.getLocation();
+        model.addAttribute("currentUpperLocation", userLocation.getUpperLocation()); // 사용자의 Upper Location
+        model.addAttribute("locations", locationService.getLowerLocation(
+                String.valueOf(userLocation.getUpperLocation()))); // 해당 Upper Location의 하위 Location 리스트
+
+        // 해당 Upper Location의 하위 Location 리스트
+
+        if (!upperLocations.isEmpty()) {
+
+            String firstUpperLocation = upperLocations.get(0);
+            List<Location> lowerLocations = locationService.getLowerLocation(firstUpperLocation);
+            model.addAttribute("locations", lowerLocations);
+        }
         return "member/edit_profile";
+    }
+
+    @PostMapping("edit_profile")
+    public String editProfile(@ModelAttribute UsersRequest request) {
+        Long locationId = locationService.getLocationIdByUpperLocationAndName(request.getUpperLocation(),
+                request.getLocationName());
+        request.setLocationId(locationId);
+
+        usersService.updateUser(getLoggedInUserId(), request);
+        return "redirect:/mypage";
     }
 
     private Long getLoggedInUserId() {

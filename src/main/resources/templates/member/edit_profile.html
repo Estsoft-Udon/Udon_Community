@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/layout">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/layout">
 <th:block layout:fragment="content">
     <link rel="stylesheet" href="/css/member.css">
     <div class="wrap member">
@@ -7,46 +8,59 @@
             <h1 class="tit">회원 정보 수정</h1>
             <section class="edit_profile">
                 <form method="POST">
-                    <label for="name"></label>
-                    <input type="text" id="name" name="name" value="홍길동" disabled>
+                    <label for="name">이름</label>
+                    <input type="text" id="name" name="name" th:value="${user.name}" disabled>
 
-                    <button type="button" onclick="window.location.href='/change_pw'" class="reversal_btn pw_change_btn">비밀번호 변경하러가기</button>
+                    <button type="button" onclick="window.location.href='/change_pw'"
+                            class="reversal_btn pw_change_btn">비밀번호 변경하러가기
+                    </button>
 
-                    <label for="editSecurityQuestion" style="display: none;">비밀번호 찾기용 질문</label>
-                    <select class="securityQuestion" id="editSecurityQuestion" name="securityQuestion" required>
-                        <option value="어릴 적 별명" disabled selected>어릴 적 별명</option>
-                        <option value="어머니 성함">어머니 성함</option>
-                        <option value="첫 애완동물 이름">첫 반려동물 이름</option>
-                        <option value="초등학교 이름">초등학교 이름</option>
+<!--                    <label for="passwordHint" style="display: none;">비밀번호 찾기용 질문</label>-->
+<!--                    <select class="securityQuestion" id="passwordHint" name="passwordHint" required>-->
+<!--                        <option value="" disabled selected>질문을 선택하세요</option>-->
+<!--                        <th:block th:each="hint : ${passwordHints}">-->
+<!--                            <option th:value="${hint}" th:text="${hint.hintMessage}"></option>-->
+<!--                        </th:block>-->
+<!--                    </select>-->
+
+<!--                    <label for="securityAnswer">비밀번호찾기 답변</label>-->
+<!--                    <input type="text" id="securityAnswer" name="securityAnswer" placeholder="질문에 대한 답변을 입력하세요"-->
+<!--                           value=" 비밀번호 찾기 답변 " >-->
+
+                    <label for="nickname">별명</label>
+                    <input type="text" id="nickname" name="nickname" th:value="${user.nickname}">
+
+                    <label for="email">이메일</label>
+                    <input type="email" id="email" name="email" th:value="${user.email}">
+
+                    <!--                     Location의 Upper 별로 -->
+                    <label for="upperLocation">지역</label>
+                    <select id="upperLocation" name="upperLocation" onchange="updateLowerLocations()">
+                        <option value="" disabled selected>거주하는 지역을 선택하세요</option>
+                        <th:block th:each="upperLocation : ${upperLocations}">
+                            <option th:value="${upperLocation}"
+                                    th:text="${upperLocation}"
+                                    th:selected="${upperLocation == user.location.upperLocation}"></option>
+                        </th:block>
                     </select>
 
-                    <label for="securityAnswer"></label>
-                    <input type="text" id="securityAnswer" name="securityAnswer" placeholder="질문에 대한 답변을 입력하세요" value="우동왕">
-
-                    <label for="nickname"></label>
-                    <input type="text" id="nickname" name="nickname" value="길동이">
-
-                    <label for="email"></label>
-                    <input type="email" id="email" name="email" value="udon123@gmail.com">
-
-                    <label for="location"></label>
-<!--                     Location의 Upper 별로 -->
-                    <select id="location" name="location" required>
-                        <option value="서울" disabled selected>서울</option>
-                        <option value="부산">부산</option>
-                        <option value="대구">대구</option>
-                        <option value="인천">인천</option>
-                        <option value="광주">광주</option>
-                        <option value="대전">대전</option>
-                        <option value="울산">울산</option>
+                    <label for="locationName"></label>
+                    <select id="locationName" name="locationName" required>
+                        <option value="" disabled selected>하위 지역을 선택하세요</option>
+                        <th:block th:each="location : ${locations}">
+                            <option th:value="${location.id}"
+                                    th:text="${location.name}"
+                                    th:selected="${location.id == user.location.id}"></option>
+                        </th:block>
                     </select>
+
                     <div class="btn_box">
                         <button onclick="location.href='/'" class="reversal_btn">취소하기</button>
                         <button type="submit" class="save_btn default_btn">저장하기</button>
                     </div>
-                  <div class="bot">
-                      <button type="button" onclick="location.href='/withdrawal'" class="delete_btn">회원 탈퇴하기</button>
-                  </div>
+                    <div class="bot">
+                        <button type="button" onclick="location.href='/withdrawal'" class="delete_btn">회원 탈퇴하기</button>
+                    </div>
                 </form>
             </section>
         </div>

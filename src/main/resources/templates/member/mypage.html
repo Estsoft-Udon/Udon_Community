@@ -37,6 +37,9 @@
                     <span id="email" th:text="${user.email}"></span>
 
                     <label for="location">거주하는 지역</label>
+                    <span id="locationUpper" th:text="${user.location.getUpperLocation()}"></span>
+
+                    <label for="location">상세 지역</label>
                     <span id="location" th:text="${user.location.getName()}"></span>
                 </div>
 
