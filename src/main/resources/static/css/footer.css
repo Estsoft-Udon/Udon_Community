@@ -1,0 +1,15 @@
+footer{
+    position: relative;
+    background: #595959;
+}
+
+footer .inner{
+    padding: 12rem 0;
+    box-sizing: border-box;
+}
+
+.default_layout{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
