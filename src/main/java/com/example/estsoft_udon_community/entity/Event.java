@@ -44,6 +44,17 @@ public class Event {
     private Location location;
 
     @ManyToOne // 작성자와의 관계 설정
-    @JoinColumn(name = "users_id")
+    @JoinColumn(name = "user_id")
     private Users users; // 작성한 사용자 정보 추가
+
+    @PrePersist
+    public void prePersist() {
+        this.requestedAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }
