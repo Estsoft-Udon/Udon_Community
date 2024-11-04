@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -53,6 +54,12 @@ public class AdminService {
         return articles.stream()
                 .map(ArticleResponse::new)
                 .toList();
+    }
+
+    // 관리자 특정 게시글 조회
+    public Optional<ArticleResponse> getAdminByArticleId(Long articleId) {
+        return articlesRepository.findById(articleId)
+                .map(ArticleResponse::new);
     }
 
     // 관리자 게시글 수정

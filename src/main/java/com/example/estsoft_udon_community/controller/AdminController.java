@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -47,6 +48,14 @@ public class AdminController {
     public ResponseEntity<List<ArticleResponse>> getAdminArticles() {
         List<ArticleResponse> adminArticles = adminService.getAdminArticles();
         return ResponseEntity.ok(adminArticles);
+    }
+
+    // 관리자 특정 게시글 조회
+    @GetMapping("/articles/{articleId}")
+    public ResponseEntity<ArticleResponse> getAdminByArticleId(@PathVariable Long articleId) {
+        Optional<ArticleResponse> article = adminService.getAdminByArticleId(articleId);
+        return article.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     // 관리자 게시글 수정

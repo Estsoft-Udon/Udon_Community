@@ -18,6 +18,4 @@ public interface ArticlesRepository extends JpaRepository<Articles, Long> {
     Optional<Articles> findByIdAndIsDeletedFalse(Long id);
 
     List<Articles> findByAuthorGrade(Grade grade);
-
-    // articles - articles_like - like~
 }
