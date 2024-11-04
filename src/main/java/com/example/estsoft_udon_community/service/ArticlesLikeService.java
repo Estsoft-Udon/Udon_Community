@@ -6,6 +6,9 @@ import com.example.estsoft_udon_community.repository.ArticlesRepository;
 import com.example.estsoft_udon_community.repository.UsersRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class ArticlesLikeService {
     private final ArticlesLikeRepository articlesLikeRepository;
@@ -18,16 +21,28 @@ public class ArticlesLikeService {
         this.articlesRepository = articlesRepository;
     }
 
-    public ArticlesLike saveArticlesLike(Long articleId, Long userId) {
-        Articles articles = articlesRepository.findById(articleId)
-                .orElseThrow(() -> new IllegalArgumentException("articles id: "+ articleId + "not found"));
+    public ArticlesLike pressArticlesLike(Long articlesId, Long userId) {
+        Articles article = articlesRepository.findById(articlesId)
+                .orElseThrow(() -> new IllegalArgumentException("articles id: " + articlesId + " not found"));
 
         Users user = usersRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("users id: "+ userId + "not found"));
+                .orElseThrow(() -> new IllegalArgumentException("users id: " + userId + " not found"));
 
-        return articlesLikeRepository.save(new ArticlesLike(articles, user));
+        // 코멘트, 유저로 좋아요가 존재하는지 검색 후 없으면 저장, 있으면 삭제
+        Optional<ArticlesLike> foundLike = articlesLikeRepository.findByArticlesAndUsers(article, user);
+
+        if (foundLike.isPresent()) {
+            // 좋아요가 이미 존재할 경우 삭제하고 null을 반환
+            articlesLikeRepository.delete(foundLike.get());
+            return null;
+        } else {
+            // 좋아요가 없을 경우 새로 저장하고 저장된 객체 반환
+            ArticlesLike newLike = new ArticlesLike(article, user);
+            return articlesLikeRepository.save(newLike);
+        }
     }
-    public void deleteArticlesLike(Long articlesLikeId) {
-        articlesLikeRepository.deleteById(articlesLikeId);
+
+    public List<Object[]> findArticlesOrderByLikesCountDesc() {
+        return articlesLikeRepository.findArticlesOrderByLikesCountDescWithCount();
     }
 }

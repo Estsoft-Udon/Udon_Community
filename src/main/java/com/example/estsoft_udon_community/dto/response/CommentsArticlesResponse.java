@@ -24,7 +24,6 @@ public class CommentsArticlesResponse {
     private List<CommentsResponse> comments = new ArrayList<>();
 
     public CommentsArticlesResponse(Articles articles, List<CommentsResponse> comments) {
-
         this.userNickname = articles.getUserId().getNickname();
         this.title = articles.getTitle();
         this.content = articles.getContent();
