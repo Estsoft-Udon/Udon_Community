@@ -14,12 +14,14 @@ import java.util.Optional;
 public interface CommentsLikeRepository extends JpaRepository<CommentsLike, Long> {
     Optional<CommentsLike> findByCommentsAndUsers(Comments comments, Users user);
 
+    // 코멘트를 좋아요 순으로 정렬해서 조회하기
     @Query("SELECT c FROM Comments c " +
             "LEFT JOIN CommentsLike cl ON c = cl.comments " +
             "GROUP BY c " +
             "ORDER BY COUNT(cl.id) DESC")
     List<Comments> findCommentsOrderByLikesCountDesc();
 
+    // 코멘트를 게시글 별로 좋아요 순으로 정렬해서 조회하기
     @Query("SELECT c, COUNT(cl.id) FROM Comments c " +
             "JOIN c.articles a " +
             "LEFT JOIN CommentsLike cl ON c = cl.comments " +

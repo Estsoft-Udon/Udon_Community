@@ -157,43 +157,36 @@ Content-Type: application/json
   "userId": 5
 }
 
-
-### 코멘트 좋아요 등록
-POST localhost:8080/api/like/Comments
-Content-Type: application/json
-
-{
-  "commentId": 8,
-  "userId": 5
-}
-
-
-### 코멘트 좋아요 삭제
-DELETE localhost:8080/api/like/articles
-Content-Type: application/json
-
-{
-  "commentId": 3,
-  "userId": 5
-}
-
-
 ### 게시글 좋아요 등록 / 삭제
-POST localhost:8080/api/like/ArticlesLike
+POST localhost:8080/api/like/articlesLike
 Content-Type: application/json
 
 {
-  "articleId": 8,
-  "userId": 5
+  "articleId": 10,
+  "userId": 2
 }
 
 
 
 ### 코멘트 좋아요 등록 / 삭제
-POST localhost:8080/api/like/CommentsLike
+POST localhost:8080/api/like/commentsLike
 Content-Type: application/json
 
 {
   "commentId": 3,
   "userId": 5
 }
+
+
+
+### 좋아요 순 게시글 조회
+GET localhost:8080/api/like/articles
+
+
+### 좋아요 순 코멘트 조회
+GET localhost:8080/api/like/comments
+
+
+### 특정 게시글의 코멘트 조회 (좋아요 순으로)
+#@articleId=5
+GET localhost:8080/api/like/comments/{{articleId}}
