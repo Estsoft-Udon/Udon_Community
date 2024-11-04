@@ -51,8 +51,12 @@ public class CommentsService {
 
     // 댓글 수정
     public Comments update(Long commentId, CommentsRequest request) {
+        if(isDeleted(commentId)) {
+            throw(new EntityNotFoundException("삭제된 댓글입니다. ID: " + commentId));
+        }
         Comments comments = findComment(commentId);
         comments.updateCommentsContent(request.getContent());
+        comments.setUpdatedAt(LocalDateTime.now());
 
         return commentsRepository.save(comments);
     }
@@ -64,8 +68,11 @@ public class CommentsService {
 
 
     // 댓글 soft delete
-    public Comments softDelete(Long commentsId) {
-        Comments comments = findComment(commentsId);
+    public Comments softDelete(Long commentId) {
+        if(isDeleted(commentId)) {
+            throw(new EntityNotFoundException("삭제된 댓글입니다. ID: " + commentId));
+        }
+        Comments comments = findComment(commentId);
         comments.setIsDeleted(true);
         comments.setDeletedAt(LocalDateTime.now());
 
@@ -74,7 +81,11 @@ public class CommentsService {
 
 
     // 댓글 삭제 여부 검사
-    public boolean isDeleted(Comments comments) {
+    public boolean isDeleted(Long commentId) {
+        Comments comments = commentsRepository.findById(commentId).orElseThrow(
+                () -> new EntityNotFoundException("댓글을 찾을 수 없습니다. ID: " + commentId)
+        );
+
         if(comments.getIsDeleted()) {
             return true;
         }

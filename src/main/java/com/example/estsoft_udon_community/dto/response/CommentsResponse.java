@@ -13,9 +13,11 @@ import java.time.LocalDateTime;
 public class CommentsResponse {
     private String content;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public CommentsResponse(Comments comments) {
         this.content = comments.getContent();
         this.createdAt = comments.getCreatedAt();
+        this.updatedAt = comments.getUpdatedAt();
     }
 }

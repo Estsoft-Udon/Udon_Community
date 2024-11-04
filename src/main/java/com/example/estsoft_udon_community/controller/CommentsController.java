@@ -35,30 +35,20 @@ public class CommentsController {
     }
 
     @GetMapping("/articles/{articleId}/comments")
-    public ResponseEntity<CommentsArticlesResponse> getCommentsByArticleId(@PathVariable Long articleId) {
+    public ResponseEntity<CommentsArticlesResponse> findCommentsByArticleId(@PathVariable Long articleId) {
 
         Articles articles = articlesRepository.findById(articleId)
                 .orElseThrow(() -> new IllegalArgumentException("게시글 id에 해당하는 게시글이 없습니다."));
 
-        List<Comments> commentsList = commentsService.findCommentsByArticleId(articleId);
-
-        List<CommentsResponse> commentsResponseList = commentsList.stream()
-                .map(CommentsResponse::new).toList();
+        List<CommentsResponse> commentsResponseList = getCommentsByArticleId(articleId);
 
         return ResponseEntity.ok(
                 new CommentsArticlesResponse(articles, commentsResponseList));
     }
 
     @GetMapping("/articles/{articleId}/commentsonly")
-    public ResponseEntity<List<CommentsResponse>> getOnlyCommentsByArticleId(@PathVariable Long articleId) {
-
-        ArticleResponse articles = articlesService.findByArticleId(articleId)
-                .orElseThrow(() -> new IllegalArgumentException("게시글 id에 해당하는 게시글이 없습니다."));
-
-        List<Comments> commentsList = commentsService.findCommentsByArticleId(articleId);
-
-        List<CommentsResponse> commentsResponseList = commentsList.stream()
-                .map(CommentsResponse::new).toList();
+    public ResponseEntity<List<CommentsResponse>> findOnlyCommentsByArticleId(@PathVariable Long articleId) {
+        List<CommentsResponse> commentsResponseList = getCommentsByArticleId(articleId);
 
         return ResponseEntity.ok(commentsResponseList);
     }
@@ -80,6 +70,20 @@ public class CommentsController {
     public ResponseEntity<Void> softDelete(@PathVariable Long commentId) {
         commentsService.softDelete(commentId);
         return ResponseEntity.ok().build();
+    }
+
+    public List<CommentsResponse> getCommentsByArticleId(Long articleId) {
+        Articles articles = articlesRepository.findById(articleId)
+                .orElseThrow(() -> new IllegalArgumentException("게시글 id에 해당하는 게시글이 없습니다."));
+
+        List<Comments> commentsList = commentsService.findCommentsByArticleId(articleId);
+
+        List<CommentsResponse> commentsResponseList = commentsList.stream()
+                .filter(comment -> !comment.getIsDeleted()) // 삭제되지 않은 댓글만 필터링
+                .map(CommentsResponse::new)
+                .toList();
+
+        return commentsResponseList;
     }
 
 
