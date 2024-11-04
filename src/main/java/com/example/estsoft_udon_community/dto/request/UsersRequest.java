@@ -13,7 +13,6 @@ public class UsersRequest {
     private String loginId;
 
     private String password;
-
     // 비밀번호 확인 입력 박스
     private PasswordHint passwordHint;
     // 비밀번호 찾기용 문답 입력박스
@@ -24,6 +23,12 @@ public class UsersRequest {
     private String email;
 
     private Long locationId;
+
+
+    // 추가된 필드
+    private String upperLocation; // UpperLocation 정보
+
+    private String locationName; // Location 이름
 
     // UserRequest -> Users
     public Users convert(Location location) {
