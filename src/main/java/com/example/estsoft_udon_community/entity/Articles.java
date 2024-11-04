@@ -67,11 +67,6 @@ public class Articles {
         this.updatedAt = LocalDateTime.now();
     }
 
-    @PreUpdate
-    public void preUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
-
     public Articles (Users userId, String title, String content, ArticleCategory category, List<Hashtag> hashtags, Location location) {
         this.userId = userId;
         this.title = title;

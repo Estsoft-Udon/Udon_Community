@@ -63,6 +63,8 @@ public class ArticlesService {
         List<Hashtag> newHashtags = getOrCreateHashtags(request.getHashtagName());
 
         updateArticleDetails(article, request.getTitle(), request.getContent(), newHashtags);
+
+        article.setUpdatedAt(LocalDateTime.now());
         removeUnusedHashtags();
         return articlesRepository.save(article);
     }
