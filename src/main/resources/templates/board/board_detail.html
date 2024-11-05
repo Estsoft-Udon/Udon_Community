@@ -1,208 +1,89 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/layout">
-<th:block layout:fragment="content">
+<head>
     <link rel="stylesheet" href="/css/board.css">
+</head>
+<th:block layout:fragment="content">
     <div class="wrap board_detail_wr">
         <div class="w_1280">
+            <!-- Breadcrumb Navigation -->
             <nav class="breadcrumb">
                 <ul class="brec_wr inb">
                     <li class="brec n1 home">
-                        <a href="/">
-                            home
-                        </a> >
+                        <a href="/">home</a> >
                     </li>
                     <li class="brec n2"><a href="/board_list">게시판</a> > </li>
                     <li class="brec n3">게시판 상세</li>
                 </ul>
             </nav>
+
             <div class="container">
+                <!-- User and Post Info -->
                 <div class="user_box">
                     <div class="t_box">
-                        <p class="user_id">작성자</p>
+                        <p class="user_id" th:text="${article.nickname}">작성자 닉네임</p>
                     </div>
                     <div class="b_box">
-                        <p class="wt_time">2024.11.04</p>
+                        <p class="wt_time" th:text="|Posted on ${#temporals.format(article.createdAt, 'yyyy-MM-dd HH:mm')}|">2024.11.04</p>
                         <div class="post_stats">
-                            <div class="views"><span class="view_icon icon_box"></span>68</div>
-                            <div class="likes"><span class="thumb_icon icon_box"></span>1</div>
+                            <div class="views">
+                                <span class="view_icon icon_box"></span>
+                                <span th:text="${article.viewCount}">68</span>
+                            </div>
+                            <div class="likes">
+                                <span class="thumb_icon icon_box"></span>1
+                            </div>
                         </div>
                     </div>
                 </div>
-                <h2 class="tit">글 제목 영역입니다.</h2>
+
+                <!-- Post Title -->
+                <h2 class="tit" th:text="${article.title}">글 제목 영역입니다.</h2>
+
+                <!-- Post Content -->
                 <div class="txt_box">
-                    <p>테스트 내용입니다. 테스트 내용. 테스트 내용입니다. 테스트 내용.테스트 내용입니다. 테스트 내용.테스트 내용입니다. 테스트 내용.테스트 내용입니다. 테스트 내용.테스트 내용입니다. 테스트 내용.테스트 내용입니다. 테스트 내용.</p>
+                    <p th:text="${article.content}">테스트 내용입니다. 테스트 내용. 테스트 내용입니다. 테스트 내용. 테스트 내용입니다. 테스트 내용.</p>
                 </div>
+
+                <!-- Hashtags and Interaction Buttons -->
                 <div class="flex_box">
                     <div class="hash_box">
-                        <span>#로컬맛집</span>
-                        <span>#여행</span>
-                        <span>#산책</span>
-                        <span>#꿀팁</span>
+                        <span th:each="hashtag : ${article.hashtags}" th:text="'#' + ${article.hashtags}">#해시태그</span>
                     </div>
                     <div class="btn_box">
+                        <svg width="20" height="10" viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg">
+                            <ellipse cx="50" cy="35" rx="45" ry="10" class="plate" />
+                            <ellipse cx="50" cy="15" rx="45" ry="10" class="plate" />
+                        </svg>
                         <button type="button" class="thumb_icon"></button>
                         <span class="count_num">0</span>
                     </div>
                 </div>
-                <!--
-                    해당 글 작성자 일 때 user_btn_box 활성화
-                    아니면 user_btn_box 에 dn 추가하여 비활성화 처리
-                -->
-                <div class="user_btn_box">
-                    <button type="button" class="del_btn">삭제</button>
-                    <button type="button" class="edit_btn" onclick="location.href='/board_edit'">수정</button>
-                </div>
+
+                <!-- Comments Section -->
                 <div class="comment_box">
-                    <!--
-                        해당 댓글 작성자 일 때 btn_wr 활성화
-                        아니면 btn_wr 에 dn 추가하여 비활성화 처리
-                    -->
-                    <div class="comment_inner">
-                        <p class="count_box"><span class="count_num">4</span>개의 댓글</p>
-                        <div class="cont">
-                            <div class="l_box">
-                                <div class="user_box">
-                                    <div class="icon_box">
-                                        <svg width="20" height="25" viewBox="0 0 100 30" xmlns="http://www.w3.org/2000/svg">
-                                            <ellipse cx="50" cy="15" rx="45" ry="10" class="plate" />
-                                        </svg>
-                                    </div>
-                                    <p class="comment_user_id">작성자</p>
-                                    <p class="comment_date">2024.11.05</p>
+                    <div class="cont">
+                        <div class="l_box">
+                            <div class="user_box">
+                                <div class="icon_box">
+                                    <svg width="20" height="10" viewBox="0 0 100 30" xmlns="http://www.w3.org/2000/svg">
+                                        <ellipse cx="50" cy="15" rx="45" ry="10" class="plate" />
+                                    </svg>
                                 </div>
-                                <div class="com_txt_box">
-                                    <p>댓글 내용</p>
-                                </div>
-                                <div class="btn_wr">
-                                    <button class="edit_btn">수정</button> /
-                                    <button class="del_btn">삭제</button>
-                                </div>
+                                <p class="comment_user_id">작성자</p>
+                                <p class="comment_date" th:text="|Posted on ${#temporals.format(article.createdAt, 'yyyy-MM-dd HH:mm')}|">2024.11.05</p>
                             </div>
-                            <div class="r_box">
-                                <button type="button" class="thumb_icon"></button>
-                                <span class="count_num">0</span>
+                            <div class="com_txt_box">
+                                <p>댓글 내용</p>
+                            </div>
+                            <div class="btn_wr">
+                                <button class="edit_btn">수정</button>
+                                <button class="del_btn">삭제</button>
                             </div>
                         </div>
-                        <div class="cont">
-                            <div class="l_box">
-                                <div class="user_box">
-                                    <div class="icon_box">
-                                        <svg width="20" height="25" viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg">
-                                            <ellipse cx="50" cy="35" rx="45" ry="10" class="plate" />
-                                            <ellipse cx="50" cy="15" rx="45" ry="10" class="plate" />
-                                        </svg>
-                                    </div>
-                                    <p class="comment_user_id">작성자</p>
-                                    <p class="comment_date">2024.11.05</p>
-                                </div>
-                                <div class="com_txt_box">
-                                    <p>댓글 내용</p>
-                                </div>
-                                <div class="btn_wr dn">
-                                    <button class="edit_btn">수정</button> /
-                                    <button class="del_btn">삭제</button>
-                                </div>
-                            </div>
-                            <div class="r_box">
-                                <button type="button" class="thumb_icon"></button>
-                                <span class="count_num">0</span>
-                            </div>
+                        <div class="r_box">
+                            <button type="button" class="thumb_icon"></button>
                         </div>
-                        <div class="cont">
-                            <div class="l_box">
-                                <div class="user_box">
-                                    <div class="icon_box">
-                                        <svg width="20" height="25" viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg">
-                                            <ellipse cx="50" cy="55" rx="45" ry="10" class="plate" />
-                                            <ellipse cx="50" cy="35" rx="45" ry="10" class="plate" />
-                                            <ellipse cx="50" cy="15" rx="45" ry="10" class="plate" />
-                                        </svg>
-                                    </div>
-                                    <p class="comment_user_id">작성자</p>
-                                    <p class="comment_date">2024.11.05</p>
-                                </div>
-                                <div class="com_txt_box">
-                                    <p>댓글 내용</p>
-                                </div>
-                                <div class="btn_wr dn">
-                                    <button class="edit_btn">수정</button> /
-                                    <button class="del_btn">삭제</button>
-                                </div>
-                            </div>
-                            <div class="r_box">
-                                <button type="button" class="thumb_icon"></button>
-                                <span class="count_num">0</span>
-                            </div>
-                        </div>
-                        <div class="cont">
-                            <div class="l_box">
-                                <div class="user_box">
-                                    <div class="icon_box">
-                                        <svg width="20" height="25" viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg">
-                                            <ellipse cx="50" cy="75" rx="45" ry="10" class="plate" />
-                                            <ellipse cx="50" cy="55" rx="45" ry="10" class="plate" />
-                                            <ellipse cx="50" cy="35" rx="45" ry="10" class="plate" />
-                                            <ellipse cx="50" cy="15" rx="45" ry="10" class="plate" />
-                                        </svg>
-                                    </div>
-                                    <p class="comment_user_id">작성자</p>
-                                    <p class="comment_date">2024.11.05</p>
-                                </div>
-                                <div class="com_txt_box">
-                                    <p>댓글 내용</p>
-                                </div>
-                                <div class="btn_wr dn">
-                                    <button class="edit_btn">수정</button> /
-                                    <button class="del_btn">삭제</button>
-                                </div>
-                            </div>
-                            <div class="r_box">
-                                <button type="button" class="thumb_icon"></button>
-                                <span class="count_num">0</span>
-                            </div>
-                        </div>
-                        <div class="pagination_wr">
-                            <ul class="pagination">
-                                <!--
-                                    li.on 현재 활성화 된 페이지
-                                    5페이지 이후에 prev_btn 활성화
-                                    마지막 페이지 노출되면 next_btn 비활성화
-                                -->
-                                <li class="prev_btn dn">
-                                    <button type="button">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="arrow">
-                                            <path d="M15 19l-7-7 7-7" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                        </svg>
-                                    </button>
-                                </li>
-                                <li class="on">
-                                    <button type="button">1</button>
-                                </li>
-                                <li>
-                                    <button type="button">2</button>
-                                </li>
-                                <li>
-                                    <button type="button">3</button>
-                                </li>
-                                <li>
-                                    <button type="button">4</button>
-                                </li>
-                                <li>
-                                    <button type="button">5</button>
-                                </li>
-                                <li class="next_btn">
-                                    <button type="button">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="arrow">
-                                            <path d="M9 5l7 7-7 7" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                        </svg>
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="cont wt_cont">
-                        <textarea placeholder="댓글을 작성해주세요."></textarea>
-                        <button type="button">댓글 쓰기</button>
                     </div>
                 </div>
             </div>
