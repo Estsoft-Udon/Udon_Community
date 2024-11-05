@@ -64,6 +64,7 @@
                 <!-- Comments Section -->
                 <div class="comment_box">
                     <h3>댓글</h3>
+                    <div th:if="${commentsPage != null}">
                     <div th:each="comment : ${commentsPage.content}">
                         <div class="cont">
                             <div class="l_box">
@@ -75,8 +76,8 @@
                                     <p th:text="${comment.content}">댓글 내용</p>
                                 </div>
                                 <div class="btn_wr" th:if="${comment.user.id == loggedInUserId}">
-                                    <button class="edit_btn" onclick="">수정</button>
-                                    <button class="del_btn" onclick="">삭제</button>
+                                    <button class="edit_btn" onclick="edit_comment([[${comment.id}]])">수정</button>
+                                    <button class="del_btn" onclick="delete_comment([[${comment.id}]])">삭제</button>
                                 </div>
                             </div>
                             <div class="r_box">
@@ -87,7 +88,7 @@
                     </div>
 
                     <!-- Pagination -->
-                    <div class="pagination_wr">
+                    <div class="pagination_wr" >
                         <ul class="pagination">
                             <li th:classappend="${commentsPage.hasPrevious()} ? '' : 'disabled'">
                                 <a th:href="@{|/articles/${article.id}?page=${commentsPage.number - 1}|}">
@@ -106,6 +107,7 @@
                             </li>
                         </ul>
                     </div>
+                        </div>
 
                     <!-- Comment Writing Section -->
                     <div class="cont wt_cont">
