@@ -11,24 +11,6 @@ h1.tit{
     align-items: center;
 }
 
-input{
-    width: 100%;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    padding: 1rem;
-    border-radius: 1rem;
-    font-size: 1.5rem;
-    display: block;
-    margin-bottom: 1.5rem;
-}
-
-input:last-child{
-    margin-bottom: 2.5rem;
-}
-
-input:focus{
-    border: 1px solid rgba(0,133,249,1);
-}
-
 form{
     max-width: 50rem;
     margin: 0 auto;
@@ -57,37 +39,6 @@ form{
 
 .btn_box button{
     flex: 1;
-}
-
-select{
-    width: 100%;
-    padding: 1rem 3rem 1rem 1rem;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 1rem;
-    box-sizing: border-box;
-    font-size: 1.5rem;
-    appearance: none;
-    background-color: #fff;
-    margin-bottom: 1.5rem;
-    color: rgba(0, 0, 0, 0.6);
-    background-image: url('data:image/svg+xml;utf8,<svg fill="%23666" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 16px;
-}
-
-select:focus {
-    border-color: rgba(0,133,249,1);
-    outline: none;
-    color: #000;
-}
-
-select.selected {
-    color: #000;
-}
-
-select option:checked {
-    color: #000;
 }
 
 .change_btn{

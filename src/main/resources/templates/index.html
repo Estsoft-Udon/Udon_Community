@@ -1,10 +1,153 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/layout">
+<head>
+    <link rel="stylesheet" href="/css/index.css">
+</head>
+<body>
 <th:block layout:fragment="content">
-    <div class="wrap">
+    <div class="wrap main">
         <div class="w_1280">
-            본문
+            <section class="location_filter">
+                <label for="region" class="dn">지역 선택</label>
+                <select id="region" class="region">
+                    <option value="">지역 선택</option>
+                    <option value="서울">서울</option>
+                    <option value="경기도">경기도</option>
+                </select>
+
+                <label for="city" class="dn">시군구 선택</label>
+                <select id="city" class="city">
+                    <option value="">시군구 선택</option>
+                    <option value="광진구">광진구</option>
+                    <option value="도봉구">도봉구</option>
+                </select>
+
+                <button class="default_btn">보러가기</button>
+            </section>
+
+            <main>
+                <aside class="left_sec">
+                    <h2>
+                        <a href="javascript:void(0)">🔥 HOT 한 우동</a>
+                    </h2>
+                    <ul class="post_list">
+                        <li class="post_item">
+                            <div class="l_box">
+                                <div class="ranking">1.</div>
+                                <div class="id">아이디</div>
+                                <div class="grade">(등급)</div>
+                            </div>
+                            <div class="post_stats">
+                                <div class="icon thumb_icon on"></div>
+                                <div class="likes">누적 좋아요 수</div>
+                            </div>
+                        </li>
+                    </ul>
+                </aside>
+
+                <section class="right_sec">
+                    <div class="board_list">
+                        <article class="newest">
+                            <h2>
+                                <a href="/">🔺최신 게시글</a>
+                            </h2>
+                            <ul class="post_list">
+                                <li class="post_item">
+                                    <div class="l_box">
+                                        <div class="top">
+                                            <span class="w_id">아이디</span>
+                                            <span class="w_pw">작성 시간</span>
+                                        </div>
+                                        <div class="bot">
+                                            <span class="title">글 제목</span>
+                                            <div class="post_stats">
+                                                <div class="icon thumb_icon"></div>
+                                                <div class="likes">좋아요 수</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </article>
+                        <article class="hotplace">
+                            <h2>
+                                <a href="/">🍚 한 뚝배기 하실래요?</a>
+                            </h2>
+                            <ul class="post_list">
+                                <li class="post_item">
+                                    <div class="l_box">
+                                        <div class="top">
+                                            <span class="w_id">아이디</span>
+                                            <span class="w_pw">작성 시간</span>
+                                        </div>
+                                        <div class="bot">
+                                            <span class="title">글 제목</span>
+                                            <div class="post_stats">
+                                                <div class="icon thumb_icon"></div>
+                                                <div class="likes">좋아요 수</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </article>
+                    </div>
+                    <article class="event calendar">
+                        <h2>
+                            <a href="/">👟 동네 한바퀴</a>
+                            <!-- 비회원 : 클릭 시 로그인 화면으로 이동 -->
+                            <!-- 회원 : 3등급 이상만 신청 가능 -->
+                        </h2>
+                        <div class="btn_sec">
+                            <button type="button" class="reversal_btn event_apply_btn" onclick="openModal()">일정 등록 신청하기</button>
+                        </div>
+                        <div id="calendar"></div>
+                    </article>
+                </section>
+            </main>
         </div>
+        <!-- 모달 창 -->
+        <dialog class="modal-overlay" id="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>일정 추가 요청</h2>
+                    <p>
+                        일정 추가 요청의 경우,우동 보안관 등급 이상부터 신청 가능합니다. <br>
+                        관리자 승인 후 노출 됩니다.
+                    </p>
+                    <button type="button" class="close-btn" onclick="closeModal()">&times;</button>
+                </div>
+                <form id="eventForm" th:action="@{/api/event}" method="post" onsubmit="return handleSubmit(event)">
+                    <label for="title">제목</label>
+                    <input type="text" id="title" name="title" required>
+
+                    <label for="eventType">일정 타입</label>
+                    <select id="eventType" name="eventType" required>
+                        <option value="GATHERING">소모임</option>
+                        <option value="FESTIVAL">축제</option>
+                    </select>
+
+                    <label for="dateTime">신청 날짜</label>
+                    <input type="datetime-local" id="dateTime" name="dateTime" required>
+
+                    <label for="content">내용</label>
+                    <textarea id="content" name="content" rows="4" required></textarea>
+
+                    <!-- (임시) 수정 필요 -->
+                    <input type="hidden" name="usersId" value="2">
+                    <input type="hidden" name="locationId" value="01">
+<!--                    <input type="hidden" name="userId" value="/*[[${userId}]]*/">-->
+<!--                    <input type="hidden" name="locationId" value="/*[[${locationId}]]*/">-->
+                    <!-- 수정 필요 -->
+
+                    <div class="btn_sec">
+                        <button type="submit" class="submit-btn default_btn">신청하기</button>
+                    </div>
+                </form>
+            </div>
+        </dialog>
     </div>
+    <script src="/js/index.js"></script>
 </th:block>
+</body>
 </html>
