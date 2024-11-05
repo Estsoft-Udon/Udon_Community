@@ -4,22 +4,25 @@ import com.example.estsoft_udon_community.dto.request.UsersRequest;
 import com.example.estsoft_udon_community.entity.Location;
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.enums.PasswordHint;
+import com.example.estsoft_udon_community.security.CustomUserDetails;
 import com.example.estsoft_udon_community.service.LocationService;
+import com.example.estsoft_udon_community.security.UsersDetailService;
 import com.example.estsoft_udon_community.service.UsersService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
 public class ViewController {
     private final UsersService usersService;
     private final LocationService locationService;
+    private final UsersDetailService usersDetailService;
 
     private Long userId;
 
@@ -27,23 +30,6 @@ public class ViewController {
     @GetMapping("/login")
     public String login() {
         return "member/login";
-    }
-
-    // 로그인은 수정해서
-    @PostMapping("/login")
-    public String loginPost(String loginId,
-                            String password,
-                            Model model) {
-        try {
-            Users users = usersService.loginUser(loginId, password);
-            userId = users.getId();
-
-            return "redirect:/mypage";
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-            model.addAttribute("loginError", true);
-            return "member/login"; // 로그인 실패 시 로그인 페이지로 다시 이동
-        }
     }
 
     @GetMapping("/find_id")
@@ -137,9 +123,10 @@ public class ViewController {
     }
 
     @GetMapping("/mypage")
-    public String mypage(Model model) {
+    public String mypage(Model model, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         Users users = usersService.findUserById(getLoggedInUserId());
-        model.addAttribute("user", users);
+        model.addAttribute("user", customUserDetails.getUser());
+//        model.addAttribute("user", users);
         return "member/mypage";
     }
 
@@ -183,7 +170,7 @@ public class ViewController {
     }
 
     private Long getLoggedInUserId() {
-        // SecurityContextHolder 또는 세션으로 가져와야 한다.
+
         return userId;
     }
 }

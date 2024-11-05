@@ -44,11 +44,11 @@ public class AdminController {
     }
 
     // 관리자 게시글 조회
-    @GetMapping("/articles")
-    public ResponseEntity<List<ArticleResponse>> getAdminArticles() {
-        List<ArticleResponse> adminArticles = adminService.getAdminArticles();
-        return ResponseEntity.ok(adminArticles);
-    }
+//    @GetMapping("/articles")
+//    public ResponseEntity<List<ArticleResponse>> getAdminArticles() {
+//        List<ArticleResponse> adminArticles = adminService.getAdminArticles();
+//        return ResponseEntity.ok(adminArticles);
+//    }
 
     // 관리자 특정 게시글 조회
     @GetMapping("/articles/{articleId}")
