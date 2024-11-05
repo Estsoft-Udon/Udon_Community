@@ -69,4 +69,11 @@ public class ArticlesController {
         List<ArticleResponse> hashtagByArticle = articlesService.findByHashtag(hashtagId);
         return ResponseEntity.ok(hashtagByArticle);
     }
+
+    // 카테고리로 게시글 조회
+    @GetMapping("/category/{category}/articles")
+    public ResponseEntity<List<ArticleResponse>> findByCategory(@PathVariable String category) {
+        List<ArticleResponse> articles = articlesService.findByCategory(category);
+        return ResponseEntity.ok(articles);
+    }
 }

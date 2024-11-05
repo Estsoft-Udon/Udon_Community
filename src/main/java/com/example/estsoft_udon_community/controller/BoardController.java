@@ -28,7 +28,6 @@ public class BoardController {
         List<ArticleResponse> articles = articlesService.findAll();
         model.addAttribute("articles", articles);
 
-        // 인기 해시태그를 가져옵니다.
         List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();
         model.addAttribute("topHashtags", topHashtags);
 

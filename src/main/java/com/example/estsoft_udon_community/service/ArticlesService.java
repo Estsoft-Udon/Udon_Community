@@ -7,6 +7,7 @@ import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.dto.request.AddArticleRequest;
 import com.example.estsoft_udon_community.dto.response.ArticleResponse;
 import com.example.estsoft_udon_community.dto.request.UpdateArticleRequest;
+import com.example.estsoft_udon_community.enums.ArticleCategory;
 import com.example.estsoft_udon_community.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -92,6 +93,13 @@ public class ArticlesService {
     // 해시태그로 게시글 조회
     public List<ArticleResponse> findByHashtag(Long hashtagId) {
         return hashtagRepository.findArticlesByHashtagIdAndIsDeletedFalse(hashtagId).stream()
+                .map(ArticleResponse::new)
+                .toList();
+    }
+
+    // 카테고리로 게시글 조회
+    public List<ArticleResponse> findByCategory(String category) {
+        return articlesRepository.findByCategory(ArticleCategory.valueOf(category)).stream()
                 .map(ArticleResponse::new)
                 .toList();
     }
