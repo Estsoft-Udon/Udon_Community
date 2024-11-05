@@ -67,22 +67,23 @@
                                 </svg>
                             </button>
                         </div>
-                        <button class="write_btn" onclick="location.href='/board_edit'">글쓰기</button>
+                        <button class="write_btn" onclick="location.href='/articles/new'">글쓰기</button>
                     </div>
 
                     <ul class="post_list">
-                        <li class="post_item">
+                        <!-- 게시글 리스트 반복 -->
+                        <li th:each="article : ${articles}" class="post_item">
                             <div class="l_box">
                                 <div class="t_box">
-                                    <span class="post_num">1.</span>
-                                    <a href="/board_detail" class="post_title"> 글 제목 영역입니다.</a>
+                                    <span class="post_num" th:text="${article.id} + '.'">1.</span>
+                                    <a th:href="@{/articles/{id}(id=${article.id})}" th:text="${article.title}" class="post_title">글 제목</a>
                                 </div>
-                                <div class="post_author">작성자</div>
+                                <div class="post_author" th:text="${article.nickname}">작성자 닉네임</div>
                             </div>
                             <div class="post_stats">
-                                <div class="views"><span class="view_icon icon_box"></span>68</div>
-                                <div class="likes"><span class="thumb_icon icon_box"></span>1</div>
-                                <div class="comments"><span class="comment_icon icon_box"></span>3</div>
+                                <div class="views"><span class="view_icon icon_box"></span><span th:text="${article.viewCount}">조회수</span></div>
+                                <div class="likes"><span class="thumb_icon icon_box"></span>좋아요 수</div>
+                                <div class="comments"><span class="comment_icon icon_box"></span>댓글 수</div>
                             </div>
                         </li>
                     </ul>
@@ -128,6 +129,16 @@
             </div>
         </div>
     </div>
-    <script src="/js/board.js"></script>
+<script>
+    const searchBox = document.querySelector(".search_box");
+
+    searchBox.querySelector("input").addEventListener("focus", () => {
+        searchBox.classList.add("on");
+    });
+
+    searchBox.querySelector("input").addEventListener("blur", () => {
+        searchBox.classList.remove("on");
+    });
+</script>
 </th:block>
 </html>

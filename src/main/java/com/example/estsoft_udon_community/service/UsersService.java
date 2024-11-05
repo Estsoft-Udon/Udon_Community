@@ -112,4 +112,13 @@ public class UsersService {
 
         return users;
     }
+
+//    // 로그인 유저 지역정보 가져오기
+//    public Location getUserLocationByLoginId(String loginId) {
+//        Users user = usersRepository.findByLoginId(loginId);
+//        if (user == null) {
+//            throw new IllegalArgumentException("유저를 찾을 수 없습니다.");
+//        }
+//        return user.getLocation();
+//    }
 }

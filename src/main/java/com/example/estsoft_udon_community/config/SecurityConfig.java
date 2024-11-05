@@ -16,8 +16,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final UsersDetailService usersDetailService;
-
     @Bean
     public WebSecurityCustomizer ignore() {
         return WebSecurity -> WebSecurity.ignoring()
