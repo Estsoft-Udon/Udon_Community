@@ -96,7 +96,7 @@
     border-bottom: 1px solid #ccc;
 }
 .board_list_wr .w_1280 .post_item .l_box {
-    width: 90%;
+    width: 75%;
 }
 .post_item .l_box .t_box {
     display: flex;
@@ -177,10 +177,10 @@
 }
 
 /* 게시글 추가 */
- .form_wr {
-     width: 100%;
-     padding: 0 3.2rem;
- }
+.form_wr {
+    width: 100%;
+    padding: 0 3.2rem;
+}
 .form_wr div {
     text-align: left;
 }
@@ -191,7 +191,6 @@
 .form_wr .input-field {
     width: 100%;
     padding: 1rem;
-    margin-top: 1rem;
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 1rem;
     font-size: 1.5rem;
@@ -230,6 +229,40 @@
     padding: 1.5rem 3.3rem 1.5rem 3.1rem;
     border-radius: 1rem;
     font-size: clamp(1.4rem, 1.1vw, 1.6rem);
+}
+.form_cont span,
+.form_wr .text-area-section span{
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+.form_cont > p {
+    font-size: 1.5rem;
+}
+.form_cont .hash_box .hash_wr {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem;
+    margin: 1rem 0;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 1rem;
+    min-height: 4rem;
+}
+.form_cont .hash_box .hash_wr .tag {
+    display: flex;
+    gap: .5rem;
+}
+.form_cont .hash_box .hash_wr .tag .close-btn {
+    display: flex;
+    cursor: pointer;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    width: 1.8rem;
+    height: 1.8rem;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 0.2rem;
 }
 /* 게시글 상세 */
 .plate {

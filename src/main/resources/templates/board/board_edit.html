@@ -8,7 +8,8 @@
                 <form th:action="@{/api/articles}" th:object="${addArticleRequest}" method="post" action="javascript:void(0)">
                     <!-- 카테고리 선택 -->
                     <div class="form_cont">
-                        <label for="category">카테고리 선택</label>
+                        <span>카테고리</span>
+                        <label for="category" class="dn">카테고리 선택</label>
                         <select id="category" th:field="${addArticleRequest.category}" class="input-field">
                             <option value="" disabled selected>카테고리 선택</option>
                             <option value="RESTAURANT">맛집</option>
@@ -41,14 +42,25 @@
 
                     <!-- 제목 작성 -->
                     <div class="form_cont">
-                        <label for="title">제목 작성</label>
+                        <span>제목</span>
+                        <label for="title" class="dn">제목 작성</label>
                         <input type="text" id="title" th:field="${addArticleRequest.title}" class="input-field" placeholder="제목 입력" required>
                     </div>
 
+                    <!-- 해시 태그 작성 이전 코드 -->
+<!--                    <div class="form_cont">-->
+<!--                        <label for="hashtag">해시 태그 작성</label>-->
+<!--                        <input type="text" id="hashtag" th:field="${addArticleRequest.hashtagName}" class="input-field" placeholder="해시태그 입력" required>-->
+<!--                    </div>-->
+
                     <!-- 해시 태그 작성 -->
                     <div class="form_cont">
-                        <label for="hashtag">해시 태그 작성</label>
-                        <input type="text" id="hashtag" th:field="${addArticleRequest.hashtagName}" class="input-field" placeholder="해시태그 입력" required>
+                        <span>해시 태그 작성</span>
+                        <p>* 해시 태그는 아래 입력창에서 해시 태그할 단어를 기입 후 엔터를 눌러 추가시키고 없애고 싶은 해시 태그는 단어 옆 x 버튼을 누르면 지울 수 있습니다.</p>
+                        <div class="hash_box">
+                            <div class="hash_wr"></div>
+                            <input type="text" class="hash_field" placeholder="해시태그 입력">
+                        </div>
                     </div>
 
                     <!-- 글 입력 -->
@@ -72,5 +84,6 @@
         </div>
     </div>
     <script src="/js/common.js"></script>
+    <script src="/js/board.js"></script>
 </th:block>
 </html>
