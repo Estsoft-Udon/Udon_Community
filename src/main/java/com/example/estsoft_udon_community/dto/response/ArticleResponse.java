@@ -18,6 +18,7 @@ import java.util.List;
 public class ArticleResponse {
     private Long id;
     private Long userId;
+    private String nickname;
     private String title;
     private String content;
     private ArticleCategory category;
@@ -31,6 +32,7 @@ public class ArticleResponse {
         // pk primary Key
         this.id = article.getId();
         this.userId = article.getUserId().getId();
+        this.nickname = article.getUserId().getNickname();
         this.title = article.getTitle();
         this.content = article.getContent();
         this.category = article.getCategory();

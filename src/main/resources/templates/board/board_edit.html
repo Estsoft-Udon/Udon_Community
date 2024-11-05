@@ -5,15 +5,16 @@
     <div class="wrap board_detail_wr">
         <div class="w_1280">
             <div class="form_wr">
-                <form method="post" action="javascript:void(0)">
+                <form th:action="@{/api/articles}" th:object="${addArticleRequest}" method="post" action="javascript:void(0)">
                     <!-- 카테고리 선택 -->
                     <div class="form_cont">
-                        <!--회원 등급 체크 후 이상일 때 아래 셀렉트 박스 클래스 dn 제어-->
                         <label for="category">카테고리 선택</label>
-                        <select id="category" class="input-field">
-                            <option value="default">카테고리 선택</option>
-                            <option value="host" class="dn">축제 신청 (2등급 이상만 가능)</option>
-                            <option value="small_group" class="dn">소모임 신청 (3등급 이상만 가능)</option>
+                        <select id="category" th:field="${addArticleRequest.category}" class="input-field">
+                            <option value="" disabled selected>카테고리 선택</option>
+                            <option value="RESTAURANT">맛집</option>
+                            <option value="TRAVEL_DESTINATION">여행지</option>
+                            <option value="DATE_COURSE">데이트 코스</option>
+                            <option value="WALKING_COURSE">산책 코스</option>
                         </select>
                     </div>
 
@@ -21,6 +22,7 @@
                     <div class="form_cont">
                         <span>지역</span>
                         <label for="upperLocation" class="dn">지역을 선택</label>
+<!--                        <input type="text" id="region" class="input-field" placeholder="지역 입력" readonly th:text="${userLocation}">-->
                         <select id="upperLocation" name="upperLocation" onchange="updateLowerLocations()">
                             <option value="" disabled selected>지역을 선택하세요</option>
                             <th:block th:each="upperLocation : ${upperLocations}">
@@ -40,19 +42,19 @@
                     <!-- 제목 작성 -->
                     <div class="form_cont">
                         <label for="title">제목 작성</label>
-                        <input type="text" id="title" class="input-field" placeholder="제목 입력" required>
+                        <input type="text" id="title" th:field="${addArticleRequest.title}" class="input-field" placeholder="제목 입력" required>
                     </div>
 
                     <!-- 해시 태그 작성 -->
                     <div class="form_cont">
                         <label for="hashtag">해시 태그 작성</label>
-                        <input type="text" id="hashtag" class="input-field" placeholder="해시태그 입력" required>
+                        <input type="text" id="hashtag" th:field="${addArticleRequest.hashtagName}" class="input-field" placeholder="해시태그 입력" required>
                     </div>
 
                     <!-- 글 입력 -->
                     <div class="text-area-section">
                         <span>글 입력</span>
-                        <textarea class="input-field" placeholder="내용을 입력하세요" required></textarea>
+                        <textarea th:field="${addArticleRequest.content}" class="input-field" placeholder="내용을 입력하세요" required></textarea>
                     </div>
 
                     <!-- 버튼 영역 -->
