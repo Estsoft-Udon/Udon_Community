@@ -12,7 +12,7 @@
                     <li class="brec n1 home">
                         <a href="/">home</a> >
                     </li>
-                    <li class="brec n2"><a href="/board_list">게시판</a> > </li>
+                    <li class="brec n2"><a href="/articles">게시판</a> > </li>
                     <li class="brec n3">게시판 상세</li>
                 </ul>
             </nav>
@@ -84,6 +84,48 @@
                         <div class="r_box">
                             <button type="button" class="thumb_icon"></button>
                         </div>
+                    </div>
+                    <div class="pagination_wr">
+                        <ul class="pagination">
+                            <!--
+                                li.on 현재 활성화 된 페이지
+                                5페이지 이후에 prev_btn 활성화
+                                마지막 페이지 노출되면 next_btn 비활성화
+                            -->
+                            <li class="prev_btn dn">
+                                <button type="button">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="arrow">
+                                        <path d="M15 19l-7-7 7-7" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                            </li>
+                            <li class="on">
+                                <button type="button">1</button>
+                            </li>
+                            <li>
+                                <button type="button">2</button>
+                            </li>
+                            <li>
+                                <button type="button">3</button>
+                            </li>
+                            <li>
+                                <button type="button">4</button>
+                            </li>
+                            <li>
+                                <button type="button">5</button>
+                            </li>
+                            <li class="next_btn">
+                                <button type="button">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="arrow">
+                                        <path d="M9 5l7 7-7 7" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="cont wt_cont">
+                        <textarea placeholder="댓글을 작성해주세요."></textarea>
+                        <button type="button">댓글 쓰기</button>
                     </div>
                 </div>
             </div>
