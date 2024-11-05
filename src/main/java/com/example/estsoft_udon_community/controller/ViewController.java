@@ -124,16 +124,15 @@ public class ViewController {
 
     @GetMapping("/mypage")
     public String mypage(Model model, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        Users users = usersService.findUserById(getLoggedInUserId());
-        model.addAttribute("user", customUserDetails.getUser());
-//        model.addAttribute("user", users);
+        Users users = usersService.findByLoginId(customUserDetails.getUsername());
+        model.addAttribute("user", users);
         return "member/mypage";
     }
 
     @GetMapping("/edit_profile")
-    public String editProfile(Model model) {
+    public String editProfile(Model model, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         // 사용자의 정보
-        Users users = usersService.findUserById(getLoggedInUserId());
+        Users users = usersService.findUserById(getLoggedInUserId(customUserDetails));
         model.addAttribute("user", users);
 
         model.addAttribute("passwordHints", PasswordHint.values());
@@ -160,17 +159,18 @@ public class ViewController {
     }
 
     @PostMapping("edit_profile")
-    public String editProfile(@ModelAttribute UsersRequest request) {
+    public String editProfile(@ModelAttribute UsersRequest request, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         Long locationId = locationService.getLocationIdByUpperLocationAndName(request.getUpperLocation(),
                 request.getLocationName());
         request.setLocationId(locationId);
 
-        usersService.updateUser(getLoggedInUserId(), request);
+        usersService.updateUser(getLoggedInUserId(customUserDetails), request);
         return "redirect:/mypage";
     }
 
-    private Long getLoggedInUserId() {
+    private Long getLoggedInUserId(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        Users users = usersService.findByLoginId(customUserDetails.getUsername());
 
-        return userId;
+        return users.getId();
     }
 }
