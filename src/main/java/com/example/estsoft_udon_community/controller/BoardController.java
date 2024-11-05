@@ -38,6 +38,7 @@ public class BoardController {
             return "redirect:/board_list";
         }
     }
+
     @GetMapping("/board_edit")
     public String boardEdit(Model model) {
         Articles article = new Articles();

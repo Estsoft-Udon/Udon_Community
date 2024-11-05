@@ -37,7 +37,6 @@ public class CustomUserDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return  List.of(new SimpleGrantedAuthority("ROLE_" + user.getGrade().name()));
     }
-
     @Override
     public boolean isAccountNonExpired() {
         return true; // 계정 만료 여부
@@ -51,5 +50,12 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public boolean isCredentialsNonExpired() {
         return true; // 자격 증명 만료 여부
+    }
+
+    public String getNickname() {
+        return user.getNickname();
+    }
+    public String getGrade(){
+        return user.getGrade().getDisplayName();
     }
 }
