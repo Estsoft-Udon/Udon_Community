@@ -397,3 +397,8 @@
     border-radius: 1rem;
     font-size: clamp(1.4rem, 1.1vw, 1.6rem);
 }
+
+.disabled {
+    pointer-events: none; /* 클릭을 비활성화 */
+    opacity: 0.5; /* 시각적으로 비활성화된 느낌 제공 */
+}
