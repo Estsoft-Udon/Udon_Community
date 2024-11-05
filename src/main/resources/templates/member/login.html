@@ -6,14 +6,14 @@
         <div class="w_1280">
             <h1 class="tit">로그인</h1>
             <section>
-                <form id="loginForm">
+                <form id="loginForm" th:action="@{/login}" th:method="post">
                     <label for="username"></label>
-                    <input type="text" id="username" name="username" required placeholder="아이디">
+                    <input type="text" id="username" name="loginId" required placeholder="로그인">
                     <label for="password"></label>
                     <input type="password" id="password" name="password" required placeholder="비밀번호">
                    <div class="input_bot">
                        <!-- 로그인 정보가 일치하지 않을 때 노출됩니다. -->
-                       <div class="txt_box dn">
+                       <div class="txt_box" th:classappend="${loginError} ? '' : 'dn'">
                            <div class="id_info">
                                <span>로그인 정보가 일치하지 않습니다.</span>
                            </div>

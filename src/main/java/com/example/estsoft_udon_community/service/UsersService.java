@@ -20,22 +20,22 @@ public class UsersService {
     private final LocationRepository locationRepository;
 
     // 회원가입
-    public UsersResponse registerUser(UsersRequest request) {
+    public Users registerUser(UsersRequest request) {
         Location location = locationRepository.findById(request.getLocationId()).orElseThrow();
-        return new UsersResponse(usersRepository.save(request.convert(location)));
+
+        return usersRepository.save(request.convert(location));
     }
 
     // 전체조회
-    public List<UsersResponse> getAllUsers() {
-        List<Users> users = usersRepository.findAll();
-        return users.stream().map(UsersResponse::new).toList();
+    public List<Users> getAllUsers() {
+        return usersRepository.findAll();
     }
 
     // 로그인 ->
     public Users loginUser(String loginId, String password) {
         Users users = usersRepository.findByLoginId(loginId);
-        // 로그인 시간 추가
 
+        // 로그인 시간 추가
         users.updateLastLoginAt();
         usersRepository.save(users);
 
@@ -46,22 +46,23 @@ public class UsersService {
     }
 
     // 유저 정보 조회
-    public UsersResponse findUserById(Long id) {
+    public Users findUserById(Long id) {
         Users users = usersRepository.findById(id).orElseThrow();
 
         Location location = users.getLocation(); // location 정보 가져오기
+        users.setLocation(location);
 
-        LocationDTO locationDTO = new LocationDTO(location);
-        UsersResponse usersResponse = new UsersResponse(users);
-        usersResponse.setLocation(locationDTO);
-
-        return usersResponse;
+        return users;
     }
 
     // 유저 정보 수정
     public Users updateUser(Long userId, UsersRequest request) {
         Users user = usersRepository.findById(userId).orElse(null);
 
+        if (request.getLocationId() != null) {
+            Location location = locationRepository.findById(request.getLocationId()).orElseThrow();
+            user.setLocation(location);
+        }
         return usersRepository.save(request.updateEntity(user));
     }
 

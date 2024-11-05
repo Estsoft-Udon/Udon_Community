@@ -26,36 +26,35 @@ public class UsersController {
     // 회원가입
     @PostMapping("/register")
     public ResponseEntity<UsersResponse> registerUser(@RequestBody UsersRequest user) {
-        return ResponseEntity.ok(usersService.registerUser(user));
+        return ResponseEntity.ok(new UsersResponse(usersService.registerUser(user)));
     }
 
     // 로그인
     @PostMapping("/login")
-    public ResponseEntity<Users> loginUser(String loginId, String password) {
-        Users users = usersService.loginUser(loginId, password);
-        return ResponseEntity.ok(users);
+    public ResponseEntity<UsersResponse> loginUser(String loginId, String password) {
+        return ResponseEntity.ok(new UsersResponse(usersService.loginUser(loginId, password)));
     }
 
     @GetMapping("/users")
     public ResponseEntity<List<UsersResponse>> getAllUsers() {
-        return ResponseEntity.ok(usersService.getAllUsers());
+        return ResponseEntity.ok(usersService.getAllUsers().stream().map(UsersResponse::new).toList());
     }
 
     // 유저 정보 조회
     @GetMapping("/users/{userId}")
     public ResponseEntity<UsersResponse> findUserById(@PathVariable Long userId) {
-        return ResponseEntity.ok(usersService.findUserById(userId));
+        return ResponseEntity.ok(new UsersResponse(usersService.findUserById(userId)));
     }
 
     // 수정
     @PutMapping("/users/{userId}")
-    public ResponseEntity<Users> updateUser(@PathVariable Long userId, @RequestBody UsersRequest user) {
-        return ResponseEntity.ok(usersService.updateUser(userId, user));
+    public ResponseEntity<UsersResponse> updateUser(@PathVariable Long userId, @RequestBody UsersRequest usersRequest) {
+        return ResponseEntity.ok(new UsersResponse(usersService.updateUser(userId, usersRequest)));
     }
 
     // 삭제
     @DeleteMapping("/users/{userId}")
-    public ResponseEntity<Users> deleteUser(@PathVariable Long userId) {
+    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
         usersService.deleteUser(userId);
         return ResponseEntity.ok().build();
     }
