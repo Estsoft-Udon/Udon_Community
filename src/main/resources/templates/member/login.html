@@ -7,22 +7,23 @@
             <h1 class="tit">로그인</h1>
             <section>
                 <form id="loginForm" th:action="@{/login}" th:method="post">
+                    <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
                     <label for="username"></label>
                     <input type="text" id="username" name="loginId" required placeholder="로그인">
                     <label for="password"></label>
                     <input type="password" id="password" name="password" required placeholder="비밀번호">
-                   <div class="input_bot">
-                       <!-- 로그인 정보가 일치하지 않을 때 노출됩니다. -->
-                       <div class="txt_box dn">
-                           <div class="id_info">
-                               <span>로그인 정보가 일치하지 않습니다.</span>
-                           </div>
-                       </div>
-                       <div class="find_box">
-                           <button type="button" class="find_id_btn" onclick="location.href='find_id'">아이디 찾기</button>
-                           <button type="button" class="find_pw_btn" onclick="location.href='find_pw'">비밀번호 찾기</button>
-                       </div>
-                   </div>
+                    <div class="input_bot">
+                        <!-- 로그인 정보가 일치하지 않을 때 노출됩니다. -->
+                        <div class="txt_box" th:if="${param.error}">
+                            <div class="id_info">
+                                <span th:text="${session.errorMessage}">로그인 정보가 일치하지 않습니다.</span>
+                            </div>
+                        </div>
+                        <div class="find_box">
+                            <button type="button" class="find_id_btn" onclick="location.href='find_id'">아이디 찾기</button>
+                            <button type="button" class="find_pw_btn" onclick="location.href='find_pw'">비밀번호 찾기</button>
+                        </div>
+                    </div>
                     <div class="btn_box">
                         <button type="submit" class="default_btn login_btn">로그인</button>
                         <button type="button" class="reversal_btn" onclick="location.href='signup'">회원가입</button>

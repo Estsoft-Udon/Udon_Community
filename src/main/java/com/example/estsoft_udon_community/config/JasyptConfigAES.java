@@ -19,7 +19,7 @@ public class JasyptConfigAES {
         PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
         SimpleStringPBEConfig config = new SimpleStringPBEConfig();
 
-        config.setPassword(password); // 지정한 암호화키
+        config.setPassword(password); // 지정한 암호화 키
         config.setAlgorithm("PBEWITHHMACSHA512ANDAES_256");
         config.setKeyObtentionIterations("1000");
         config.setPoolSize("1");

@@ -4,16 +4,29 @@ import com.example.estsoft_udon_community.dto.request.UsersRequest;
 import com.example.estsoft_udon_community.entity.Location;
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.enums.PasswordHint;
+import com.example.estsoft_udon_community.security.CustomUserDetails;
 import com.example.estsoft_udon_community.service.LocationService;
+import com.example.estsoft_udon_community.service.UsersDetailService;
 import com.example.estsoft_udon_community.service.UsersService;
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -21,7 +34,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class ViewController {
     private final UsersService usersService;
     private final LocationService locationService;
-    Long userId;
+    private final UsersDetailService usersDetailService;
+    private final BCryptPasswordEncoder passwordEncoder;
 
 
     @GetMapping("/login")
@@ -36,9 +50,40 @@ public class ViewController {
                             Model model,
                             RedirectAttributes redirectAttributes) {
         try {
-            Users users = usersService.loginUser(loginId, password);
-            userId = users.getId();
+            UserDetails userDetails = usersDetailService.loadUserByUsername(loginId);
+
+            if (!passwordEncoder.matches(password, userDetails.getPassword())) {
+                throw new BadCredentialsException("Invalid password");
+            }
+
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
+                    );
+
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+            String userLoginId = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+
+            System.out.println(userLoginId);
+            System.out.println(SecurityContextHolder.getContext());
+
+            Users users = usersService.loginUser(userLoginId, password);
+
             redirectAttributes.addFlashAttribute("successMessage", "로그인 성공!");
+
+            String userRole = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getAuthorities()
+                    .stream()
+                    .map(GrantedAuthority::getAuthority) // GrantedAuthority를 문자열로 변환
+                    .findFirst() // 첫 번째 권한만 가져오기
+                    .orElse(null); // 권한이 없으면 null 반환
+
+            System.out.println("userRole : " + userRole);
+
+
             return "redirect:/mypage";
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
@@ -109,21 +154,32 @@ public class ViewController {
     }
 
     @GetMapping("/mypage")
-    public String mypage(Model model) {
-        Users users = usersService.findUserById(getLoggedInUserId());
+    public String mypage(@AuthenticationPrincipal CustomUserDetails userDetail, Model model) {
+        Users users = usersService.findByLoginId(userDetail.getUsername());
         model.addAttribute("user", users);
         return "member/mypage";
     }
 
     @GetMapping("/edit_profile")
-    public String editProfile(Model model) {
-        Users users = usersService.findUserById(getLoggedInUserId());
+    public String editProfile(@AuthenticationPrincipal CustomUserDetails userDetail, Model model) {
+        Users users = usersService.findByLoginId(userDetail.getUsername());
         model.addAttribute("user", users);
         return "member/edit_profile";
     }
 
-    private Long getLoggedInUserId() {
+    private String getLoggedInUserId() {
         // SecurityContextHolder 또는 세션으로 가져와야 한다.
-        return userId;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Object principal = authentication.getPrincipal();
+
+        String userLoginId = "";
+        // principal이 CustomUserDetails 타입인 경우에만 캐스팅합니다.
+        if (principal instanceof Users userDetails) {
+            userLoginId = userDetails.getLoginId(); // 사용자 ID 가져오기
+            System.out.println("Authenticated User ID: " + userLoginId);
+        }
+
+        return userLoginId;
     }
 }
