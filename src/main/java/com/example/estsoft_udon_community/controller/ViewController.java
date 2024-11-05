@@ -42,6 +42,55 @@ public class ViewController {
         return "member/login";
     }
 
+    // 로그인
+    @PostMapping("/login")
+    public String loginPost(@RequestParam String loginId,
+                            @RequestParam String password,
+                            Model model,
+                            RedirectAttributes redirectAttributes) {
+        try {
+            // 사용자 정보 로드
+            UserDetails userDetails = usersDetailService.loadUserByUsername(loginId);
+
+            // CustomUserDetails 인스턴스인지 확인
+            if (!(userDetails instanceof CustomUserDetails)) {
+                throw new IllegalStateException("Expected CustomUserDetails, but got " + userDetails.getClass());
+            }
+            CustomUserDetails customUserDetails = (CustomUserDetails) userDetails;
+
+            // 비밀번호 확인
+            if (!passwordEncoder.matches(password, customUserDetails.getPassword())) {
+                throw new BadCredentialsException("Invalid password");
+            }
+
+            // 인증 토큰 생성 및 SecurityContext에 설정
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(
+                            customUserDetails,
+                            null,
+                            customUserDetails.getAuthorities()
+                    );
+
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+            // 사용자 ID 및 역할 확인
+            String userLoginId = customUserDetails.getUsername();
+            String userRole = customUserDetails.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority) // GrantedAuthority를 문자열로 변환
+                    .findFirst() // 첫 번째 권한만 가져오기
+                    .orElse(null); // 권한이 없으면 null 반환
+
+            // 로그인 성공 메시지 설정
+            redirectAttributes.addFlashAttribute("successMessage", "로그인 성공!");
+
+            System.out.println("After login:  " + SecurityContextHolder.getContext());
+
+            return "redirect:/mypage";
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return "member/login"; // 로그인 실패 시 로그인 페이지로 다시 이동
+        }
+    }
 
     @GetMapping("/find_id")
     public String findId() {
