@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/layout">
+<th:block layout:fragment="content">
+    <link rel="stylesheet" href="/css/board.css">
+    <div class="wrap board_detail_wr">
+        <div class="w_1280">
+            <div class="form_wr">
+                <form method="post" action="javascript:void(0)">
+                    <!-- 카테고리 선택 -->
+                    <div class="form_cont">
+                        <!--회원 등급 체크 후 이상일 때 아래 셀렉트 박스 클래스 dn 제어-->
+                        <label for="category">카테고리 선택</label>
+                        <select id="category" class="input-field">
+                            <option value="default">카테고리 선택</option>
+                            <option value="host" class="dn">축제 신청 (2등급 이상만 가능)</option>
+                            <option value="small_group" class="dn">소모임 신청 (3등급 이상만 가능)</option>
+                        </select>
+                    </div>
+
+                    <!-- 작성자 지역 노출 -->
+                    <div class="form_cont">
+                        <label for="region">지역</label>
+                        <input type="text" id="region" class="input-field" placeholder="지역 입력" readonly value="서울시 용산구">
+                    </div>
+
+                    <!-- 제목 작성 -->
+                    <div class="form_cont">
+                        <label for="title">제목 작성</label>
+                        <input type="text" id="title" class="input-field" placeholder="제목 입력" required>
+                    </div>
+
+                    <!-- 해시 태그 작성 -->
+                    <div class="form_cont">
+                        <label for="hashtag">해시 태그 작성</label>
+                        <input type="text" id="hashtag" class="input-field" placeholder="해시태그 입력" required>
+                    </div>
+
+                    <!-- 글 입력 -->
+                    <div class="text-area-section">
+                        <span>글 입력</span>
+                        <textarea class="input-field" placeholder="내용을 입력하세요" required></textarea>
+                    </div>
+
+                    <!-- 버튼 영역 -->
+                    <div class="btn_wr">
+                        <button type="button" class="cancel_btn" onclick="location.href='/board_list'">취소하기</button>
+                        <button type="submit" class="submit_btn">작성하기</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</th:block>
+</html>
