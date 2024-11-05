@@ -1,6 +1,7 @@
 package com.example.estsoft_udon_community.controller;
 
 import com.example.estsoft_udon_community.dto.request.AddArticleRequest;
+import com.example.estsoft_udon_community.dto.response.ArticleDetailResponse;
 import com.example.estsoft_udon_community.dto.response.ArticleResponse;
 import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.service.ArticlesService;
@@ -25,7 +26,7 @@ public class BoardController {
 
     @GetMapping("/articles")
     public String getBoardList(Model model) {
-        List<ArticleResponse> articles = articlesService.findAll();
+        List<ArticleDetailResponse> articles = articlesService.findAll();
         model.addAttribute("articles", articles);
 
         List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();

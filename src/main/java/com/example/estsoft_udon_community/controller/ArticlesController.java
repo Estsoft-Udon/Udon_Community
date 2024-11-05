@@ -1,6 +1,7 @@
 package com.example.estsoft_udon_community.controller;
 
 import com.example.estsoft_udon_community.dto.request.AddArticleRequest;
+import com.example.estsoft_udon_community.dto.response.ArticleDetailResponse;
 import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.dto.response.ArticleResponse;
 import com.example.estsoft_udon_community.dto.request.UpdateArticleRequest;
@@ -28,8 +29,8 @@ public class ArticlesController {
 
     // 게시글 전체 조회
     @GetMapping("/articles")
-    public ResponseEntity<List<ArticleResponse>> findAll() {
-        List<ArticleResponse> articles = articlesService.findAll();
+    public ResponseEntity<List<ArticleDetailResponse>> findAll() {
+        List<ArticleDetailResponse> articles = articlesService.findAll();
         return ResponseEntity.ok(articles);
     }
 

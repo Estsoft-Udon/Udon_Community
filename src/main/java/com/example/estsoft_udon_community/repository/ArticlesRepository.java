@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,7 +14,7 @@ import java.util.Optional;
 public interface ArticlesRepository extends JpaRepository<Articles, Long> {
     List<Articles> findByLocationIdAndIsDeletedFalse(Long locationId);
 
-    Collection<Articles> findByIsDeletedFalse();
+    List<Articles> findByIsDeletedFalse();
 
     Optional<Articles> findByIdAndIsDeletedFalse(Long id);
 

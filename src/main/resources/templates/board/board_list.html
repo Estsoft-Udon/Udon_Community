@@ -73,8 +73,8 @@
                             </div>
                             <div class="post_stats">
                                 <div class="views"><span class="view_icon icon_box"></span><span th:text="${article.viewCount}">조회수</span></div>
-                                <div class="likes"><span class="thumb_icon icon_box"></span>좋아요 수</div>
-                                <div class="comments"><span class="comment_icon icon_box"></span>댓글 수</div>
+                                <div class="likes"><span class="thumb_icon icon_box"></span><span th:text="${article.likeCount}">좋아요 수</span></div>
+                                <div class="comments"><span class="comment_icon icon_box"></span><span th:text="${article.commentCount}">댓글 수</span></div>
                             </div>
                         </li>
                     </ul>

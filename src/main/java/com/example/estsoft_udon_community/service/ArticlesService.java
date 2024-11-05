@@ -1,5 +1,7 @@
 package com.example.estsoft_udon_community.service;
 
+import com.example.estsoft_udon_community.dto.response.ArticleDetailResponse;
+import com.example.estsoft_udon_community.dto.response.CommentsArticlesResponse;
 import com.example.estsoft_udon_community.entity.ArticleHashtagJoin;
 import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Hashtag;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +27,8 @@ public class ArticlesService {
     private final HashtagRepository hashtagRepository;
     private final ArticleHashtagJoinRepository articleHashtagJoinRepository;
     private final UsersRepository usersRepository;
+    private final CommentsRepository commentsRepository;
+    private final ArticlesLikeRepository articlesLikeRepository;
 
     // 게시글 등록
     public Articles saveArticle(AddArticleRequest request) {
@@ -43,9 +48,13 @@ public class ArticlesService {
     }
 
     // 전체 게시글 조회
-    public List<ArticleResponse> findAll() {
-        return articlesRepository.findByIsDeletedFalse().stream()
-                .map(ArticleResponse::new)
+    public List<ArticleDetailResponse> findAll() {
+        List<Articles> articles = articlesRepository.findByIsDeletedFalse();
+
+        return articles.stream()
+                .map(article -> new ArticleDetailResponse(article,
+                        articlesLikeRepository.countLikesByArticles(article),
+                        commentsRepository.countByArticles(article)))
                 .toList();
     }
 
