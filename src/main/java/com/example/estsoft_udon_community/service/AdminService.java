@@ -48,13 +48,13 @@ public class AdminService {
         return new UsersResponse(user);
     }
 
-    // 관리자 게시글 조회
-    public List<ArticleResponse> getAdminArticles() {
-        List<Articles> articles = articlesRepository.findByAuthorGrade(Grade.UDON_ADMIN);
-        return articles.stream()
-                .map(ArticleResponse::new)
-                .toList();
-    }
+//    // 관리자 게시글 조회
+//    public List<ArticleResponse> getAdminArticles() {
+//        List<Articles> articles = articlesRepository.findByAuthorGrade(Grade.UDON_ADMIN);
+//        return articles.stream()
+//                .map(ArticleResponse::new)
+//                .toList();
+//    }
 
     // 관리자 특정 게시글 조회
     public Optional<ArticleResponse> getAdminByArticleId(Long articleId) {

@@ -4,16 +4,17 @@ import com.example.estsoft_udon_community.dto.request.UsersRequest;
 import com.example.estsoft_udon_community.entity.Location;
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.enums.PasswordHint;
+import com.example.estsoft_udon_community.security.CustomUserDetails;
 import com.example.estsoft_udon_community.service.LocationService;
 import com.example.estsoft_udon_community.service.UsersService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
@@ -21,29 +22,9 @@ public class ViewController {
     private final UsersService usersService;
     private final LocationService locationService;
 
-    private Long userId;
-
-
     @GetMapping("/login")
     public String login() {
         return "member/login";
-    }
-
-    // 로그인은 수정해서
-    @PostMapping("/login")
-    public String loginPost(String loginId,
-                            String password,
-                            Model model) {
-        try {
-            Users users = usersService.loginUser(loginId, password);
-            userId = users.getId();
-
-            return "redirect:/mypage";
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-            model.addAttribute("loginError", true);
-            return "member/login"; // 로그인 실패 시 로그인 페이지로 다시 이동
-        }
     }
 
     @GetMapping("/find_id")
@@ -110,14 +91,10 @@ public class ViewController {
     public String signup(@ModelAttribute UsersRequest request,
                          Model model) {
         try {
-            // 전송된 데이터 로깅
-            // 사용자의 Location 정보를 가져와야합니다.
-
             Long locationId = locationService.getLocationIdByUpperLocationAndName(request.getUpperLocation(),
                     request.getLocationName());
             request.setLocationId(locationId);
-
-            System.out.println("Received signup request: " + request);
+            usersService.registerUser(request);
 
             return "redirect:/success";
         } catch (Exception e) {
@@ -137,16 +114,16 @@ public class ViewController {
     }
 
     @GetMapping("/mypage")
-    public String mypage(Model model) {
-        Users users = usersService.findUserById(getLoggedInUserId());
+    public String mypage(Model model, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        Users users = usersService.findByLoginId(customUserDetails.getUsername());
         model.addAttribute("user", users);
         return "member/mypage";
     }
 
     @GetMapping("/edit_profile")
-    public String editProfile(Model model) {
+    public String editProfile(Model model, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         // 사용자의 정보
-        Users users = usersService.findUserById(getLoggedInUserId());
+        Users users = usersService.findUserById(getLoggedInUserId(customUserDetails));
         model.addAttribute("user", users);
 
         model.addAttribute("passwordHints", PasswordHint.values());
@@ -162,7 +139,6 @@ public class ViewController {
                 String.valueOf(userLocation.getUpperLocation()))); // 해당 Upper Location의 하위 Location 리스트
 
         // 해당 Upper Location의 하위 Location 리스트
-
         if (!upperLocations.isEmpty()) {
 
             String firstUpperLocation = upperLocations.get(0);
@@ -173,17 +149,18 @@ public class ViewController {
     }
 
     @PostMapping("edit_profile")
-    public String editProfile(@ModelAttribute UsersRequest request) {
+    public String editProfile(@ModelAttribute UsersRequest request,
+                              @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         Long locationId = locationService.getLocationIdByUpperLocationAndName(request.getUpperLocation(),
                 request.getLocationName());
         request.setLocationId(locationId);
 
-        usersService.updateUser(getLoggedInUserId(), request);
+        usersService.updateUser(getLoggedInUserId(customUserDetails), request);
         return "redirect:/mypage";
     }
 
-    private Long getLoggedInUserId() {
-        // SecurityContextHolder 또는 세션으로 가져와야 한다.
-        return userId;
+    // 로그인 정보 가져오기
+    private Long getLoggedInUserId(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        return usersService.findByLoginId(customUserDetails.getUsername()).getId();
     }
 }
