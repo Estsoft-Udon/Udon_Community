@@ -80,4 +80,9 @@ public class Articles {
         this.hashtags = hashtags;
         this.location = location;
     }
+
+    // 뷰카운트 증가
+    public void incrementViewCount() {
+        this.viewCount += 1;
+    }
 }
