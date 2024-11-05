@@ -148,7 +148,7 @@ public class ViewController {
         return "member/edit_profile";
     }
 
-    @PostMapping("edit_profile")
+    @PostMapping("/edit_profile")
     public String editProfile(@ModelAttribute UsersRequest request,
                               @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         Long locationId = locationService.getLocationIdByUpperLocationAndName(request.getUpperLocation(),
