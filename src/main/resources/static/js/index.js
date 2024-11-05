@@ -143,3 +143,39 @@ function changeMonth(direction) {
 }
 
 window.onload = () => updateCalendar();
+
+function toggleLocationName() {
+    const upperLocation = document.getElementById('upperLocation');
+    const locationName = document.getElementById('locationName');
+    const submitButton = document.getElementById('submitButton');
+
+    if (upperLocation.value) {
+        locationName.disabled = false;
+    } else {
+        locationName.disabled = true;
+        locationName.value = '';
+        submitButton.disabled = true;
+    }
+
+    locationName.onchange = function() {
+        submitButton.disabled = !locationName.value;
+    };
+}
+
+function redirectToLocationBoard() {
+    const locationId = document.getElementById('locationName').value;
+
+    if (!locationId) {
+        alert("지역을 선택하세요.");
+        return;
+    }
+
+    console.log(locationId);
+    window.location.href = `/board_list?locationId=${locationId}`;
+
+    // 선택된 지역 초기화
+    document.getElementById('upperLocation').selectedIndex = 0;
+    document.getElementById('locationName').selectedIndex = 0;
+}
+
+document.getElementById('locationName').disabled = true;
