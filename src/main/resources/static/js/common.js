@@ -1,21 +1,3 @@
-const selectBoxes = document.querySelectorAll('.securityQuestion, #location');
-
-selectBoxes.forEach(selectBox => {
-    selectBox.addEventListener('change', function() {
-        if (selectBox.value) {
-            selectBox.classList.add('selected');
-        } else {
-            selectBox.classList.remove('selected');
-        }
-    });
-
-    window.addEventListener('load', function() {
-        if (selectBox.value) {
-            selectBox.classList.add('selected');
-        }
-    });
-});
-
 function updateLowerLocations() {
     const upperLocation = document.getElementById('upperLocation').value;
     const locationSelect = document.getElementById('locationName');
@@ -50,8 +32,22 @@ function updateLowerLocations() {
         });
 }
 
-// 에러 메시지가 있으면 알림 창을 표시
-const errorMessage = document.getElementById("errorMessage")?.value;
-if (errorMessage) {
-    alert(errorMessage);
-};
+function initializeSelectBox(selectors) {
+    const selectBoxes = document.querySelectorAll(selectors);
+
+    selectBoxes.forEach(selectBox => {
+        selectBox.addEventListener('change', function() {
+            if (selectBox.value) {
+                selectBox.classList.add('selected');
+            } else {
+                selectBox.classList.remove('selected');
+            }
+        });
+
+        if (selectBox.value) {
+            selectBox.classList.add('selected');
+        }
+    });
+}
+
+initializeSelectBox('.securityQuestion, #location, #upperLocation, #locationName');
