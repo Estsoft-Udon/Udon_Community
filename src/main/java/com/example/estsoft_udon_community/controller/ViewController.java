@@ -9,24 +9,13 @@ import com.example.estsoft_udon_community.service.LocationService;
 import com.example.estsoft_udon_community.security.UsersDetailService;
 import com.example.estsoft_udon_community.service.UsersService;
 import java.util.List;
-
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
@@ -34,7 +23,8 @@ public class ViewController {
     private final UsersService usersService;
     private final LocationService locationService;
     private final UsersDetailService usersDetailService;
-    private final BCryptPasswordEncoder passwordEncoder;
+
+    private Long userId;
 
 
     @GetMapping("/login")
@@ -42,63 +32,43 @@ public class ViewController {
         return "member/login";
     }
 
-    // 로그인
-    @PostMapping("/login")
-    public String loginPost(@RequestParam String loginId,
-                            @RequestParam String password,
-                            Model model,
-                            RedirectAttributes redirectAttributes) {
-        try {
-            // 사용자 정보 로드
-            UserDetails userDetails = usersDetailService.loadUserByUsername(loginId);
-
-            // CustomUserDetails 인스턴스인지 확인
-            if (!(userDetails instanceof CustomUserDetails)) {
-                throw new IllegalStateException("Expected CustomUserDetails, but got " + userDetails.getClass());
-            }
-            CustomUserDetails customUserDetails = (CustomUserDetails) userDetails;
-
-            // 비밀번호 확인
-            if (!passwordEncoder.matches(password, customUserDetails.getPassword())) {
-                throw new BadCredentialsException("Invalid password");
-            }
-
-            // 인증 토큰 생성 및 SecurityContext에 설정
-            UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(
-                            customUserDetails,
-                            null,
-                            customUserDetails.getAuthorities()
-                    );
-
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-
-            // 사용자 ID 및 역할 확인
-            String userLoginId = customUserDetails.getUsername();
-            String userRole = customUserDetails.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority) // GrantedAuthority를 문자열로 변환
-                    .findFirst() // 첫 번째 권한만 가져오기
-                    .orElse(null); // 권한이 없으면 null 반환
-
-            // 로그인 성공 메시지 설정
-            redirectAttributes.addFlashAttribute("successMessage", "로그인 성공!");
-
-            System.out.println("After login:  " + SecurityContextHolder.getContext());
-
-            return "redirect:/mypage";
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-            return "member/login"; // 로그인 실패 시 로그인 페이지로 다시 이동
-        }
+    @GetMapping("/find_id")
+    public String findId(Model model) {
+        model.addAttribute("isIdFound", false);
+        return "member/find_id";
     }
 
-    @GetMapping("/find_id")
-    public String findId() {
+    @PostMapping("/find_id")
+    public String findId(String name, String email, Model model) {
+
+        // 아이디 검색 서비스 호출
+        Users foundUser = usersService.searchId(name, email);
+
+        if (foundUser != null) {
+            String loginId = foundUser.getLoginId();
+            // 아이디가 발견된 경우
+            model.addAttribute("foundId", loginId);
+            model.addAttribute("isIdFound", true);
+            // 아이디 발견 여부 플래그
+        } else {
+            model.addAttribute("isIdFound", false);
+        }
         return "member/find_id";
     }
 
     @GetMapping("/find_pw")
-    public String findPw() {
+    public String findPw(Model model) {
+        model.addAttribute("passwordHints", PasswordHint.values());
+        return "member/find_pw";
+    }
+
+    @PostMapping("/find_pw")
+    public String findPw(Model model, String loginId, PasswordHint passwordHint, String passwordAnswer) {
+        Users users = usersService.searchPassword(loginId, passwordHint, passwordAnswer);
+        if (users != null) {
+            return changePw();
+        }
+        model.addAttribute("errorMessage", "일치하는 정보가 없습니다.");
         return "member/find_pw";
     }
 
@@ -129,12 +99,10 @@ public class ViewController {
             // 전송된 데이터 로깅
             // 사용자의 Location 정보를 가져와야합니다.
 
-            //
             Long locationId = locationService.getLocationIdByUpperLocationAndName(request.getUpperLocation(),
                     request.getLocationName());
             request.setLocationId(locationId);
 
-            usersService.registerUser(request);
             System.out.println("Received signup request: " + request);
 
             return "redirect:/success";
@@ -155,21 +123,54 @@ public class ViewController {
     }
 
     @GetMapping("/mypage")
-    public String mypage(@AuthenticationPrincipal CustomUserDetails userDetail, Model model) {
-        getCurrentUser();
-        Users users = usersService.findByLoginId(userDetail.getUsername());
-        model.addAttribute("user", users);
+    public String mypage(Model model, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        Users users = usersService.findUserById(getLoggedInUserId());
+        model.addAttribute("user", customUserDetails.getUser());
+//        model.addAttribute("user", users);
         return "member/mypage";
     }
 
     @GetMapping("/edit_profile")
-    public String editProfile(@AuthenticationPrincipal CustomUserDetails userDetail, Model model) {
-        Users users = usersService.findByLoginId(userDetail.getUsername());
+    public String editProfile(Model model) {
+        // 사용자의 정보
+        Users users = usersService.findUserById(getLoggedInUserId());
         model.addAttribute("user", users);
+
+        model.addAttribute("passwordHints", PasswordHint.values());
+
+        // upperLocation의 정보
+        List<String> upperLocations = locationService.getDistinctUpperLocations();
+        model.addAttribute("upperLocations", upperLocations);
+
+        // 사용자의 현재 Location 정보 - 회원정보 수정을 누르면 원래 내 값을 가져오고 싶었으나 실패
+        Location userLocation = users.getLocation();
+        model.addAttribute("currentUpperLocation", userLocation.getUpperLocation()); // 사용자의 Upper Location
+        model.addAttribute("locations", locationService.getLowerLocation(
+                String.valueOf(userLocation.getUpperLocation()))); // 해당 Upper Location의 하위 Location 리스트
+
+        // 해당 Upper Location의 하위 Location 리스트
+
+        if (!upperLocations.isEmpty()) {
+
+            String firstUpperLocation = upperLocations.get(0);
+            List<Location> lowerLocations = locationService.getLowerLocation(firstUpperLocation);
+            model.addAttribute("locations", lowerLocations);
+        }
         return "member/edit_profile";
     }
 
-    public void getCurrentUser() {
-        System.out.println(SecurityContextHolder.getContext());
+    @PostMapping("edit_profile")
+    public String editProfile(@ModelAttribute UsersRequest request) {
+        Long locationId = locationService.getLocationIdByUpperLocationAndName(request.getUpperLocation(),
+                request.getLocationName());
+        request.setLocationId(locationId);
+
+        usersService.updateUser(getLoggedInUserId(), request);
+        return "redirect:/mypage";
+    }
+
+    private Long getLoggedInUserId() {
+
+        return userId;
     }
 }

@@ -13,7 +13,7 @@
                         <span class="grade_info def_c">*2등급 이상일 때 등업 요청 버튼이 활성화 됩니다.</span>
                     </label>
                     <div class="grade_box">
-                        <span id="grade" th:text="${user.grade} ">튀김우동</span>
+                        <span id="grade" th:text="${user.grade.getDisplayName()}"></span>
                         <!--2등급 이상일 시 버튼 활성화 됩니다. 활성화 시 on 클래스 추가-->
                         <button id="upgradeRequestBtn" class="reversal_btn">등업 요청</button>
                     </div>
@@ -37,6 +37,9 @@
                     <span id="email" th:text="${user.email}"></span>
 
                     <label for="location">거주하는 지역</label>
+                    <span id="locationUpper" th:text="${user.location.getUpperLocation()}"></span>
+
+                    <label for="location">상세 지역</label>
                     <span id="location" th:text="${user.location.getName()}"></span>
                 </div>
 

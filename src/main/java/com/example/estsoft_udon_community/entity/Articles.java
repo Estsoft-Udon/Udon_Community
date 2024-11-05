@@ -67,11 +67,6 @@ public class Articles {
         this.updatedAt = LocalDateTime.now();
     }
 
-    @PreUpdate
-    public void preUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
-
     public Articles (Users userId, String title, String content, ArticleCategory category, List<Hashtag> hashtags, Location location) {
         this.userId = userId;
         this.title = title;
@@ -79,5 +74,10 @@ public class Articles {
         this.category = category;
         this.hashtags = hashtags;
         this.location = location;
+    }
+
+    // 뷰카운트 증가
+    public void incrementViewCount() {
+        this.viewCount += 1;
     }
 }

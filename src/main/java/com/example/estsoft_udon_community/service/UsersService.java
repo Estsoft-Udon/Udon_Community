@@ -99,6 +99,10 @@ public class UsersService {
     public Users updateUser(Long userId, UsersRequest request) {
         Users user = usersRepository.findById(userId).orElse(null);
 
+        if (request.getLocationId() != null) {
+            Location location = locationRepository.findById(request.getLocationId()).orElseThrow();
+            user.setLocation(location);
+        }
         return usersRepository.save(request.updateEntity(user));
     }
 

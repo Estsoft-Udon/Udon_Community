@@ -1,5 +1,8 @@
 package com.example.estsoft_udon_community.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum Grade {
     UDON("우동"),
     UDON_FRIEND("우동 친구"),

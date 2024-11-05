@@ -24,7 +24,6 @@ public class UsersRequest {
 
     private Long locationId;
 
-
     // 추가된 필드
     private String upperLocation; // UpperLocation 정보
 

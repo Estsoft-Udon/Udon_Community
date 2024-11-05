@@ -49,3 +49,9 @@ function updateLowerLocations() {
             console.error('에러 발생:', error);
         });
 }
+
+// 에러 메시지가 있으면 알림 창을 표시
+const errorMessage = document.getElementById("errorMessage")?.value;
+if (errorMessage) {
+    alert(errorMessage);
+};

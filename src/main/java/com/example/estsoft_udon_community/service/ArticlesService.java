@@ -51,7 +51,11 @@ public class ArticlesService {
     // 특정 게시글 조회
     public Optional<ArticleResponse> findByArticleId(Long id) {
         return articlesRepository.findByIdAndIsDeletedFalse(id)
-                .map(ArticleResponse::new);
+                .map(articles -> {
+                    articles.incrementViewCount();
+                    articlesRepository.save(articles);
+                    return new ArticleResponse(articles);
+                });
     }
 
     // 특정 게시글 수정
@@ -63,6 +67,8 @@ public class ArticlesService {
         List<Hashtag> newHashtags = getOrCreateHashtags(request.getHashtagName());
 
         updateArticleDetails(article, request.getTitle(), request.getContent(), newHashtags);
+
+        article.setUpdatedAt(LocalDateTime.now());
         removeUnusedHashtags();
         return articlesRepository.save(article);
     }
