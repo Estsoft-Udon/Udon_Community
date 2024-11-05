@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class ViewController {
     private final UsersService usersService;
     private final LocationService locationService;
-    private final UsersDetailService usersDetailService;
 
     private Long userId;
 
@@ -104,6 +103,7 @@ public class ViewController {
             request.setLocationId(locationId);
 
             System.out.println("Received signup request: " + request);
+            usersService.registerUser(request);
 
             return "redirect:/success";
         } catch (Exception e) {

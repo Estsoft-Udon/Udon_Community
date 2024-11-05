@@ -22,13 +22,6 @@ public class UsersService {
     private final LocationRepository locationRepository;
     private final BCryptPasswordEncoder passwordEncoder; // BCryptPasswordEncoder 주입
 
-
-//    // 회원가입
-//    public Users registerUser(UsersRequest request) {
-//        Location location = locationRepository.findById(request.getLocationId()).orElseThrow();
-//
-//        return usersRepository.save(request.convert(location));
-//    }
     // 회원가입
     public Users registerUser(UsersRequest request) {
         // 위치 정보 가져오기
@@ -70,20 +63,6 @@ public class UsersService {
 
         return users;
     }
-
-//    // 로그인 ->
-//    public Users loginUser(String loginId, String password) {
-//        Users users = usersRepository.findByLoginId(loginId);
-//
-//        // 로그인 시간 추가
-//        users.updateLastLoginAt();
-//        usersRepository.save(users);
-//
-//        if (!password.equals(users.getPassword())) {
-//            throw new IllegalArgumentException("Wrong password");
-//        }
-//        return users;
-//    }
 
     // 유저 정보 조회
     public Users findUserById(Long id) {
