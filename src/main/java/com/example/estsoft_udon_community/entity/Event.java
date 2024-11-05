@@ -36,8 +36,8 @@ public class Event {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    @Column(name = "is_accepted")
-    private Boolean isAccepted;
+    @Column(name = "is_accepted", nullable = false)
+    private Boolean isAccepted = false; // 기본값 false로 설정
 
     @ManyToOne
     @JoinColumn(name = "location_id")
@@ -56,5 +56,10 @@ public class Event {
     @PreUpdate
     public void preUpdate() {
         this.updatedAt = LocalDateTime.now();
+    }
+
+    // 승인 상태를 변경하기 위한 메서드 추가
+    public void setAccepted(boolean accepted) {
+        this.isAccepted = accepted;
     }
 }
