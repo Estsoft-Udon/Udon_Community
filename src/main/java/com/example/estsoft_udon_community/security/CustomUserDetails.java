@@ -1,6 +1,5 @@
 package com.example.estsoft_udon_community.security;
 import com.example.estsoft_udon_community.entity.Users;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -36,24 +35,21 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + user.getGrade().name()));
-
-        System.out.println("User authorities: " + authorities); // 로그로 권한 확인
-        return authorities;
+        return  List.of(new SimpleGrantedAuthority("ROLE_" + user.getGrade().name()));
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false; // 계정 만료 여부
+        return true; // 계정 만료 여부
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false; // 계정 잠금 여부
+        return true; // 계정 잠금 여부
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false; // 자격 증명 만료 여부
+        return true; // 자격 증명 만료 여부
     }
 }

@@ -6,7 +6,6 @@ import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.enums.PasswordHint;
 import com.example.estsoft_udon_community.security.CustomUserDetails;
 import com.example.estsoft_udon_community.service.LocationService;
-import com.example.estsoft_udon_community.security.UsersDetailService;
 import com.example.estsoft_udon_community.service.UsersService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -22,10 +21,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class ViewController {
     private final UsersService usersService;
     private final LocationService locationService;
-    private final UsersDetailService usersDetailService;
-
-    private Long userId;
-
 
     @GetMapping("/login")
     public String login() {
@@ -96,14 +91,10 @@ public class ViewController {
     public String signup(@ModelAttribute UsersRequest request,
                          Model model) {
         try {
-            // 전송된 데이터 로깅
-            // 사용자의 Location 정보를 가져와야합니다.
-
             Long locationId = locationService.getLocationIdByUpperLocationAndName(request.getUpperLocation(),
                     request.getLocationName());
             request.setLocationId(locationId);
-
-            System.out.println("Received signup request: " + request);
+            usersService.registerUser(request);
 
             return "redirect:/success";
         } catch (Exception e) {
@@ -124,16 +115,15 @@ public class ViewController {
 
     @GetMapping("/mypage")
     public String mypage(Model model, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        Users users = usersService.findUserById(getLoggedInUserId());
-        model.addAttribute("user", customUserDetails.getUser());
-//        model.addAttribute("user", users);
+        Users users = usersService.findByLoginId(customUserDetails.getUsername());
+        model.addAttribute("user", users);
         return "member/mypage";
     }
 
     @GetMapping("/edit_profile")
-    public String editProfile(Model model) {
+    public String editProfile(Model model, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         // 사용자의 정보
-        Users users = usersService.findUserById(getLoggedInUserId());
+        Users users = usersService.findUserById(getLoggedInUserId(customUserDetails));
         model.addAttribute("user", users);
 
         model.addAttribute("passwordHints", PasswordHint.values());
@@ -149,7 +139,6 @@ public class ViewController {
                 String.valueOf(userLocation.getUpperLocation()))); // 해당 Upper Location의 하위 Location 리스트
 
         // 해당 Upper Location의 하위 Location 리스트
-
         if (!upperLocations.isEmpty()) {
 
             String firstUpperLocation = upperLocations.get(0);
@@ -160,17 +149,18 @@ public class ViewController {
     }
 
     @PostMapping("edit_profile")
-    public String editProfile(@ModelAttribute UsersRequest request) {
+    public String editProfile(@ModelAttribute UsersRequest request,
+                              @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         Long locationId = locationService.getLocationIdByUpperLocationAndName(request.getUpperLocation(),
                 request.getLocationName());
         request.setLocationId(locationId);
 
-        usersService.updateUser(getLoggedInUserId(), request);
+        usersService.updateUser(getLoggedInUserId(customUserDetails), request);
         return "redirect:/mypage";
     }
 
-    private Long getLoggedInUserId() {
-
-        return userId;
+    // 로그인 정보 가져오기
+    private Long getLoggedInUserId(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        return usersService.findByLoginId(customUserDetails.getUsername()).getId();
     }
 }
