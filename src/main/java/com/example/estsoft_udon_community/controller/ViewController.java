@@ -94,8 +94,8 @@ public class ViewController {
             Long locationId = locationService.getLocationIdByUpperLocationAndName(request.getUpperLocation(),
                     request.getLocationName());
             request.setLocationId(locationId);
-            usersService.registerUser(request);
 
+            usersService.registerUser(request);
             return "redirect:/success";
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());

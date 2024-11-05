@@ -22,14 +22,14 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer ignore() {
         return WebSecurity -> WebSecurity.ignoring()
-                .requestMatchers("/css/**", "/js/**", "/img/**"); // 정적 리소스 허용
+                .requestMatchers("/css/**", "js/**", "/img/**"); // 정적 리소스 허용
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(
                         custom -> custom.requestMatchers("/api/**").permitAll()
-                                .requestMatchers("/", "/login", "/signup", "/find_id", "/find_pw").permitAll()
+                                .requestMatchers("/", "/login", "/signup", "/find_id", "/find_pw","/getLowerLocations").permitAll()
                                 .anyRequest().hasAnyRole("UDON", "UDON_FRIEND", "UDON_SHERIFF", "UDON_MASTER", "UDON_ADMIN")
                 )
                 .formLogin(custom -> custom.loginPage("/login"))
