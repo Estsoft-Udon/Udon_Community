@@ -32,7 +32,7 @@ public class EventResponse {
         this.title = event.getTitle();
         this.content = event.getContent();
         this.eventType = event.getEventType();
-        this.isAccepted = event.getIsAccepted();
+        this.isAccepted = (event.getIsAccepted() != null) ? event.getIsAccepted() : false; // 기본값 false 설정
         this.usersId = event.getUsers().getId();
     }
 }
