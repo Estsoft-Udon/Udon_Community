@@ -1,6 +1,7 @@
 package com.example.estsoft_udon_community.service;
 
 import com.example.estsoft_udon_community.dto.response.CommentsArticlesResponse;
+import com.example.estsoft_udon_community.dto.response.CommentsResponse;
 import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Comments;
 import com.example.estsoft_udon_community.dto.request.CommentsRequest;
@@ -10,6 +11,8 @@ import com.example.estsoft_udon_community.repository.CommentsRepository;
 import com.example.estsoft_udon_community.repository.UsersRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -35,6 +38,7 @@ public class CommentsService {
 
         return commentsRepository.save(new Comments(articles, users, request.getContent()));
     }
+
 
     // 댓글 목록 조회
     public Comments findComment(Long commentsId) {
@@ -91,6 +95,11 @@ public class CommentsService {
             return true;
         }
         return false;
+    }
+
+    public Page<CommentsResponse> findCommentsByArticleId(Long articleId, Pageable pageable) {
+        return commentsRepository.findByArticlesId(articleId, pageable)
+                .map(CommentsResponse::new);
     }
 }
 
