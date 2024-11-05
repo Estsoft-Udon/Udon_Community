@@ -123,4 +123,9 @@ public class ArticlesService {
     private void removeUnusedHashtags() {
         hashtagRepository.deleteUnusedHashtags();
     }
+
+
+    public Articles findJustArticle(Long id) {
+        return articlesRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Article not found"));
+    }
 }
