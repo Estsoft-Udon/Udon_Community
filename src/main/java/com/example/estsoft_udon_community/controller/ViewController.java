@@ -6,7 +6,6 @@ import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.enums.PasswordHint;
 import com.example.estsoft_udon_community.security.CustomUserDetails;
 import com.example.estsoft_udon_community.service.LocationService;
-import com.example.estsoft_udon_community.security.UsersDetailService;
 import com.example.estsoft_udon_community.service.UsersService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +21,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class ViewController {
     private final UsersService usersService;
     private final LocationService locationService;
-
-    private Long userId;
-
 
     @GetMapping("/login")
     public String login() {
@@ -95,14 +91,9 @@ public class ViewController {
     public String signup(@ModelAttribute UsersRequest request,
                          Model model) {
         try {
-            // 전송된 데이터 로깅
-            // 사용자의 Location 정보를 가져와야합니다.
-
             Long locationId = locationService.getLocationIdByUpperLocationAndName(request.getUpperLocation(),
                     request.getLocationName());
             request.setLocationId(locationId);
-
-            System.out.println("Received signup request: " + request);
             usersService.registerUser(request);
 
             return "redirect:/success";
@@ -148,7 +139,6 @@ public class ViewController {
                 String.valueOf(userLocation.getUpperLocation()))); // 해당 Upper Location의 하위 Location 리스트
 
         // 해당 Upper Location의 하위 Location 리스트
-
         if (!upperLocations.isEmpty()) {
 
             String firstUpperLocation = upperLocations.get(0);
@@ -159,7 +149,8 @@ public class ViewController {
     }
 
     @PostMapping("edit_profile")
-    public String editProfile(@ModelAttribute UsersRequest request, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+    public String editProfile(@ModelAttribute UsersRequest request,
+                              @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         Long locationId = locationService.getLocationIdByUpperLocationAndName(request.getUpperLocation(),
                 request.getLocationName());
         request.setLocationId(locationId);
@@ -168,9 +159,8 @@ public class ViewController {
         return "redirect:/mypage";
     }
 
+    // 로그인 정보 가져오기
     private Long getLoggedInUserId(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        Users users = usersService.findByLoginId(customUserDetails.getUsername());
-
-        return users.getId();
+        return usersService.findByLoginId(customUserDetails.getUsername()).getId();
     }
 }
