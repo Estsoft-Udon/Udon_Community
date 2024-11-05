@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <th:block th:fragment="headerFragment">
     <head>
         <title>udon</title>
@@ -18,9 +18,9 @@
                     </picture>
                 </a>
             </h1>
-            <div class="connection_info">
+            <div>
                 <!-- 로그인 전 -->
-                <ul>
+                <ul sec:authorize="isAnonymous()">
                     <li>
                         <a href="/login">로그인</a>
                     </li>
@@ -29,18 +29,18 @@
                     </li>
                 </ul>
                 <!-- 로그인 후 -->
-                <ul class="dn">
+                <ul sec:authorize="isAuthenticated()">
                     <li>
                         <a href="/mypage">마이페이지</a>
                     </li>
                     <li>
                         <a href="javascript:void(0);">
-                            <span>닉네임</span>
-                            <span>(등급)</span>
+                            <span sec:authentication="principal.nickname"></span>
+                            <span sec:authentication="principal.grade"></span>
                         </a>
                     </li>
                     <li>
-                        <a href="">로그아웃</a>
+                        <a href="/">로그아웃</a>
                     </li>
                 </ul>
             </div>
