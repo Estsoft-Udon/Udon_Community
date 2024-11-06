@@ -99,6 +99,13 @@ public class ArticlesService {
         Page<Articles> articlesPage = articlesRepository.findByLocationIdAndIsDeletedFalse(locationId, pageable);
 
         return articlesPage.map(ArticleResponse::new);
+//     public List<ArticleDetailResponse> findByLocationId(Long locationId) {
+//         return articlesRepository.findByLocationIdAndIsDeletedFalse(locationId).stream()
+//                 .map(article -> new ArticleDetailResponse(article,
+//                         articlesLikeRepository.countLikesByArticles(article),
+//                         commentsRepository.countByArticles(article)))
+//                 .toList();
+
     }
 
     // 해시태그로 게시글 조회

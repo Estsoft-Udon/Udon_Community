@@ -37,6 +37,13 @@ public class AdminEventService {
         eventRepository.save(event);
     }
 
+    // 이벤트 승인 취소 처리
+    public void cancelEvent(Long id) {
+        Event event = eventRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid event ID"));
+        event.setIsAccepted(false);  // 승인 취소 처리
+        eventRepository.save(event);
+    }
+
     // 특정 이벤트 상세 조회
     public EventResponse getEventById(Long eventId) {
         Event event = eventRepository.findById(eventId)

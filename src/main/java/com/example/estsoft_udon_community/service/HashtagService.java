@@ -13,7 +13,9 @@ import java.util.List;
 public class HashtagService {
     private final HashtagRepository hashtagRepository;
 
+    // 상위 5개의 해시태그만 가져오기
     public List<PopularHashtag> getTopUsedHashtags() {
+
         // PageRequest를 통해 상위 5개의 해시태그만 가져오도록 설정
         PageRequest pageRequest = PageRequest.of(0, 5);
         return hashtagRepository.findTopUsedHashtags(pageRequest).stream()

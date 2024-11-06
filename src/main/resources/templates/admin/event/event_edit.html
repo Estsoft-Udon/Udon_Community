@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="admin/layout/layout">
+<head>
+    <!--    <link rel="stylesheet" href="/css/index.css">-->
+</head>
+<body>
+<th:block layout:fragment="content">
+    <div class="wrap">
+        <h1>캘린더 승인 요청 수정</h1>
+        <p>작성자 ID: <span th:text="${event.usersId}"></span></p>
+        <p>제목: <span th:text="${event.title}"></span></p>
+        <p>신청 날짜: <span th:text="${event.dateTime}"></span></p>
+        <p>내용: <span th:text="${event.content}"></span></p>
+
+        <!-- 승인 처리 -->
+        <form th:action="@{/admin/event/{id}/approve(id=${event.id})}" method="post">
+            <button type="submit" th:text="${event.isAccepted ? '승인됨' : '승인하기'}" th:disabled="${event.isAccepted}"></button>
+        </form>
+
+        <!-- 승인 취소 처리 -->
+        <form th:action="@{/admin/event/{id}/cancel(id=${event.id})}" method="post">
+            <button type="submit" th:text="${event.isAccepted ? '승인 취소' : '승인되지 않음'}" th:disabled="${!event.isAccepted}"></button>
+        </form>
+
+        <a href="/admin/event/event_list">목록으로</a>
+    </div> 
+</th:block>
+</body>
+</html>

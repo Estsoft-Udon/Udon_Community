@@ -2,6 +2,7 @@ package com.example.estsoft_udon_community.controller.admin;
 
 import com.example.estsoft_udon_community.dto.request.EventRequest;
 import com.example.estsoft_udon_community.dto.response.EventResponse;
+import com.example.estsoft_udon_community.entity.Event;
 import com.example.estsoft_udon_community.service.admin.AdminEventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,13 @@ public class AdminEventController {
         return ResponseEntity.ok("이벤트가 승인되었습니다.");
     }
 
+    // 이벤트 취소 처리 (승인 취소)
+    @PostMapping("/event/{id}/cancel")
+    public String cancelEvent(@PathVariable Long id) {
+        adminEventService.cancelEvent(id);
+        return "redirect:/admin/event/event_list";  // 목록 페이지로 리다이렉트
+    }
+
     // 이벤트 삭제
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteEvent(@PathVariable Long id) {
@@ -43,4 +51,5 @@ public class AdminEventController {
         EventResponse eventResponse = adminEventService.getEventById(id);
         return ResponseEntity.ok(eventResponse);
     }
+
 }
