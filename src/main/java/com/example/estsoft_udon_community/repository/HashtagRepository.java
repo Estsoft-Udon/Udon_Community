@@ -2,6 +2,7 @@ package com.example.estsoft_udon_community.repository;
 
 import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Hashtag;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -23,4 +24,10 @@ public interface HashtagRepository extends JpaRepository<Hashtag, Long> {
 
     @Query("SELECT a FROM Articles a JOIN a.hashtags h WHERE h.id = :hashtagId AND a.isDeleted = false")
     List<Articles> findArticlesByHashtagIdAndIsDeletedFalse(@Param("hashtagId") Long hashtagId);
+
+    @Query("SELECT h, COUNT(ahj) as usageCount " +
+            "FROM Hashtag h JOIN ArticleHashtagJoin ahj ON h.id = ahj.hashtag.id " +
+            "GROUP BY h.id " +
+            "ORDER BY usageCount DESC")
+    List<Object[]> findTopUsedHashtags(PageRequest pageRequest);
 }

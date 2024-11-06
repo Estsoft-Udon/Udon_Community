@@ -1,9 +1,11 @@
 package com.example.estsoft_udon_community.controller;
 
 import com.example.estsoft_udon_community.dto.request.AddArticleRequest;
+import com.example.estsoft_udon_community.dto.response.ArticleDetailResponse;
 import com.example.estsoft_udon_community.dto.response.ArticleResponse;
 import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.service.ArticlesService;
+import com.example.estsoft_udon_community.service.HashtagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,11 +22,16 @@ import java.util.Optional;
 public class BoardController {
     private final ArticlesService articlesService;
     private final LocationService locationService;
+    private final HashtagService hashtagService;
 
     @GetMapping("/articles")
     public String getBoardList(Model model) {
-        List<ArticleResponse> articles = articlesService.findAll();
+        List<ArticleDetailResponse> articles = articlesService.findAll();
         model.addAttribute("articles", articles);
+
+        List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();
+        model.addAttribute("topHashtags", topHashtags);
+
         return "board/board_list";
     }
 
@@ -39,7 +46,7 @@ public class BoardController {
         }
     }
 
-    @GetMapping("/board_edit")
+    @GetMapping("/articles/new")
     public String boardEdit(Model model) {
         Articles article = new Articles();
         AddArticleRequest addArticleRequest = new AddArticleRequest(null, null, "", null, "", null);
