@@ -54,7 +54,7 @@ public class BoardController {
         model.addAttribute("totalPages", articles.getTotalPages());
         model.addAttribute("totalItems", articles.getTotalElements());
 
-        // location 정보가 있든 없든 있어야하는 topHashtags 정보
+        // location 정보가 있든 없든 있어야 하는 topHashtags 정보
         List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();
         model.addAttribute("topHashtags", topHashtags);
 
