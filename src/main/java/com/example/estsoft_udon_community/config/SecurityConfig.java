@@ -32,8 +32,10 @@ public class SecurityConfig {
 //                                .anyRequest().hasAnyRole("UDON", "UDON_FRIEND", "UDON_SHERIFF", "UDON_MASTER", "UDON_ADMIN")
                 )
                 .formLogin(custom -> custom.loginPage("/login"))
+
                 // 로그아웃 추가
                 .logout(custom -> custom.logoutUrl("/logout"))
+
                 .csrf(AbstractHttpConfigurer::disable)
                 .build();
     }

@@ -1,4 +1,4 @@
-package com.example.estsoft_udon_community.controller;
+package com.example.estsoft_udon_community.controller.admin;
 
 import com.example.estsoft_udon_community.dto.request.UpdateArticleRequest;
 import com.example.estsoft_udon_community.dto.request.UsersRequest;
@@ -7,7 +7,7 @@ import com.example.estsoft_udon_community.dto.response.UsersResponse;
 import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.enums.Grade;
-import com.example.estsoft_udon_community.service.AdminService;
+import com.example.estsoft_udon_community.service.admin.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

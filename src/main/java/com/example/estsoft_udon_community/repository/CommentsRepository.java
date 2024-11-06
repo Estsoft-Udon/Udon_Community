@@ -1,5 +1,6 @@
 package com.example.estsoft_udon_community.repository;
 
+import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Comments;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,4 +15,6 @@ public interface CommentsRepository extends JpaRepository<Comments, Long> {
 
     @Query("SELECT c FROM Comments c WHERE c.articles.id = :articleId AND c.isDeleted = false ORDER BY c.createdAt DESC")
     Page<Comments> findNonDeletedCommentsByArticleId(@Param("articleId") Long articleId, Pageable pageable);
+  
+    Long countByArticles(Articles articleId);
 }

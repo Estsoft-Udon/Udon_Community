@@ -1,5 +1,6 @@
 package com.example.estsoft_udon_community.service;
 
+import com.example.estsoft_udon_community.dto.response.ArticleDetailResponse;
 import com.example.estsoft_udon_community.entity.ArticleHashtagJoin;
 import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Hashtag;
@@ -7,8 +8,12 @@ import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.dto.request.AddArticleRequest;
 import com.example.estsoft_udon_community.dto.response.ArticleResponse;
 import com.example.estsoft_udon_community.dto.request.UpdateArticleRequest;
+import com.example.estsoft_udon_community.enums.ArticleCategory;
 import com.example.estsoft_udon_community.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +28,8 @@ public class ArticlesService {
     private final HashtagRepository hashtagRepository;
     private final ArticleHashtagJoinRepository articleHashtagJoinRepository;
     private final UsersRepository usersRepository;
+    private final CommentsRepository commentsRepository;
+    private final ArticlesLikeRepository articlesLikeRepository;
 
     // 게시글 등록
     public Articles saveArticle(AddArticleRequest request) {
@@ -42,10 +49,14 @@ public class ArticlesService {
     }
 
     // 전체 게시글 조회
-    public List<ArticleResponse> findAll() {
-        return articlesRepository.findByIsDeletedFalse().stream()
-                .map(ArticleResponse::new)
-                .toList();
+    public Page<ArticleDetailResponse> findAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Articles> articlesPage = articlesRepository.findByIsDeletedFalse(pageable);
+
+        return articlesPage.map(article -> new ArticleDetailResponse(
+                article,
+                fetchLikeCount(article),
+                fetchCommentCount(article)));
     }
 
     // 특정 게시글 조회
@@ -83,17 +94,48 @@ public class ArticlesService {
     }
 
     // 특정 지역 게시글 조회
-    public List<ArticleResponse> findByLocationId(Long locationId) {
-        return articlesRepository.findByLocationIdAndIsDeletedFalse(locationId).stream()
-                .map(ArticleResponse::new)
-                .toList();
+    public Page<ArticleDetailResponse> findByLocationId(Long locationId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Articles> articlesPage = articlesRepository.findByLocationIdAndIsDeletedFalse(locationId, pageable);
+
+        return articlesPage.map(article -> new ArticleDetailResponse(article,
+                articlesLikeRepository.countLikesByArticles(article),
+                commentsRepository.countByArticles(article)));
+
+
+//     public List<ArticleDetailResponse> findByLocationId(Long locationId) {
+//         return articlesRepository.findByLocationIdAndIsDeletedFalse(locationId).stream()
+//                 .map(article -> new ArticleDetailResponse(article,
+//                         articlesLikeRepository.countLikesByArticles(article),
+//                         commentsRepository.countByArticles(article)))
+//                 .toList();
+
     }
 
     // 해시태그로 게시글 조회
-    public List<ArticleResponse> findByHashtag(Long hashtagId) {
-        return hashtagRepository.findArticlesByHashtagIdAndIsDeletedFalse(hashtagId).stream()
-                .map(ArticleResponse::new)
-                .toList();
+    public Page<ArticleResponse> findByHashtag(Long hashtagId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Articles> articlesPage = hashtagRepository.findArticlesByHashtagIdAndIsDeletedFalse(hashtagId, pageable);
+
+        return articlesPage.map(ArticleResponse::new);
+    }
+
+    // 카테고리로 게시글 조회
+    public Page<ArticleResponse> findByCategory(String category, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Articles> articlesPage = articlesRepository.findByCategory(ArticleCategory.valueOf(category), pageable);
+
+        return articlesPage.map(ArticleResponse::new);
+    }
+
+    // 제목 검색 기능
+    public Page<ArticleDetailResponse> searchByTitle(String title, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Articles> articlesPage = articlesRepository.findByTitleContainingIgnoreCase(title, pageable);
+        return articlesPage.map(article -> new ArticleDetailResponse(
+                article,
+                fetchLikeCount(article),
+                fetchCommentCount(article)));
     }
 
     // 새로운 해시태그를 생성하거나 기존 해시태그를 가져오는 메서드
@@ -124,8 +166,15 @@ public class ArticlesService {
         hashtagRepository.deleteUnusedHashtags();
     }
 
-
     public Articles findJustArticle(Long id) {
         return articlesRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Article not found"));
+    // 좋아요 수 조회
+    private Long fetchLikeCount(Articles article) {
+        return articlesLikeRepository.countLikesByArticles(article);
+    }
+
+    // 댓글 수 조회
+    private Long fetchCommentCount(Articles article) {
+        return commentsRepository.countByArticles(article);
     }
 }

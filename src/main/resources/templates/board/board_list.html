@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/layout">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/layout">
 <th:block layout:fragment="content">
     <link rel="stylesheet" href="/css/board.css">
     <div class="wrap board_list_wr">
@@ -8,37 +9,23 @@
                 <div class="t_box">
                     <h3>#인기 태그</h3>
                     <div class="hash_box">
-                        <div class="flex_box">
-                            <a href="javascript:void(0)">#맛집</a>
-                            <span class="count_num">15</span>
-                        </div>
-                        <div class="flex_box">
-                            <a href="javascript:void(0)">#여행</a>
-                            <span class="count_num">12</span>
-                        </div>
-                        <div class="flex_box">
-                            <a href="javascript:void(0)">#소모임</a>
-                            <span class="count_num">10</span>
-                        </div>
-                        <div class="flex_box">
-                            <a href="javascript:void(0)">#축제</a>
-                            <span class="count_num">10</span>
-                        </div>
-                        <div class="flex_box">
-                            <a href="javascript:void(0)">#축제 일정</a>
-                            <span class="count_num">10</span>
+                        <div th:each="tag : ${topHashtags}" class="flex_box">
+                            <a href="javascript:void(0)" th:text="'#' + ${tag.hashtag.name}"
+                               th:onclick="'loadArticlesByHashtag(' + ${tag.hashtag.id} + ')'">#해시태그 이름</a>
+                            <span class="count_num" th:text="${tag.usageCount}">사용 횟수</span>
                         </div>
                     </div>
+
                 </div>
                 <div class="b_box">
                     <div class="cate_box">
                         <h3>카테고리</h3>
                         <div class="link_box">
-                            <a href="javascript:void(0)">소모임</a>
-                            <a href="javascript:void(0)">여행</a>
-                            <a href="javascript:void(0)">맛집</a>
-                            <a href="javascript:void(0)">축제</a>
-                            <a href="javascript:void(0)">산책</a>
+                            <a href="javascript:void(0)" th:onclick="'loadArticlesByCategory(T(com.example.estsoft_udon_community.enums.ArticleCategory).GATHERING.name())'">소모임</a>
+                            <a href="javascript:void(0)" th:onclick="'loadArticlesByCategory(T(com.example.estsoft_udon_community.enums.ArticleCategory).FESTIVITIES.name())'">축제</a>
+                            <a href="javascript:void(0)" th:onclick="'loadArticlesByCategory(T(com.example.estsoft_udon_community.enums.ArticleCategory).TRAVEL_DESTINATION.name())'">여행</a>
+                            <a href="javascript:void(0)" th:onclick="'loadArticlesByCategory(T(com.example.estsoft_udon_community.enums.ArticleCategory).RESTAURANT.name())'">맛집</a>
+                            <a href="javascript:void(0)" th:onclick="'loadArticlesByCategory(T(com.example.estsoft_udon_community.enums.ArticleCategory).WALKING_COURSE.name())'">산책</a>
                         </div>
                     </div>
                 </div>
@@ -46,27 +33,33 @@
             <div class="r_box">
                 <div class="tit_wr">
                     <div class="tit_box">
-                        <h2>서울특별시</h2>
-                        <span class="sub_tit">용산구</span>
+                        <h2 th:text="${location != null ? location.upperLocation : '대한민국'}"></h2>
+                        <span th:text="${location != null ? location.name : '우리동네'}"></span>
                     </div>
-                    지금 우리 동네 위치 입니다. 다양한 사람들을 만나고 우리 동네의 모든 정보를 공유해보아요.
+                    다양한 사람들을 만나고 우리 동네의 모든 정보를 공유해보아요.
                 </div>
 
                 <div class="container">
                     <!-- Navigation and Search Bar -->
                     <div class="table_hd">
                         <div class="btn_wr">
-                            <button class="nav_btn">최신순</button> /
+                            <button class="nav_btn">최신순</button>
+                            /
                             <button class="nav_btn">인기순</button>
                         </div>
-                        <div class="search_box">
-                            <input type="text" placeholder="검색어를 입력하세요." class="search-bar">
-                            <button>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" class="h-3.5 w-3.5 text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-200">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"></path>
-                                </svg>
-                            </button>
-                        </div>
+                        <form th:action="@{/articles/search}" method="get">
+                            <div class="search_box">
+                                <input type="text" name="title" placeholder="검색어를 입력하세요." class="search-bar" th:value="${searchQuery}">
+                                <button type="submit">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                         stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon"
+                                         class="h-3.5 w-3.5 text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-200">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </form>
                         <button class="write_btn" onclick="location.href='/articles/new'">글쓰기</button>
                     </div>
 
@@ -77,47 +70,39 @@
                                 <div class="t_box">
                                     <span class="post_num" th:text="${article.id} + '.'">1.</span>
                                     <a th:href="@{/articles/{id}(id=${article.id})}" th:text="${article.title}" class="post_title">글 제목</a>
+
+                                    <!--  위치만 바꿔주세요 -->
+                                    <span th:text="${article.location}"></span>
                                 </div>
                                 <div class="post_author" th:text="${article.nickname}">작성자 닉네임</div>
                             </div>
                             <div class="post_stats">
                                 <div class="views"><span class="view_icon icon_box"></span><span th:text="${article.viewCount}">조회수</span></div>
-                                <div class="likes"><span class="thumb_icon icon_box"></span>좋아요 수</div>
-                                <div class="comments"><span class="comment_icon icon_box"></span>댓글 수</div>
+                                <div class="likes"><span class="thumb_icon icon_box"></span><span th:text="${article.likeCount}">좋아요 수</span></div>
+                                <div class="comments"><span class="comment_icon icon_box"></span><span th:text="${article.commentCount}">댓글 수</span></div>
                             </div>
                         </li>
                     </ul>
+
                     <div class="pagination_wr">
                         <ul class="pagination">
-                        <!--
-                            li.on 현재 활성화 된 페이지
-                            5페이지 이후에 prev_btn 활성화
-                            마지막 페이지 노출되면 next_btn 비활성화
-                        -->
-                            <li class="prev_btn dn">
-                                <button type="button">
+                            <!-- 이전 버튼 활성화/비활성화 -->
+                            <li th:classappend="${currentPage == 0 ? 'dn' : ''}" class="prev_btn">
+                                <button type="button" th:onclick="'loadArticlesByPage(' + (${currentPage} - 1) + ')'" aria-label="Previous">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="arrow">
                                         <path d="M15 19l-7-7 7-7" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     </svg>
                                 </button>
                             </li>
-                            <li class="on">
-                                <button type="button">1</button>
+
+                            <!-- 페이지 번호 생성 -->
+                            <li th:each="page : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${page == currentPage ? 'on' : ''}">
+                                <a th:href="@{/articles/search(title=${searchQuery}, page=${page}, size=${5})}" th:text="${page + 1}"></a>
                             </li>
-                            <li>
-                                <button type="button">2</button>
-                            </li>
-                            <li>
-                                <button type="button">3</button>
-                            </li>
-                            <li>
-                                <button type="button">4</button>
-                            </li>
-                            <li>
-                                <button type="button">5</button>
-                            </li>
-                            <li class="next_btn">
-                                <button type="button">
+
+                            <!-- 다음 버튼 활성화/비활성화 -->
+                            <li th:classappend="${currentPage == totalPages - 1 ? 'dn' : ''}" class="next_btn">
+                                <button type="button" th:onclick="'loadArticlesByPage(' + (${currentPage} + 1) + ')'" aria-label="Next">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="arrow">
                                         <path d="M9 5l7 7-7 7" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     </svg>
@@ -129,16 +114,6 @@
             </div>
         </div>
     </div>
-<script>
-    const searchBox = document.querySelector(".search_box");
-
-    searchBox.querySelector("input").addEventListener("focus", () => {
-        searchBox.classList.add("on");
-    });
-
-    searchBox.querySelector("input").addEventListener("blur", () => {
-        searchBox.classList.remove("on");
-    });
-</script>
+    <script src="/js/board.js" defer></script>
 </th:block>
 </html>
