@@ -36,7 +36,6 @@ public class ViewCommentController {
     public String boardDetail(@PathVariable Long id,
                               @RequestParam(defaultValue = "0") int page,
                               @RequestParam(defaultValue = "5") int size,
-                              @AuthenticationPrincipal CustomUserDetails customUserDetails,
                               Model model) {
         Optional<ArticleResponse> article = articlesService.findByArticleId(id);
         Pageable pageable = PageRequest.of(page, size);
@@ -46,10 +45,11 @@ public class ViewCommentController {
             comment.setLikeCount(commentsLikeService.countCommentsLike(comment.getId()));
             return comment;
         });
-        if(!commentsPage.isEmpty()) {
+
+        if (!commentsPage.isEmpty()) {
             model.addAttribute("commentsPage", commentsPage);
         }
-        model.addAttribute("loggedInUserId", getLoggedInUser(customUserDetails).getId());
+        model.addAttribute("loggedInUserId", SecurityUtil.getLoggedInUser().getId());
 
         if (article.isPresent()) {
             model.addAttribute("article", article.get());
@@ -63,7 +63,7 @@ public class ViewCommentController {
     @PostMapping("/articles/{articleId}/comments")
     public String addComment(@PathVariable Long articleId, @RequestBody CommentsRequest request) {
         Articles article = articlesService.findJustArticle(articleId);
-        if(article != null) {
+        if (article != null) {
             // 댓글 추가 로직
             Comments comment = new Comments();
             comment.setContent(request.getContent());
@@ -80,7 +80,6 @@ public class ViewCommentController {
             return "redirect:/articles"; // 게시글이 없으면 게시판 목록으로 리다이렉트
         }
     }
-
 //    // 코멘트 수정
 //    @PutMapping("/articles/{articleId}/comments/{commentId}")
 //    public String editComment(@PathVariable Long articleId,
@@ -107,12 +106,4 @@ public class ViewCommentController {
 //
 //        return "redirect:/articles/" + articleId;
 //    }
-
-    // 로그인 정보 가져오기
-    private Users getLoggedInUser(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        if(customUserDetails == null) {
-            return new Users();
-        }
-        return usersService.findByLoginId(customUserDetails.getUsername());
-    }
 }

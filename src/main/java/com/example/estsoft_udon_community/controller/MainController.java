@@ -25,9 +25,9 @@ public class MainController {
         this.articlesService = articlesService;
     }
 
-    // index 페이지 메서드
     @GetMapping("/")
     public String index(Model model) {
+
         // 상위 지역 목록을 가져와서 모델에 추가
         List<String> upperLocations = locationService.getDistinctUpperLocations();
         model.addAttribute("upperLocations", upperLocations);
@@ -45,7 +45,6 @@ public class MainController {
                 .sorted((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt())) // 최신 순 정렬
                 .limit(5)
                 .collect(Collectors.toList());
-
 
         model.addAttribute("articles", newestPosts); // 모델에 게시글 리스트 추가
 

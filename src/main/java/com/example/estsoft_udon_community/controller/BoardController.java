@@ -37,17 +37,15 @@ public class BoardController {
         if (locationId != null) {
             // location 정보가 있으면 지역별 게시글 나열
             Location locationById = locationService.getLocationById(locationId);
-
             articles = articlesService.findByLocationId(locationId, page, size);
-
             model.addAttribute("location", locationById);
+
         } else {
             // 지역 정보가 없을 때 - 전체 지역 게시글 리스트
             articles = articlesService.findAll(page, size);
             model.addAttribute("location", null);
         }
         model.addAttribute("articles", articles);
-
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", articles.getTotalPages());
         model.addAttribute("totalItems", articles.getTotalElements());
@@ -69,9 +67,9 @@ public class BoardController {
 
         Page<ArticleDetailResponse> articles = articlesService.searchByTitle(title, page, size);
 
-        model.addAttribute("articles", articles);
         model.addAttribute("searchQuery", title);
 
+        model.addAttribute("articles", articles);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", articles.getTotalPages());
         model.addAttribute("totalItems", articles.getTotalElements());
@@ -93,7 +91,6 @@ public class BoardController {
         Page<ArticleDetailResponse> articles = articlesService.findByHashtag(hashtagId, page, size);
 
         model.addAttribute("articles", articles);
-
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", articles.getTotalPages());
         model.addAttribute("totalItems", articles.getTotalElements());
@@ -114,7 +111,6 @@ public class BoardController {
         Page<ArticleDetailResponse> articles = articlesService.findByCategory(category, page, size);
 
         model.addAttribute("articles", articles);
-
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", articles.getTotalPages());
         model.addAttribute("totalItems", articles.getTotalElements());
@@ -147,14 +143,13 @@ public class BoardController {
 
     // 게시글 생성
     @PostMapping("/articles/new")
-    public String createBoard(Model model, @ModelAttribute AddArticleRequest addArticleRequest,
-                            String upperLocation, String locationName) {
+    public String createBoard(Model model, @ModelAttribute AddArticleRequest addArticleRequest, Long locationId) {
 
         model.addAttribute("article", addArticleRequest);
         model.addAttribute("articleCategories", ArticleCategory.values());
 
         //article 저장
-        articlesService.saveArticle(addArticleRequest, Long.valueOf(locationName));
+        articlesService.saveArticle(addArticleRequest, locationId);
 
         return "board/board_edit";
     }
