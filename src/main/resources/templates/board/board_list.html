@@ -68,16 +68,16 @@
                                 <div class="t_box">
                                     <span class="post_num" th:text="${article.id} + '.'">1.</span>
                                     <a th:href="@{/articles/{id}(id=${article.id})}" th:text="${article.title}" class="post_title">글 제목</a>
-
-                                    <!--  위치만 바꿔주세요 -->
-                                    <span th:text="${article.location}"></span>
                                 </div>
                                 <div class="post_author" th:text="${article.nickname}">작성자 닉네임</div>
                             </div>
-                            <div class="post_stats">
-                                <div class="views"><span class="view_icon icon_box"></span><span th:text="${article.viewCount}">조회수</span></div>
-                                <div class="likes"><span class="thumb_icon icon_box"></span><span th:text="${article.likeCount}">좋아요 수</span></div>
-                                <div class="comments"><span class="comment_icon icon_box"></span><span th:text="${article.commentCount}">댓글 수</span></div>
+                            <div class="r_box">
+                                <span th:text="${article.location}"></span>
+                                <div class="post_stats">
+                                    <div class="views"><span class="view_icon icon_box"></span><span th:text="${article.viewCount}">조회수</span></div>
+                                    <div class="likes"><span class="thumb_icon icon_box"></span><span th:text="${article.likeCount}">좋아요 수</span></div>
+                                    <div class="comments"><span class="comment_icon icon_box"></span><span th:text="${article.commentCount}">댓글 수</span></div>
+                                </div>
                             </div>
                         </li>
                     </ul>
