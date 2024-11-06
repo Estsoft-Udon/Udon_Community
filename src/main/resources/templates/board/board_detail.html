@@ -3,6 +3,7 @@
 <head>
     <link rel="stylesheet" href="/css/board.css">
     <script src="/js/comment.js"></script>
+    <script src="/js/board.js"></script>
 </head>
 <th:block layout:fragment="content">
     <div class="wrap board_detail_wr">
@@ -24,8 +25,9 @@
                     <div class="t_box">
                         <p class="user_id" th:text="${article.nickname}">작성자 닉네임</p>
                         <div class="btn_wr">
-                            <button class="edit_btn" th:if="${comment.user.id == loggedInUserId}">수정</button>
-                            <button class="del_btn" th:if="${comment.user.id == loggedInUserId}">삭제</button>
+                            <button class="edit_btn" th:if="${article.userId == loggedInUserId}" >수정</button>
+<!--                            <button class="edit_btn" th:if="${article.userId == loggedInUserId}" onclick="location.href='/articles/edit/{articleId}'">수정</button>-->
+                            <button class="del_btn" th:if="${article.userId == loggedInUserId}" th:onclick="'delete_article(' + ${article.id} + ')'">삭제</button>
                         </div>
                     </div>
                     <div class="b_box">
