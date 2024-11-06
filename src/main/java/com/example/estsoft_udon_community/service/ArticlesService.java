@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,7 +51,7 @@ public class ArticlesService {
 
     // 전체 게시글 조회
     public Page<ArticleDetailResponse> findAll(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
         Page<Articles> articlesPage = articlesRepository.findByIsDeletedFalse(pageable);
 
         return articlesPage.map(article -> new ArticleDetailResponse(
@@ -95,7 +96,7 @@ public class ArticlesService {
 
     // 특정 지역 게시글 조회
     public Page<ArticleDetailResponse> findByLocationId(Long locationId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
         Page<Articles> articlesPage = articlesRepository.findByLocationIdAndIsDeletedFalse(locationId, pageable);
 
         return articlesPage.map(article -> new ArticleDetailResponse(article,
@@ -114,7 +115,7 @@ public class ArticlesService {
 
     // 해시태그로 게시글 조회
     public Page<ArticleDetailResponse> findByHashtag(Long hashtagId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
         Page<Articles> articlesPage = hashtagRepository.findArticlesByHashtagIdAndIsDeletedFalse(hashtagId, pageable);
 
         return articlesPage.map(articles -> new ArticleDetailResponse(articles,
@@ -124,7 +125,7 @@ public class ArticlesService {
 
     // 카테고리로 게시글 조회
     public Page<ArticleDetailResponse> findByCategory(String category, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
         Page<Articles> articlesPage = articlesRepository.findByCategory(ArticleCategory.valueOf(category), pageable);
 
         return articlesPage.map(article -> new ArticleDetailResponse(
@@ -136,7 +137,7 @@ public class ArticlesService {
 
     // 제목 검색 기능
     public Page<ArticleDetailResponse> searchByTitle(String title, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
         Page<Articles> articlesPage = articlesRepository.findByTitleContainingIgnoreCase(title, pageable);
         return articlesPage.map(article -> new ArticleDetailResponse(
                 article,
