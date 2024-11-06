@@ -1,8 +1,5 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="admin/layout/layout">
-<head>
-    <!--    <link rel="stylesheet" href="/css/index.css">-->
-</head>
 <body>
 <th:block layout:fragment="content">
     <section>
@@ -12,11 +9,11 @@
                 <button type="button" class="reversal_btn">목록으로</button>
             </a>
             <form th:action="@{/admin/event/{id}/approve(id=${event.id})}" method="post" th:if="${!event.isAccepted}">
-                <button type="submit" class="reversal_btn" th:text="'승인하기'"></button>
+                <button type="submit" class="default_btn" th:text="'승인하기'"></button>
             </form>
 
             <form th:action="@{/admin/event/{id}/cancel(id=${event.id})}" method="post" th:if="${event.isAccepted}">
-                <button type="submit" class="reversal_btn" th:text="'승인 취소'"></button>
+                <button type="submit" class="default_btn" th:text="'승인 취소'"></button>
             </form>
         </div>
         <div class="info">

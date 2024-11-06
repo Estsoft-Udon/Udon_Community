@@ -8,9 +8,13 @@
     <section>
         <h1>캘린더 승인 요청 목록</h1>
         <div class="filter">
-            <a th:href="@{/admin/event/event_list}" th:class="${approved == null} ? 'selected' : ''">전체 목록</a>
-            <a th:href="@{/admin/event/event_list?approved=true}" th:class="${approved != null && approved == true} ? 'selected' : ''">승인된 이벤트</a>
-            <a th:href="@{/admin/event/event_list?approved=false}" th:class="${approved != null && approved == false} ? 'selected' : ''">승인되지 않은 이벤트</a>
+            <form th:action="@{/admin/event/event_list}" method="get">
+                <select name="approved" th:value="${approved}" onchange="this.form.submit()">
+                    <option value="" th:selected="${approved == null}">전체 목록</option>
+                    <option value="true" th:selected="${approved == true}">승인된 이벤트</option>
+                    <option value="false" th:selected="${approved == false}">승인되지 않은 이벤트</option>
+                </select>
+            </form>
         </div>
         <table>
             <thead>
