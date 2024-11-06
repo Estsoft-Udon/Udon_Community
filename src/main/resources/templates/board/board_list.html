@@ -10,8 +10,8 @@
                     <h3>#인기 태그</h3>
                     <div class="hash_box">
                         <div th:each="tag : ${topHashtags}" class="flex_box">
-                            <a href="javascript:void(0)" th:text="'#' + ${tag.hashtag.name}"
-                               th:onclick="'loadArticlesByHashtag(' + ${tag.hashtag.id} + ')'">#해시태그 이름</a>
+                            <a th:href="@{/articles/hashtag/{hashtagId}(hashtagId=${tag.hashtag.id})}"
+                               th:text="'#' + ${tag.hashtag.name}">#해시태그 이름</a>
                             <span class="count_num" th:text="${tag.usageCount}">사용 횟수</span>
                         </div>
                     </div>
@@ -21,11 +21,11 @@
                     <div class="cate_box">
                         <h3>카테고리</h3>
                         <div class="link_box">
-                            <a href="javascript:void(0)" th:onclick="'loadArticlesByCategory(T(com.example.estsoft_udon_community.enums.ArticleCategory).GATHERING.name())'">소모임</a>
-                            <a href="javascript:void(0)" th:onclick="'loadArticlesByCategory(T(com.example.estsoft_udon_community.enums.ArticleCategory).FESTIVITIES.name())'">축제</a>
-                            <a href="javascript:void(0)" th:onclick="'loadArticlesByCategory(T(com.example.estsoft_udon_community.enums.ArticleCategory).TRAVEL_DESTINATION.name())'">여행</a>
-                            <a href="javascript:void(0)" th:onclick="'loadArticlesByCategory(T(com.example.estsoft_udon_community.enums.ArticleCategory).RESTAURANT.name())'">맛집</a>
-                            <a href="javascript:void(0)" th:onclick="'loadArticlesByCategory(T(com.example.estsoft_udon_community.enums.ArticleCategory).WALKING_COURSE.name())'">산책</a>
+                            <a th:href="@{/articles/category/{category}(category='GATHERING')}">소모임</a>
+                            <a th:href="@{/articles/category/{category}(category='FESTIVITIES')}">축제</a>
+                            <a th:href="@{/articles/category/{category}(category='TRAVEL_DESTINATION')}">여행</a>
+                            <a th:href="@{/articles/category/{category}(category='RESTAURANT')}">맛집</a>
+                            <a th:href="@{/articles/category/{category}(category='WALKING_COURSE')}">산책</a>
                         </div>
                     </div>
                 </div>
@@ -64,12 +64,15 @@
                     </div>
 
                     <ul class="post_list">
-                        <!-- 게시글 리스트 반복 -->
-                        <li th:each="article : ${articles}" class="post_item">
+                        <li th:each="article, iterStat : ${articles}" class="post_item">
                             <div class="l_box">
                                 <div class="t_box">
-                                    <span class="post_num" th:text="${article.id} + '.'">1.</span>
+                                    <!-- 페이지 번호 표시 -->
+                                    <span class="post_num" th:text="${(currentPage * 5) + iterStat.index + 1}">1.</span>
                                     <a th:href="@{/articles/{id}(id=${article.id})}" th:text="${article.title}" class="post_title">글 제목</a>
+
+                                    <!-- 위치만 바꿔주세요 -->
+                                    <span th:text="${article.location}"></span>
                                 </div>
                                 <div class="post_author" th:text="${article.nickname}">작성자 닉네임</div>
                             </div>
@@ -84,6 +87,7 @@
                         </li>
                     </ul>
 
+
                     <div class="pagination_wr">
                         <ul class="pagination">
                             <!-- 이전 버튼 활성화/비활성화 -->
@@ -97,7 +101,17 @@
 
                             <!-- 페이지 번호 생성 -->
                             <li th:each="page : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${page == currentPage ? 'on' : ''}">
-                                <a th:href="@{/articles/search(title=${searchQuery}, page=${page}, size=${5})}" th:text="${page + 1}"></a>
+                                <!-- 기본 -->
+                                <a th:if="${category == null and hashtagId == null and searchQuery == null}" th:href="@{/articles(page=${page}, size=${5})}" th:text="${page + 1}"></a>
+
+                                <!-- 카테고리로 조회한 경우 -->
+                                <a th:if="${category != null}" th:href="@{/articles/category/{category}(category=${category}, page=${page}, size=${5})}" th:text="${page + 1}"></a>
+
+                                <!-- 해시태그로 조회한 경우 -->
+                                <a th:if="${hashtagId != null}" th:href="@{/articles/hashtag/{hashtagId}(hashtagId=${hashtagId}, page=${page}, size=${5})}" th:text="${page + 1}"></a>
+
+                                <!-- 검색으로 조회한 경우 -->
+                                <a th:if="${searchQuery != null}" th:href="@{/articles/search(title=${searchQuery}, page=${page}, size=${5})}" th:text="${page + 1}"></a>
                             </li>
 
                             <!-- 다음 버튼 활성화/비활성화 -->

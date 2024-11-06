@@ -29,6 +29,8 @@ public interface HashtagRepository extends JpaRepository<Hashtag, Long> {
 
     @Query("SELECT h, COUNT(ahj) as usageCount " +
             "FROM Hashtag h JOIN ArticleHashtagJoin ahj ON h.id = ahj.hashtag.id " +
+            "JOIN Articles a ON ahj.articles.id = a.id " +
+            "WHERE a.isDeleted = false " +
             "GROUP BY h.id " +
             "ORDER BY usageCount DESC")
     List<Object[]> findTopUsedHashtags(PageRequest pageRequest);

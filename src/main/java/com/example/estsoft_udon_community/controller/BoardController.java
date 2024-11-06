@@ -7,10 +7,11 @@ import com.example.estsoft_udon_community.dto.response.CommentsResponse;
 import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Comments;
 import com.example.estsoft_udon_community.entity.Users;
+import com.example.estsoft_udon_community.enums.ArticleCategory;
+import com.example.estsoft_udon_community.enums.UpperLocationEnum;
 import com.example.estsoft_udon_community.security.CustomUserDetails;
 import com.example.estsoft_udon_community.service.ArticlesService;
 import com.example.estsoft_udon_community.service.HashtagService;
-import com.example.estsoft_udon_community.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -46,6 +47,7 @@ public class BoardController {
         if (locationId != null) {
             // location 정보가 있으면 지역별 게시글 나열
             Location locationById = locationService.getLocationById(locationId);
+
             articles = articlesService.findByLocationId(locationId, page, size);
 
             model.addAttribute("location", locationById);
@@ -67,6 +69,7 @@ public class BoardController {
         return "board/board_list";
     }
 
+    // 게시글 검색
     @GetMapping("/articles/search")
     public String searchArticles(
             @RequestParam String title,
@@ -90,28 +93,81 @@ public class BoardController {
         return "board/board_list";
     }
 
-//    // 게시글 생성
-//    @GetMapping("/articles/new")
-//    public String boardEdit(Model model) {
-//        Articles article = new Articles();
-//        AddArticleRequest addArticleRequest = new AddArticleRequest(null, null, "", null, "", null);
-//
-//        model.addAttribute("article", article);
-//        model.addAttribute("addArticleRequest", addArticleRequest);
-//
-//        // 상위 지역 목록을 가져와서 모델에 추가
-//        List<String> upperLocations = locationService.getDistinctUpperLocations();
-//        model.addAttribute("upperLocations", upperLocations);
-//
-//        // 첫 번째 상위 지역에 대한 하위 지역 목록을 초기화하여 모델에 추가
-//        if (!upperLocations.isEmpty()) {
-//            String firstUpperLocation = upperLocations.get(0);
-//            List<Location> lowerLocations = locationService.getLowerLocation(firstUpperLocation);
-//            model.addAttribute("locations", lowerLocations);
-//        }
-//
-//        return "board/board_edit";
-//    }
+    // 해시태그로 게시글 조회
+    @GetMapping("/articles/hashtag/{hashtagId}")
+    public String getArticlesByHashtag(@PathVariable Long hashtagId,
+                                       @RequestParam(defaultValue = "0") int page,
+                                       @RequestParam(defaultValue = "5") int size,
+                                       Model model) {
+
+        Page<ArticleDetailResponse> articles = articlesService.findByHashtag(hashtagId, page, size);
+
+        model.addAttribute("articles", articles);
+
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", articles.getTotalPages());
+        model.addAttribute("totalItems", articles.getTotalElements());
+
+        List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();
+        model.addAttribute("topHashtags", topHashtags);
+
+        return "board/board_list";
+    }
+
+    // 카테고리별 게시글 조회
+    @GetMapping("/articles/category/{category}")
+    public String getArticlesByCategory(@PathVariable String category,
+                                        @RequestParam(defaultValue = "0") int page,
+                                        @RequestParam(defaultValue = "5") int size,
+                                        Model model) {
+
+        Page<ArticleDetailResponse> articles = articlesService.findByCategory(category, page, size);
+
+        model.addAttribute("articles", articles);
+
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", articles.getTotalPages());
+        model.addAttribute("totalItems", articles.getTotalElements());
+
+        List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();
+        model.addAttribute("topHashtags", topHashtags);
+
+        return "board/board_list";
+    }
+
+    // 게시글 생성
+    @GetMapping("/articles/new")
+    public String boardEdit(Model model) {
+
+        model.addAttribute("articleCategories", ArticleCategory.values());
+
+        // 상위 지역 목록을 가져와서 모델에 추가
+        List<String> upperLocations = locationService.getDistinctUpperLocations();
+        model.addAttribute("upperLocations", upperLocations);
+
+        // 첫 번째 상위 지역에 대한 하위 지역 목록을 초기화하여 모델에 추가
+        if (!upperLocations.isEmpty()) {
+            String firstUpperLocation = upperLocations.get(0);
+            List<Location> lowerLocations = locationService.getLowerLocation(firstUpperLocation);
+            model.addAttribute("locations", lowerLocations);
+        }
+
+        return "board/board_edit";
+    }
+
+    // 게시글 생성
+    @PostMapping("/articles/new")
+    public String boardEdit(Model model, @ModelAttribute AddArticleRequest addArticleRequest,
+                            String upperLocation, String locationName) {
+
+        model.addAttribute("article", addArticleRequest);
+        model.addAttribute("articleCategories", ArticleCategory.values());
+
+        //article 저장
+        articlesService.saveArticle(addArticleRequest, Long.valueOf(locationName));
+
+        return "board/board_edit";
+    }
 
     @GetMapping("/articles/edit/{articleId}")
     public String boardEditPage() {

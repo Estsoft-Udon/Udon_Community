@@ -1,16 +1,22 @@
 package com.example.estsoft_udon_community.service;
 
 import com.example.estsoft_udon_community.dto.response.ArticleDetailResponse;
-import com.example.estsoft_udon_community.entity.*;
+import com.example.estsoft_udon_community.entity.ArticleHashtagJoin;
+import com.example.estsoft_udon_community.entity.Articles;
+import com.example.estsoft_udon_community.entity.Hashtag;
+import com.example.estsoft_udon_community.entity.Location;
+import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.dto.request.AddArticleRequest;
 import com.example.estsoft_udon_community.dto.response.ArticleResponse;
 import com.example.estsoft_udon_community.dto.request.UpdateArticleRequest;
 import com.example.estsoft_udon_community.enums.ArticleCategory;
 import com.example.estsoft_udon_community.repository.*;
+import com.example.estsoft_udon_community.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,14 +37,37 @@ public class ArticlesService {
 
     // 게시글 등록
     public Articles saveArticle(AddArticleRequest request) {
-        Long userId = request.getUserId();
+        Long userId = SecurityUtil.getLoggedInUser().getId();
+
         Users user = usersRepository.findById(userId).orElseThrow();
 
         List<Hashtag> hashtagList = getOrCreateHashtags(request.getHashtagName());
-        Location location = locationService.getLocationById(request.getLocationId());
+
+        // location 정보를 가져다 주는데?
+        Location locationById = locationService.getLocationById(request.getLocationId());
 
         Articles articles = new Articles(user, request.getTitle(), request.getContent(), request.getCategory(),
-                hashtagList, location);
+                hashtagList, locationById);
+
+        Articles savedArticle = articlesRepository.save(articles);
+
+        for (Hashtag hashtag : hashtagList) {
+            articleHashtagJoinRepository.save(new ArticleHashtagJoin(savedArticle, hashtag));
+        }
+        return savedArticle;
+    }
+
+    // 게시글 등록
+    public Articles saveArticle(AddArticleRequest request, Long locationId) {
+        Long userId = SecurityUtil.getLoggedInUser().getId();
+
+        Users user = usersRepository.findById(userId).orElseThrow();
+
+        List<Hashtag> hashtagList = getOrCreateHashtags(request.getHashtagName());
+
+        Articles articles = new Articles(user, request.getTitle(), request.getContent(), request.getCategory(),
+                hashtagList, locationService.getLocationById(locationId));
+
         Articles savedArticle = articlesRepository.save(articles);
 
         for (Hashtag hashtag : hashtagList) {
@@ -49,7 +78,7 @@ public class ArticlesService {
 
     // 전체 게시글 조회
     public Page<ArticleDetailResponse> findAll(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
         Page<Articles> articlesPage = articlesRepository.findByIsDeletedFalse(pageable);
 
         return articlesPage.map(article -> new ArticleDetailResponse(
@@ -94,12 +123,12 @@ public class ArticlesService {
 
     // 특정 지역 게시글 조회
     public Page<ArticleDetailResponse> findByLocationId(Long locationId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
         Page<Articles> articlesPage = articlesRepository.findByLocationIdAndIsDeletedFalse(locationId, pageable);
 
         return articlesPage.map(article -> new ArticleDetailResponse(article,
-                articlesLikeRepository.countLikesByArticles(article),
-                commentsRepository.countByArticles(article)));
+                fetchLikeCount(article),
+                fetchCommentCount(article)));
 
 
 //     public List<ArticleDetailResponse> findByLocationId(Long locationId) {
@@ -112,24 +141,30 @@ public class ArticlesService {
     }
 
     // 해시태그로 게시글 조회
-    public Page<ArticleResponse> findByHashtag(Long hashtagId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<ArticleDetailResponse> findByHashtag(Long hashtagId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
         Page<Articles> articlesPage = hashtagRepository.findArticlesByHashtagIdAndIsDeletedFalse(hashtagId, pageable);
 
-        return articlesPage.map(ArticleResponse::new);
+        return articlesPage.map(articles -> new ArticleDetailResponse(articles,
+                fetchLikeCount(articles),
+                fetchCommentCount(articles)));
     }
 
     // 카테고리로 게시글 조회
-    public Page<ArticleResponse> findByCategory(String category, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<ArticleDetailResponse> findByCategory(String category, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
         Page<Articles> articlesPage = articlesRepository.findByCategory(ArticleCategory.valueOf(category), pageable);
 
-        return articlesPage.map(ArticleResponse::new);
+        return articlesPage.map(article -> new ArticleDetailResponse(
+                article,
+                fetchLikeCount(article),
+                fetchCommentCount(article)
+        ));
     }
 
     // 제목 검색 기능
     public Page<ArticleDetailResponse> searchByTitle(String title, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
         Page<Articles> articlesPage = articlesRepository.findByTitleContainingIgnoreCase(title, pageable);
         return articlesPage.map(article -> new ArticleDetailResponse(
                 article,
@@ -139,6 +174,11 @@ public class ArticlesService {
 
     // 새로운 해시태그를 생성하거나 기존 해시태그를 가져오는 메서드
     private List<Hashtag> getOrCreateHashtags(List<String> hashtagNames) {
+        // hashtagNames가 null이면 빈 리스트로 초기화
+        if (hashtagNames == null) {
+            hashtagNames = List.of();
+        }
+
         return hashtagNames.stream()
                 .map(hashtagName -> hashtagRepository.findByName(hashtagName)
                         .orElseGet(() -> hashtagRepository.save(new Hashtag(hashtagName))))
@@ -176,7 +216,7 @@ public class ArticlesService {
 
     // 댓글 수 조회
     private Long fetchCommentCount(Articles article) {
-        return commentsRepository.countByArticles(article);
+        return commentsRepository.countNonDeletedCommentsByArticle(article);
     }
 
 }

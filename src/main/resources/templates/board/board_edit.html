@@ -5,17 +5,16 @@
     <div class="wrap board_detail_wr">
         <div class="w_1280">
             <div class="form_wr">
-                <form th:action="@{/api/articles}" th:object="${addArticleRequest}" method="post" action="javascript:void(0)">
+                <form th:action="@{/articles/new}" method="post">
                     <!-- 카테고리 선택 -->
                     <div class="form_cont">
                         <span>카테고리</span>
                         <label for="category" class="dn">카테고리 선택</label>
-                        <select id="category" th:field="${addArticleRequest.category}" class="input-field">
+                        <select id="category" name="category" class="input-field">
                             <option value="" disabled selected>카테고리 선택</option>
-                            <option value="RESTAURANT">맛집</option>
-                            <option value="TRAVEL_DESTINATION">여행지</option>
-                            <option value="DATE_COURSE">데이트 코스</option>
-                            <option value="WALKING_COURSE">산책 코스</option>
+                            <th:block th:each="category : ${articleCategories}">
+                                <option th:value="${category}" th:text="${category.getDisplayName()}"></option>
+                            </th:block>
                         </select>
                     </div>
 
@@ -44,7 +43,7 @@
                     <div class="form_cont">
                         <span>제목</span>
                         <label for="title" class="dn">제목 작성</label>
-                        <input type="text" id="title" th:field="${addArticleRequest.title}" class="input-field" placeholder="제목 입력" required>
+                        <input type="text" id="title" name="title" class="input-field" placeholder="제목 입력" required>
                     </div>
 
                     <!-- 해시 태그 작성 이전 코드 -->
@@ -66,7 +65,7 @@
                     <!-- 글 입력 -->
                     <div class="text-area-section">
                         <span>글 입력</span>
-                        <textarea th:field="${addArticleRequest.content}" class="input-field" placeholder="내용을 입력하세요" required></textarea>
+                        <textarea name="content" class="input-field" placeholder="내용을 입력하세요" required></textarea>
                     </div>
 
                     <!-- 버튼 영역 -->

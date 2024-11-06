@@ -20,7 +20,7 @@ public class LocationService {
 
     // LocationId로 Location 정보 가져오기
     public Location getLocationById(Long id) {
-        return locationRepository.findById(id).orElseThrow();
+        return locationRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("위치 정보가 없습니다."));
     }
 
     public List<String> getDistinctUpperLocations() {
