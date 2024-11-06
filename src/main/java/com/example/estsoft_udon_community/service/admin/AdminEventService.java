@@ -16,16 +16,24 @@ public class AdminEventService {
 
     private final EventRepository eventRepository;
 
-    // 승인되지 않은 이벤트 목록 조회
-//    public List<EventResponse> getUnapprovedEvents() {
-//        List<Event> events = eventRepository.findByIsAcceptedFalse();
-//        return events.stream().map(EventResponse::new).collect(Collectors.toList());
-//    }
-
     // 모든 이벤트 조회 (승인 여부 상관없이)
     public List<EventResponse> getAllEvents() {
         List<Event> events = eventRepository.findAll();
         return events.stream().map(EventResponse::new).collect(Collectors.toList());
+    }
+
+    // 승인된 이벤트 목록 조회
+    public List<EventResponse> getApprovedEvents() {
+        return eventRepository.findByIsAcceptedTrue().stream()
+                .map(event -> new EventResponse(event)) // EventResponse로 변환
+                .collect(Collectors.toList());
+    }
+
+    // 승인되지 않은 이벤트 목록 조회
+    public List<EventResponse> getUnapprovedEvents() {
+        return eventRepository.findByIsAcceptedFalse().stream()
+                .map(event -> new EventResponse(event)) // EventResponse로 변환
+                .collect(Collectors.toList());
     }
 
     // 이벤트 승인
