@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="admin/layout/layout">
+<body>
+<th:block layout:fragment="content">
+    <section>
+        <h1>게시글 수정</h1>
+        <div class="btn_box">
+            <a href="/admin/board/board_list">
+                <button type="button" class="reversal_btn">목록으로</button>
+            </a>
+            <form>
+                <button type="submit" class="default_btn">저장하기</button>
+            </form>
+        </div>
+        <div class="info">
+            <div class="info_item">
+                <p class="info_label">공개 여부</p>
+                <!-- 피그마 기준으로 작업되었습니다. 셀렉트로 변경하셔도 괜찮습니다. -->
+                <div class="radio_box">
+                    <div class="radio">
+                        <label for="public">공개</label>
+                        <input type="radio" id="public" name="visibility" value="public" required>
+                    </div>
+                    <div class="radio">
+                        <label for="private">비공개</label>
+                        <input type="radio" id="private" name="visibility" value="private">
+                    </div>
+                </div>
+            </div>
+            <div class="info_item">
+                <p class="info_label">작성자 ID</p>
+                <span>작성자 아이디 텍스트로</span>
+            </div>
+            <div class="info_item">
+                <p class="info_label">제목</p>
+                <span>글 제목이 들어갑니다</span>
+            </div>
+            <div class="info_item">
+                <p class="info_label">지역</p>
+                <span>작성자 지역이 들어갑니다</span>
+            </div>
+            <div class="info_item txt_item">
+                <p class="info_label">내용</p>
+                <p>작성된 내용의 글이 들어갑니다</p>
+            </div>
+        </div>
+    </section>
+</th:block>
+</body>
+</html>
