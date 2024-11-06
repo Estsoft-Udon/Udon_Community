@@ -59,15 +59,15 @@ public class ArticlesController {
         return ResponseEntity.ok().build();
     }
 
-    // 특정 지역 게시글 조회하기
-    @GetMapping("/locations/{locationId}/articles")
-    public ResponseEntity<Page<ArticleResponse>> findByLocationId(
-            @PathVariable Long locationId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Page<ArticleResponse> locationByIdArticle = articlesService.findByLocationId(locationId, page, size);
-        return ResponseEntity.ok(locationByIdArticle);
-    }
+//    // 특정 지역 게시글 조회하기
+//    @GetMapping("/locations/{locationId}/articles")
+//    public ResponseEntity<Page<ArticleResponse>> findByLocationId(
+//            @PathVariable Long locationId,
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "10") int size) {
+//        Page<ArticleResponse> locationByIdArticle = articlesService.findByLocationId(locationId, page, size);
+//        return ResponseEntity.ok(locationByIdArticle);
+//    }
 
     // 해시태그로 게시글 조회
     @GetMapping("/hashtag/{hashtagId}/articles")
