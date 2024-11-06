@@ -2,7 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <th:block th:replace="~{admin/layout/header :: headerFragment}"></th:block>
 <body>
-<th:block layout:fragment="content"></th:block>
+<div class="wrap">
+    <div layout:fragment="content"></div>
+</div>
 </body>
-<!--<th:block th:replace="~{layout/footer :: footerFragment}"></th:block>-->
 </html>
