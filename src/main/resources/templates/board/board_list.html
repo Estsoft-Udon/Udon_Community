@@ -80,43 +80,28 @@
                             </div>
                         </li>
                     </ul>
+
                     <div class="pagination_wr">
                         <ul class="pagination">
-                            <!--
-                                li.on 현재 활성화 된 페이지
-                                5페이지 이후에 prev_btn 활성화
-                                마지막 페이지 노출되면 next_btn 비활성화
-                            -->
-                            <li class="prev_btn dn">
-                                <button type="button">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                         xmlns="http://www.w3.org/2000/svg" class="arrow">
-                                        <path d="M15 19l-7-7 7-7" stroke="#000" stroke-width="2" stroke-linecap="round"
-                                              stroke-linejoin="round"/>
+                            <!-- 이전 버튼 활성화/비활성화 -->
+                            <li th:classappend="${currentPage == 0 ? 'dn' : ''}" class="prev_btn">
+                                <button type="button" th:onclick="'loadArticlesByPage(' + (${currentPage} - 1) + ')'" aria-label="Previous">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="arrow">
+                                        <path d="M15 19l-7-7 7-7" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     </svg>
                                 </button>
                             </li>
-                            <li class="on">
-                                <button type="button">1</button>
+
+                            <!-- 페이지 번호 생성 -->
+                            <li th:each="page : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${page == currentPage ? 'on' : ''}">
+                                <a th:href="@{/articles/search(title=${searchQuery}, page=${page}, size=${5})}" th:text="${page + 1}"></a>
                             </li>
-                            <li>
-                                <button type="button">2</button>
-                            </li>
-                            <li>
-                                <button type="button">3</button>
-                            </li>
-                            <li>
-                                <button type="button">4</button>
-                            </li>
-                            <li>
-                                <button type="button">5</button>
-                            </li>
-                            <li class="next_btn">
-                                <button type="button">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                         xmlns="http://www.w3.org/2000/svg" class="arrow">
-                                        <path d="M9 5l7 7-7 7" stroke="#000" stroke-width="2" stroke-linecap="round"
-                                              stroke-linejoin="round"/>
+
+                            <!-- 다음 버튼 활성화/비활성화 -->
+                            <li th:classappend="${currentPage == totalPages - 1 ? 'dn' : ''}" class="next_btn">
+                                <button type="button" th:onclick="'loadArticlesByPage(' + (${currentPage} + 1) + ')'" aria-label="Next">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="arrow">
+                                        <path d="M9 5l7 7-7 7" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     </svg>
                                 </button>
                             </li>

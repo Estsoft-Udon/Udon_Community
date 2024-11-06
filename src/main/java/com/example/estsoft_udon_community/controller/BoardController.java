@@ -7,6 +7,7 @@ import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.service.ArticlesService;
 import com.example.estsoft_udon_community.service.HashtagService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import com.example.estsoft_udon_community.entity.Location;
@@ -26,9 +27,17 @@ public class BoardController {
     private final HashtagService hashtagService;
 
     @GetMapping("/articles")
-    public String getBoardList(Model model) {
-        List<ArticleDetailResponse> articles = articlesService.findAll();
+    public String getBoardList(@RequestParam(defaultValue = "0") int page,
+                               @RequestParam(defaultValue = "5") int size,
+                               Model model) {
+
+        // 페이지네이션을 위한 서비스 호출
+        Page<ArticleDetailResponse> articles = articlesService.findAll(page, size);
+
         model.addAttribute("articles", articles);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", articles.getTotalPages());
+        model.addAttribute("totalItems", articles.getTotalElements());
 
         List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();
         model.addAttribute("topHashtags", topHashtags);
@@ -37,18 +46,22 @@ public class BoardController {
     }
 
     @GetMapping("/articles/search")
-    public String searchArticles(@RequestParam String title, Model model) {
-        if (title == null || title.trim().isEmpty()) {
-            return "redirect:/articles";
-        }
+    public String searchArticles(
+            @RequestParam String title,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            Model model) {
 
-        List<ArticleDetailResponse> articles = articlesService.searchByTitle(title);
+        Page<ArticleDetailResponse> articles = articlesService.searchByTitle(title, page, size);
+
         model.addAttribute("articles", articles);
+        model.addAttribute("searchQuery", title);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", articles.getTotalPages());
+        model.addAttribute("totalItems", articles.getTotalElements());
 
         List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();
         model.addAttribute("topHashtags", topHashtags);
-
-        model.addAttribute("searchQuery", title);
 
         return "board/board_list";
     }

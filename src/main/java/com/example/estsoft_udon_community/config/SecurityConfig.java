@@ -20,7 +20,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer ignore() {
         return WebSecurity -> WebSecurity.ignoring()
-                .requestMatchers("/css/**", "js/**", "/img/**"); // 정적 리소스 허용
+                .requestMatchers("/css/**", "js/**", "/img/**", "/error"); // 정적 리소스 허용
     }
 
     @Bean
