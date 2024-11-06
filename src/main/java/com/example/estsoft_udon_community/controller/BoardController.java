@@ -137,7 +137,7 @@ public class BoardController {
 
     // 게시글 생성
     @GetMapping("/articles/new")
-    public String boardEdit(Model model) {
+    public String createBoard(Model model) {
 
         model.addAttribute("articleCategories", ArticleCategory.values());
 
@@ -157,7 +157,7 @@ public class BoardController {
 
     // 게시글 생성
     @PostMapping("/articles/new")
-    public String boardEdit(Model model, @ModelAttribute AddArticleRequest addArticleRequest,
+    public String createBoard(Model model, @ModelAttribute AddArticleRequest addArticleRequest,
                             String upperLocation, String locationName) {
 
         model.addAttribute("article", addArticleRequest);
@@ -169,8 +169,12 @@ public class BoardController {
         return "board/board_edit";
     }
 
+    // 게시글 수정
     @GetMapping("/articles/edit/{articleId}")
     public String boardEditPage() {
         return "board/board_edit";
     }
+
+    // 게시글 수정
+
 }
