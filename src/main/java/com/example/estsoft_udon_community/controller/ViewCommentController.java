@@ -10,6 +10,7 @@ import com.example.estsoft_udon_community.entity.Location;
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.security.CustomUserDetails;
 import com.example.estsoft_udon_community.service.*;
+import com.example.estsoft_udon_community.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -60,15 +61,14 @@ public class ViewCommentController {
 
     // 코멘트 추가
     @PostMapping("/articles/{articleId}/comments")
-    public String addComment(@PathVariable Long articleId, @RequestBody CommentsRequest request,
-                             @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+    public String addComment(@PathVariable Long articleId, @RequestBody CommentsRequest request) {
         Articles article = articlesService.findJustArticle(articleId);
         if(article != null) {
             // 댓글 추가 로직
             Comments comment = new Comments();
             comment.setContent(request.getContent());
             comment.setArticles(article); // 게시글 ID 설정
-            comment.setUsers(getLoggedInUser(customUserDetails));
+            comment.setUsers(SecurityUtil.getLoggedInUser());
 
             // 댓글 저장
             commentsService.saveComment(articleId, new CommentsRequest(comment));
