@@ -17,5 +17,5 @@ public class AddArticleRequest {
     private String title;
     private List<String> hashtagName;
     private String content;
-    private Location location;
+    private Long locationId;
 }

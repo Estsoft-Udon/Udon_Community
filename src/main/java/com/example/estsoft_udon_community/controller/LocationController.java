@@ -14,7 +14,6 @@ import java.util.List;
 public class LocationController {
     private final LocationService locationService;
 
-    // 인증이 안되니까 하위 선택이 안들어왔다.
     @GetMapping("/getLowerLocations")
     public List<Location> getLowerLocations(@RequestParam String upperLocation) {
         return locationService.getLowerLocation(upperLocation);

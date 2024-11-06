@@ -79,11 +79,11 @@ public class ViewController {
         model.addAttribute("passwordHints", PasswordHint.values());
 
         if (!upperLocations.isEmpty()) {
-
             String firstUpperLocation = upperLocations.get(0);
             List<Location> lowerLocations = locationService.getLowerLocation(firstUpperLocation);
             model.addAttribute("locations", lowerLocations);
         }
+
         return "member/signup";
     }
 
@@ -91,6 +91,7 @@ public class ViewController {
     public String signup(@ModelAttribute UsersRequest request,
                          Model model) {
         try {
+            // AddArticleRequest 에는 upper, name이 없음
             Long locationId = locationService.getLocationIdByUpperLocationAndName(request.getUpperLocation(),
                     request.getLocationName());
             request.setLocationId(locationId);

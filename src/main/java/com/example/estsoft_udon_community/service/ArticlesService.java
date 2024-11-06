@@ -4,12 +4,14 @@ import com.example.estsoft_udon_community.dto.response.ArticleDetailResponse;
 import com.example.estsoft_udon_community.entity.ArticleHashtagJoin;
 import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Hashtag;
+import com.example.estsoft_udon_community.entity.Location;
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.dto.request.AddArticleRequest;
 import com.example.estsoft_udon_community.dto.response.ArticleResponse;
 import com.example.estsoft_udon_community.dto.request.UpdateArticleRequest;
 import com.example.estsoft_udon_community.enums.ArticleCategory;
 import com.example.estsoft_udon_community.repository.*;
+import com.example.estsoft_udon_community.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,16 +32,41 @@ public class ArticlesService {
     private final UsersRepository usersRepository;
     private final CommentsRepository commentsRepository;
     private final ArticlesLikeRepository articlesLikeRepository;
+    private final LocationService locationService;
 
     // 게시글 등록
     public Articles saveArticle(AddArticleRequest request) {
-        Long userId = request.getUserId();
+        Long userId = SecurityUtil.getLoggedInUser().getId();
+
+        Users user = usersRepository.findById(userId).orElseThrow();
+
+        List<Hashtag> hashtagList = getOrCreateHashtags(request.getHashtagName());
+
+        // location 정보를 가져다 주는데?
+        Location locationById = locationService.getLocationById(request.getLocationId());
+
+        Articles articles = new Articles(user, request.getTitle(), request.getContent(), request.getCategory(),
+                hashtagList, locationById);
+
+        Articles savedArticle = articlesRepository.save(articles);
+
+        for (Hashtag hashtag : hashtagList) {
+            articleHashtagJoinRepository.save(new ArticleHashtagJoin(savedArticle, hashtag));
+        }
+        return savedArticle;
+    }
+
+    // 게시글 등록
+    public Articles saveArticle(AddArticleRequest request, Long locationId) {
+        Long userId = SecurityUtil.getLoggedInUser().getId();
+
         Users user = usersRepository.findById(userId).orElseThrow();
 
         List<Hashtag> hashtagList = getOrCreateHashtags(request.getHashtagName());
 
         Articles articles = new Articles(user, request.getTitle(), request.getContent(), request.getCategory(),
-                hashtagList, user.getLocation());
+                hashtagList, locationService.getLocationById(locationId));
+
         Articles savedArticle = articlesRepository.save(articles);
 
         for (Hashtag hashtag : hashtagList) {
@@ -140,6 +167,11 @@ public class ArticlesService {
 
     // 새로운 해시태그를 생성하거나 기존 해시태그를 가져오는 메서드
     private List<Hashtag> getOrCreateHashtags(List<String> hashtagNames) {
+        // hashtagNames가 null이면 빈 리스트로 초기화
+        if (hashtagNames == null) {
+            hashtagNames = List.of();
+        }
+
         return hashtagNames.stream()
                 .map(hashtagName -> hashtagRepository.findByName(hashtagName)
                         .orElseGet(() -> hashtagRepository.save(new Hashtag(hashtagName))))
