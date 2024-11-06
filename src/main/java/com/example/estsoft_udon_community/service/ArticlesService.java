@@ -52,9 +52,10 @@ public class ArticlesService {
         List<Articles> articles = articlesRepository.findByIsDeletedFalse();
 
         return articles.stream()
-                .map(article -> new ArticleDetailResponse(article,
-                        articlesLikeRepository.countLikesByArticles(article),
-                        commentsRepository.countByArticles(article)))
+                .map(article -> new ArticleDetailResponse(
+                        article,
+                        fetchLikeCount(article),
+                        fetchCommentCount(article)))
                 .toList();
     }
 
@@ -113,6 +114,17 @@ public class ArticlesService {
                 .toList();
     }
 
+    // 제목 검색 기능
+    public List<ArticleDetailResponse> searchByTitle(String title) {
+        List<Articles> articles = articlesRepository.findByTitleContainingIgnoreCase(title);
+        return articles.stream()
+                .map(article -> new ArticleDetailResponse(
+                        article,
+                        fetchLikeCount(article),
+                        fetchCommentCount(article)))
+                .toList();
+    }
+
     // 새로운 해시태그를 생성하거나 기존 해시태그를 가져오는 메서드
     private List<Hashtag> getOrCreateHashtags(List<String> hashtagNames) {
         return hashtagNames.stream()
@@ -139,5 +151,15 @@ public class ArticlesService {
     // 사용안하는 해시태그 제거
     private void removeUnusedHashtags() {
         hashtagRepository.deleteUnusedHashtags();
+    }
+
+    // 좋아요 수 조회
+    private Long fetchLikeCount(Articles article) {
+        return articlesLikeRepository.countLikesByArticles(article);
+    }
+
+    // 댓글 수 조회
+    private Long fetchCommentCount(Articles article) {
+        return commentsRepository.countByArticles(article);
     }
 }

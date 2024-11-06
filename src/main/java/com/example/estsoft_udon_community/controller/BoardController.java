@@ -13,6 +13,7 @@ import com.example.estsoft_udon_community.entity.Location;
 import com.example.estsoft_udon_community.service.LocationService;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +32,23 @@ public class BoardController {
 
         List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();
         model.addAttribute("topHashtags", topHashtags);
+
+        return "board/board_list";
+    }
+
+    @GetMapping("/articles/search")
+    public String searchArticles(@RequestParam String title, Model model) {
+        if (title == null || title.trim().isEmpty()) {
+            return "redirect:/articles";
+        }
+
+        List<ArticleDetailResponse> articles = articlesService.searchByTitle(title);
+        model.addAttribute("articles", articles);
+
+        List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();
+        model.addAttribute("topHashtags", topHashtags);
+
+        model.addAttribute("searchQuery", title);
 
         return "board/board_list";
     }

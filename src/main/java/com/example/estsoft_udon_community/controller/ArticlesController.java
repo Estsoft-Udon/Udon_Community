@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,6 +76,15 @@ public class ArticlesController {
     @GetMapping("/category/{category}/articles")
     public ResponseEntity<List<ArticleResponse>> findByCategory(@PathVariable String category) {
         List<ArticleResponse> articles = articlesService.findByCategory(category);
+        return ResponseEntity.ok(articles);
+    }
+
+    // 제목 검색 기능
+    public ResponseEntity<List<ArticleDetailResponse>> searchArticlesByTitle(@RequestParam String title) {
+        if (title == null || title.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body(Collections.emptyList());
+        }
+        List<ArticleDetailResponse> articles = articlesService.searchByTitle(title);
         return ResponseEntity.ok(articles);
     }
 }

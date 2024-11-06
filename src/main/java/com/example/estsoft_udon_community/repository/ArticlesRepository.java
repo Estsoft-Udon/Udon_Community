@@ -20,4 +20,6 @@ public interface ArticlesRepository extends JpaRepository<Articles, Long> {
 
     @Query("SELECT a FROM Articles a WHERE a.category = :category")
     List<Articles> findByCategory(@Param("category") ArticleCategory category);
+
+    List<Articles> findByTitleContainingIgnoreCase(String title);
 }

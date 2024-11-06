@@ -47,17 +47,19 @@
                             /
                             <button class="nav_btn">인기순</button>
                         </div>
-                        <div class="search_box">
-                            <input type="text" placeholder="검색어를 입력하세요." class="search-bar">
-                            <button>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                     stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon"
-                                     class="h-3.5 w-3.5 text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-200">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                          d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"></path>
-                                </svg>
-                            </button>
-                        </div>
+                        <form th:action="@{/articles/search}" method="get">
+                            <div class="search_box">
+                                <input type="text" name="title" placeholder="검색어를 입력하세요." class="search-bar" th:value="${searchQuery}">
+                                <button type="submit">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                         stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon"
+                                         class="h-3.5 w-3.5 text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-200">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </form>
                         <button class="write_btn" onclick="location.href='/articles/new'">글쓰기</button>
                     </div>
 
