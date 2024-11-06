@@ -171,7 +171,7 @@ function redirectToLocationBoard() {
     }
 
     console.log(locationId);
-    window.location.href = `/board_list?locationId=${locationId}`;
+    window.location.href = `/articles?locationId=${locationId}`;
 
     // 선택된 지역 초기화
     document.getElementById('upperLocation').selectedIndex = 0;

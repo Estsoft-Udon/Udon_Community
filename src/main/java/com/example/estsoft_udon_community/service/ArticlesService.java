@@ -93,9 +93,11 @@ public class ArticlesService {
     }
 
     // 특정 지역 게시글 조회
-    public List<ArticleResponse> findByLocationId(Long locationId) {
+    public List<ArticleDetailResponse> findByLocationId(Long locationId) {
         return articlesRepository.findByLocationIdAndIsDeletedFalse(locationId).stream()
-                .map(ArticleResponse::new)
+                .map(article -> new ArticleDetailResponse(article,
+                        articlesLikeRepository.countLikesByArticles(article),
+                        commentsRepository.countByArticles(article)))
                 .toList();
     }
 

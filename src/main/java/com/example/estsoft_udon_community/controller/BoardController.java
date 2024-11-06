@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,18 +25,34 @@ public class BoardController {
     private final LocationService locationService;
     private final HashtagService hashtagService;
 
+    // 게시글 리스트 조회 (전체 or 동네별)
     @GetMapping("/articles")
-    public String getBoardList(Model model) {
-        List<ArticleDetailResponse> articles = articlesService.findAll();
+    public String getBoardList(@RequestParam(required = false) Long locationId, Model model) {
+
+        List<ArticleDetailResponse> articles;
+        if (locationId != null) {
+
+            // location 정보가 있으면 지역별 게시글 나열
+            Location locationById = locationService.getLocationById(locationId);
+            model.addAttribute("location", locationById);
+
+            articles = articlesService.findByLocationId(locationId);
+        } else {
+            // location 정보가 없을면 전체 게시글 날짜 순서대로
+            model.addAttribute("location", null);
+            articles = articlesService.findAll();
+        }
         model.addAttribute("articles", articles);
 
+        // 인기 해시태그 리스트 설정
         List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();
         model.addAttribute("topHashtags", topHashtags);
 
         return "board/board_list";
     }
 
-    @GetMapping("/articles/{id}")
+    // 게시글(단건) 조회 articleId
+    @GetMapping("articles/{id}")
     public String boardDetail(@PathVariable Long id, Model model) {
         Optional<ArticleResponse> article = articlesService.findByArticleId(id);
         if (article.isPresent()) {
@@ -46,6 +63,7 @@ public class BoardController {
         }
     }
 
+    // 게시글 생성
     @GetMapping("/articles/new")
     public String boardEdit(Model model) {
         Articles article = new Articles();

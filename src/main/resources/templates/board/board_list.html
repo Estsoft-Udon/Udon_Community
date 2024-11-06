@@ -33,10 +33,10 @@
             <div class="r_box">
                 <div class="tit_wr">
                     <div class="tit_box">
-                        <h2>서울특별시</h2>
-                        <span class="sub_tit">용산구</span>
+                        <h2 th:text="${location != null ? location.upperLocation : '대한민국'}"></h2>
+                        <span th:text="${location != null ? location.name : '우리동네'}"></span>
                     </div>
-                    지금 우리 동네 위치 입니다. 다양한 사람들을 만나고 우리 동네의 모든 정보를 공유해보아요.
+                    다양한 사람들을 만나고 우리 동네의 모든 정보를 공유해보아요.
                 </div>
 
                 <div class="container">
