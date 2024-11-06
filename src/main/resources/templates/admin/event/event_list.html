@@ -5,33 +5,38 @@
 </head>
 <body>
 <th:block layout:fragment="content">
-    <div class="wrap">
+    <section>
         <h1>캘린더 승인 요청 목록</h1>
+        <div class="filter">
+            <a th:href="@{/admin/event/event_list}" th:class="${approved == null} ? 'selected' : ''">전체 목록</a>
+            <a th:href="@{/admin/event/event_list?approved=true}" th:class="${approved != null && approved == true} ? 'selected' : ''">승인된 이벤트</a>
+            <a th:href="@{/admin/event/event_list?approved=false}" th:class="${approved != null && approved == false} ? 'selected' : ''">승인되지 않은 이벤트</a>
+        </div>
         <table>
             <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>제목</th>
-                    <th>내용</th>
-                    <th>이벤트 날짜</th>
-                    <th>타입</th>
-                    <th>승인 여부</th>
-                </tr>
+            <tr>
+                <th>ID</th>
+                <th>제목</th>
+                <th>내용</th>
+                <th>이벤트 날짜</th>
+                <th>타입</th>
+                <th>승인 여부</th>
+            </tr>
             </thead>
             <tbody>
-                <tr th:each="event : ${events}">
-                    <td th:text="${event.id}">1</td>
-                    <td>
-                        <a th:href="@{/admin/event/event_edit/{id}(id=${event.id})}" th:text="${event.title}"></a>
-                    </td>
-                    <td th:text="${event.content}"></td>
-                    <td th:text="${event.dateTime}"></td>
-                    <td th:text="${event.eventType}"></td>
-                    <td th:text="${event.isAccepted ? '승인' : '미승인'}"></td>
-                </tr>
+            <tr th:each="event : ${events}">
+                <td th:text="${event.id}">1</td>
+                <td>
+                    <a th:href="@{/admin/event/event_edit/{id}(id=${event.id})}" th:text="${event.title}"></a>
+                </td>
+                <td th:text="${event.content}"></td>
+                <td th:text="${event.dateTime}"></td>
+                <td th:text="${event.eventType}"></td>
+                <td th:text="${event.isAccepted ? '승인' : '미승인'}"></td>
+            </tr>
             </tbody>
         </table>
-    </div>
+    </section>
 </th:block>
 </body>
 </html>
