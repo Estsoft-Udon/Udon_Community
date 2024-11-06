@@ -21,11 +21,11 @@
                     <div class="cate_box">
                         <h3>카테고리</h3>
                         <div class="link_box">
-                            <a href="javascript:void(0)" th:onclick="'loadArticlesByCategory(T(com.example.estsoft_udon_community.enums.ArticleCategory).GATHERING.name())'">소모임</a>
-                            <a href="javascript:void(0)" th:onclick="'loadArticlesByCategory(T(com.example.estsoft_udon_community.enums.ArticleCategory).FESTIVITIES.name())'">축제</a>
-                            <a href="javascript:void(0)" th:onclick="'loadArticlesByCategory(T(com.example.estsoft_udon_community.enums.ArticleCategory).TRAVEL_DESTINATION.name())'">여행</a>
-                            <a href="javascript:void(0)" th:onclick="'loadArticlesByCategory(T(com.example.estsoft_udon_community.enums.ArticleCategory).RESTAURANT.name())'">맛집</a>
-                            <a href="javascript:void(0)" th:onclick="'loadArticlesByCategory(T(com.example.estsoft_udon_community.enums.ArticleCategory).WALKING_COURSE.name())'">산책</a>
+                            <a th:href="@{/articles/category/{category}(category='GATHERING')}">소모임</a>
+                            <a th:href="@{/articles/category/{category}(category='FESTIVITIES')}">축제</a>
+                            <a th:href="@{/articles/category/{category}(category='TRAVEL_DESTINATION')}">여행</a>
+                            <a th:href="@{/articles/category/{category}(category='RESTAURANT')}">맛집</a>
+                            <a th:href="@{/articles/category/{category}(category='WALKING_COURSE')}">산책</a>
                         </div>
                     </div>
                 </div>

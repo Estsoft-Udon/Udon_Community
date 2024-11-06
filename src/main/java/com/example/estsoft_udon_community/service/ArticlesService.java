@@ -123,11 +123,15 @@ public class ArticlesService {
     }
 
     // 카테고리로 게시글 조회
-    public Page<ArticleResponse> findByCategory(String category, int page, int size) {
+    public Page<ArticleDetailResponse> findByCategory(String category, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Articles> articlesPage = articlesRepository.findByCategory(ArticleCategory.valueOf(category), pageable);
 
-        return articlesPage.map(ArticleResponse::new);
+        return articlesPage.map(article -> new ArticleDetailResponse(
+                article,
+                fetchLikeCount(article),
+                fetchCommentCount(article)
+        ));
     }
 
     // 제목 검색 기능

@@ -97,22 +97,39 @@ public class BoardController {
                                        @RequestParam(defaultValue = "5") int size,
                                        Model model) {
 
-        // 해시태그에 해당하는 게시글을 서비스에서 조회
         Page<ArticleDetailResponse> articles = articlesService.findByHashtag(hashtagId, page, size);
 
-        // 인기 해시태그 목록도 함께 모델에 추가
-        List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();
-        model.addAttribute("topHashtags", topHashtags);
-
-        // 모델에 게시글 리스트 추가
         model.addAttribute("articles", articles);
 
-        // 페이지네이션을 위한 데이터 추가
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", articles.getTotalPages());
         model.addAttribute("totalItems", articles.getTotalElements());
 
-        return "board/board_list";  // 해당 게시글 목록을 출력할 템플릿
+        List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();
+        model.addAttribute("topHashtags", topHashtags);
+
+        return "board/board_list";
+    }
+
+    // 카테고리별 게시글 조회
+    @GetMapping("/articles/category/{category}")
+    public String getArticlesByCategory(@PathVariable String category,
+                                        @RequestParam(defaultValue = "0") int page,
+                                        @RequestParam(defaultValue = "5") int size,
+                                        Model model) {
+
+        Page<ArticleDetailResponse> articles = articlesService.findByCategory(category, page, size);
+
+        model.addAttribute("articles", articles);
+
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", articles.getTotalPages());
+        model.addAttribute("totalItems", articles.getTotalElements());
+
+        List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();
+        model.addAttribute("topHashtags", topHashtags);
+
+        return "board/board_list";
     }
 
     // 게시글 생성

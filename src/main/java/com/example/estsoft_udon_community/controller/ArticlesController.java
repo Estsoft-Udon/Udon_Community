@@ -81,11 +81,11 @@ public class ArticlesController {
 
     // 카테고리로 게시글 조회
     @GetMapping("/articles/category/{category}")
-    public ResponseEntity<Page<ArticleResponse>> findByCategory(
+    public ResponseEntity<Page<ArticleDetailResponse>> findByCategory(
             @PathVariable String category,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        Page<ArticleResponse> articles = articlesService.findByCategory(category, page, size);
+        Page<ArticleDetailResponse> articles = articlesService.findByCategory(category, page, size);
         return ResponseEntity.ok(articles);
     }
 
