@@ -49,15 +49,15 @@ public class AdminViewController {
     // 이벤트 승인 처리
     @PostMapping("/event/{id}/approve")
     public String approveEvent(@PathVariable Long id) {
-        adminEventService.approveEvent(id);  // 승인 처리
-        return "redirect:/admin/event/event_list";  // 목록 페이지로 리다이렉트
+        adminEventService.approveEvent(id);
+        return "redirect:/admin/event/event_edit/{id}";
     }
 
     // 이벤트 취소 처리 (승인 취소)
     @PostMapping("/event/{id}/cancel")
     public String cancelEvent(@PathVariable Long id) {
-        adminEventService.cancelEvent(id);  // 승인 취소 처리
-        return "redirect:/admin/event/event_list";  // 목록 페이지로 리다이렉트
+        adminEventService.cancelEvent(id);
+        return "redirect:/admin/event/event_edit/{id}";
     }
 
 }

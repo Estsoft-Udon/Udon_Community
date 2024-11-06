@@ -325,3 +325,56 @@ td a:hover {
     color: rgba(0,133,249,1);
     font-weight: bold;
 }
+
+.info_card {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+/* 개별 항목 스타일 */
+.info_item {
+    display: flex;
+    justify-content: flex-start;
+    padding: 10px 0;
+}
+
+.info_item.txt_item{
+    display: block;
+}
+
+/* 마지막 항목에는 구분선 제거 */
+.info_item:last-child {
+    border-bottom: none;
+}
+
+/* 항목의 제목 부분 스타일 */
+.info_label {
+    width: 12rem;
+    font-weight: bold;
+    color: #555;
+    margin-right: 10px;
+}
+
+/* 텍스트 색상 */
+.info_item span {
+    color: #333;
+}
+
+.txt_item .info_label{
+    margin-bottom: 2rem;
+}
+
+.btn_box{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1.5rem;
+}
+
+.btn_box button.approved{
+    color: #fff;
+    background: #aaa;
+    border-color: #aaa;
+    cursor: no-drop;
+}

@@ -5,25 +5,39 @@
 </head>
 <body>
 <th:block layout:fragment="content">
-    <div class="wrap">
+    <section>
         <h1>캘린더 승인 요청 수정</h1>
-        <p>작성자 ID: <span th:text="${event.usersId}"></span></p>
-        <p>제목: <span th:text="${event.title}"></span></p>
-        <p>신청 날짜: <span th:text="${event.dateTime}"></span></p>
-        <p>내용: <span th:text="${event.content}"></span></p>
+        <div class="btn_box">
+            <a href="/admin/event/event_list">
+                <button type="button" class="reversal_btn">목록으로</button>
+            </a>
+            <form th:action="@{/admin/event/{id}/approve(id=${event.id})}" method="post" th:if="${!event.isAccepted}">
+                <button type="submit" class="reversal_btn" th:text="'승인하기'"></button>
+            </form>
 
-        <!-- 승인 처리 -->
-        <form th:action="@{/admin/event/{id}/approve(id=${event.id})}" method="post">
-            <button type="submit" th:text="${event.isAccepted ? '승인됨' : '승인하기'}" th:disabled="${event.isAccepted}"></button>
-        </form>
-
-        <!-- 승인 취소 처리 -->
-        <form th:action="@{/admin/event/{id}/cancel(id=${event.id})}" method="post">
-            <button type="submit" th:text="${event.isAccepted ? '승인 취소' : '승인되지 않음'}" th:disabled="${!event.isAccepted}"></button>
-        </form>
-
-        <a href="/admin/event/event_list">목록으로</a>
-    </div> 
+            <form th:action="@{/admin/event/{id}/cancel(id=${event.id})}" method="post" th:if="${event.isAccepted}">
+                <button type="submit" class="reversal_btn" th:text="'승인 취소'"></button>
+            </form>
+        </div>
+        <div class="info">
+            <div class="info_item">
+                <p class="info_label">작성자 ID</p>
+                <span th:text="${event.usersId}"></span>
+            </div>
+            <div class="info_item">
+                <p class="info_label">제목</p>
+                <span th:text="${event.title}"></span>
+            </div>
+            <div class="info_item">
+                <p class="info_label">신청 날짜</p>
+                <span th:text="${event.dateTime}"></span>
+            </div>
+            <div class="info_item txt_item">
+                <p class="info_label">내용</p>
+                <p th:text="${event.content}"></p>
+            </div>
+        </div>
+    </section>
 </th:block>
 </body>
 </html>
