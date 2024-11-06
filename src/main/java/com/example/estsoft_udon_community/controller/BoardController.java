@@ -113,12 +113,8 @@ public class BoardController {
 //        return "board/board_edit";
 //    }
 
-    @PutMapping("/articles/")
-    public String boardEdit(Model model) {
-        String loginId = SecurityUtil.getLoggedInUser().getLoginId();
-
-
-
+    @GetMapping("/articles/edit/{articleId}")
+    public String boardEditPage() {
         return "board/board_edit";
     }
 }
