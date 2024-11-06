@@ -7,6 +7,8 @@ import com.example.estsoft_udon_community.dto.response.CommentsResponse;
 import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Comments;
 import com.example.estsoft_udon_community.entity.Users;
+import com.example.estsoft_udon_community.enums.ArticleCategory;
+import com.example.estsoft_udon_community.enums.UpperLocationEnum;
 import com.example.estsoft_udon_community.security.CustomUserDetails;
 import com.example.estsoft_udon_community.service.ArticlesService;
 import com.example.estsoft_udon_community.service.HashtagService;
@@ -45,6 +47,7 @@ public class BoardController {
         if (locationId != null) {
             // location 정보가 있으면 지역별 게시글 나열
             Location locationById = locationService.getLocationById(locationId);
+
             articles = articlesService.findByLocationId(locationId, page, size);
 
             model.addAttribute("location", locationById);
@@ -92,11 +95,8 @@ public class BoardController {
     // 게시글 생성
     @GetMapping("/articles/new")
     public String boardEdit(Model model) {
-        Articles article = new Articles();
-        AddArticleRequest addArticleRequest = new AddArticleRequest(null, null, "", null, "", null);
 
-        model.addAttribute("article", article);
-        model.addAttribute("addArticleRequest", addArticleRequest);
+        model.addAttribute("articleCategories", ArticleCategory.values());
 
         // 상위 지역 목록을 가져와서 모델에 추가
         List<String> upperLocations = locationService.getDistinctUpperLocations();
@@ -112,20 +112,17 @@ public class BoardController {
         return "board/board_edit";
     }
 
-//    @GetMapping("/articles/new")
-//    public String boardEdit(Model model) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String loginId = authentication.getName();
-//
-//        Location userLocation = usersService.getUserLocationByLoginId(loginId);
-//
-//        Articles article = new Articles();
-//        AddArticleRequest addArticleRequest = new AddArticleRequest(null, null, "", null, "", userLocation);
-//
-//        model.addAttribute("article", article);
-//        model.addAttribute("addArticleRequest", addArticleRequest);
-//        model.addAttribute("userLocation", userLocation.getName());
-//
-//        return "board/board_edit";
-//    }
+    // 게시글 생성
+    @PostMapping("/articles/new")
+    public String boardEdit(Model model, @ModelAttribute AddArticleRequest addArticleRequest,
+                            String upperLocation, String locationName) {
+
+        model.addAttribute("article", addArticleRequest);
+        model.addAttribute("articleCategories", ArticleCategory.values());
+
+        //article 저장
+        articlesService.saveArticle(addArticleRequest, Long.valueOf(locationName));
+
+        return "board/board_edit";
+    }
 }
