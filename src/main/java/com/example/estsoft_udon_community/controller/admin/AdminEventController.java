@@ -6,6 +6,7 @@ import com.example.estsoft_udon_community.entity.Event;
 import com.example.estsoft_udon_community.service.admin.AdminEventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

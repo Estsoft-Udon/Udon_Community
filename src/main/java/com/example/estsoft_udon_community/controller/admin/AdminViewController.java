@@ -19,13 +19,24 @@ public class AdminViewController {
         this.adminEventService = adminEventService;
     }
 
-    // 이벤트 목록 조회
+    // 이벤트 목록 조회 (기본적으로 전체 목록)
     @GetMapping("/event/event_list")
-    public String eventList(Model model) {
-        List<EventResponse> events = adminEventService.getAllEvents();
+    public String eventList(@RequestParam(value = "approved", required = false) Boolean approved, Model model) {
+        List<EventResponse> events;
+
+        if (approved == null) {
+            events = adminEventService.getAllEvents();
+        } else if (approved) {
+            events = adminEventService.getApprovedEvents();
+        } else {
+            events = adminEventService.getUnapprovedEvents();
+        }
+
         model.addAttribute("events", events);
+        model.addAttribute("approved", approved);
         return "admin/event/event_list";
     }
+
 
     // 이벤트 승인 여부 수정
     @GetMapping("/event/event_edit/{id}")
