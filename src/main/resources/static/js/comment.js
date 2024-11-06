@@ -30,9 +30,9 @@ function submit_comment() {
 }
 
 function press_edit(comment_id) {
-    const content_element = document.getElementById('origin_comment');
-    const input_element = document.getElementById('edit_comment');
-    const edit_button = document.getElementById('comment_edit_btn');
+    const content_element = document.getElementById(`origin_comment_${comment_id}`);
+    const input_element = document.getElementById(`edit_comment_${comment_id}`);
+    const edit_button = document.getElementById(`comment_edit_btn_${comment_id}`);
 
     // p 태그를 textarea로 바꾸기
     content_element.style.display = 'none';
@@ -44,9 +44,9 @@ function press_edit(comment_id) {
 }
 
 function edit_comment(comment_id) {
-    const content_element = document.getElementById('origin_comment');
-    const input_element = document.getElementById('edit_comment');
-    const edit_button = document.getElementById('comment_edit_btn');
+    const content_element = document.getElementById(`origin_comment_${comment_id}`);
+    const input_element = document.getElementById(`edit_comment_${comment_id}`);
+    const edit_button = document.getElementById(`comment_edit_btn_${comment_id}`);
 
     const content = input_element.value;
 

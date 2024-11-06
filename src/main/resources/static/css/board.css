@@ -290,16 +290,22 @@
 .board_detail_wr .w_1280 .container {
     padding: 0 3.2rem;
 }
+.board_detail_wr .container .user_box .t_box {
+    display: flex;
+    justify-content: space-between;
+}
 .board_detail_wr .container .user_box .b_box {
     display: flex;
     justify-content: space-between;
     margin-top: 1rem;
 }
+
 .board_detail_wr .container .tit {
     margin-top: 2rem;
     font-size: 3.5rem;
     font-weight: bold;
 }
+
 .board_detail_wr .container .txt_box {
     margin-top: 2rem;
     min-height: 40rem;
