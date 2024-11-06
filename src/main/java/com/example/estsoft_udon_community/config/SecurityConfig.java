@@ -28,8 +28,7 @@ public class SecurityConfig {
         return http.authorizeHttpRequests(
                         custom -> custom.requestMatchers("/api/**").permitAll()
                                 .requestMatchers("/", "/login", "/signup", "/find_id", "/find_pw","/getLowerLocations", "/success").permitAll()
-                                .anyRequest().permitAll()
-//                                .anyRequest().hasAnyRole("UDON", "UDON_FRIEND", "UDON_SHERIFF", "UDON_MASTER", "UDON_ADMIN")
+                                .anyRequest().hasAnyRole("UDON", "UDON_FRIEND", "UDON_SHERIFF", "UDON_MASTER", "UDON_ADMIN")
                 )
                 .formLogin(custom -> custom.loginPage("/login"))
 

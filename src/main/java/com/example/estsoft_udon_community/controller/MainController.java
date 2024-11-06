@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,7 +35,7 @@ public class MainController {
         // 첫 번째 상위 지역에 대한 하위 지역 목록을 초기화하여 모델에 추가
         if (!upperLocations.isEmpty()) {
             String firstUpperLocation = upperLocations.get(0);
-            List<Location> lowerLocations = locationService.getLowerLocation(firstUpperLocation);
+            List<Location> lowerLocations = locationService.getLowerLocations(firstUpperLocation);
             model.addAttribute("locations", lowerLocations);
         }
 

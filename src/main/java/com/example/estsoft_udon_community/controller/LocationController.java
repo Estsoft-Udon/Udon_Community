@@ -16,6 +16,6 @@ public class LocationController {
 
     @GetMapping("/getLowerLocations")
     public List<Location> getLowerLocations(@RequestParam String upperLocation) {
-        return locationService.getLowerLocation(upperLocation);
+        return locationService.getLowerLocations(upperLocation);
     }
 }
