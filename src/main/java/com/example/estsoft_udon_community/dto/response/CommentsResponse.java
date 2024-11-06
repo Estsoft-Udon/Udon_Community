@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommentsResponse {
+    private long id;
     private Users user;
     private String nickName;
     private String content;
@@ -19,6 +20,7 @@ public class CommentsResponse {
     private LocalDateTime updatedAt;
 
     public CommentsResponse(Comments comments) {
+        this.id = comments.getId();
         this.user = comments.getUsers();
         this.nickName = comments.getUsers().getNickname();
         this.content = comments.getContent();

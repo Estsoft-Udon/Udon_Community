@@ -98,7 +98,7 @@ public class CommentsService {
     }
 
     public Page<CommentsResponse> findCommentsByArticleId(Long articleId, Pageable pageable) {
-        return commentsRepository.findByArticlesId(articleId, pageable)
+        return commentsRepository.findNonDeletedCommentsByArticleId(articleId, pageable)
                 .map(CommentsResponse::new);
     }
 }

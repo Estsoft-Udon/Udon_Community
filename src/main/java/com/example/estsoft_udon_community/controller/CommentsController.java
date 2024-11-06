@@ -20,13 +20,12 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
 public class CommentsController {
     private final ArticlesService articlesService;
     private final CommentsService commentsService;
     private final ArticlesRepository articlesRepository;
 
-    @PostMapping("/articles/{articleId}/comments")
+    @PostMapping("/api/articles/{articleId}/comments")
     public ResponseEntity<CommentsResponse> saveCommentByArticleId(@PathVariable Long articleId,
                                                                    @RequestBody CommentsRequest request) {
         Comments comments = commentsService.saveComment(articleId, request);
@@ -34,7 +33,7 @@ public class CommentsController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new CommentsResponse(comments));
     }
 
-    @GetMapping("/articles/{articleId}/comments")
+    @GetMapping("/api/articles/{articleId}/comments")
     public ResponseEntity<CommentsArticlesResponse> findCommentsByArticleId(@PathVariable Long articleId) {
 
         Articles articles = articlesRepository.findById(articleId)
@@ -46,29 +45,35 @@ public class CommentsController {
                 new CommentsArticlesResponse(articles, commentsResponseList));
     }
 
-    @GetMapping("/articles/{articleId}/commentsonly")
+    @GetMapping("/api/articles/{articleId}/commentsonly")
     public ResponseEntity<List<CommentsResponse>> findOnlyCommentsByArticleId(@PathVariable Long articleId) {
         List<CommentsResponse> commentsResponseList = getCommentsByArticleId(articleId);
 
         return ResponseEntity.ok(commentsResponseList);
     }
 
-    @PutMapping("/comments/{commentId}")
-    public ResponseEntity<CommentsResponse> updateComment(@PathVariable Long commentId,
+//     코멘트 수정
+    @PutMapping("/articles/{articleId}/comments/{commentId}")
+    public ResponseEntity<CommentsResponse> updateComment(@PathVariable Long articleId,
+                                                          @PathVariable Long commentId,
                                                           @RequestBody CommentsRequest reqeust) {
         Comments updatedComment = commentsService.update(commentId, reqeust);
+
         return ResponseEntity.ok(new CommentsResponse(updatedComment));
     }
 
-    @DeleteMapping("/comments/{commentId}")
+    @DeleteMapping("/api/comments/{commentId}")
     public ResponseEntity<Void> deleteComment(@PathVariable Long commentId) {
         commentsService.deleteBy(commentId);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/comments/{commentId}/soft")
-    public ResponseEntity<Void> softDelete(@PathVariable Long commentId) {
+    // 코멘트 삭제
+    @DeleteMapping("/articles/{articleId}/comments/{commentId}")
+    public ResponseEntity<Void> softDelete(@PathVariable Long articleId, @PathVariable Long commentId) {
+        System.out.println("실행은 됐다");
         commentsService.softDelete(commentId);
+
         return ResponseEntity.ok().build();
     }
 
