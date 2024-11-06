@@ -99,8 +99,8 @@ public class ArticlesService {
         Page<Articles> articlesPage = articlesRepository.findByLocationIdAndIsDeletedFalse(locationId, pageable);
 
         return articlesPage.map(article -> new ArticleDetailResponse(article,
-                articlesLikeRepository.countLikesByArticles(article),
-                commentsRepository.countByArticles(article)));
+                fetchLikeCount(article),
+                fetchCommentCount(article)));
 
 
 //     public List<ArticleDetailResponse> findByLocationId(Long locationId) {
@@ -118,8 +118,8 @@ public class ArticlesService {
         Page<Articles> articlesPage = hashtagRepository.findArticlesByHashtagIdAndIsDeletedFalse(hashtagId, pageable);
 
         return articlesPage.map(articles -> new ArticleDetailResponse(articles,
-                articlesLikeRepository.countArticlesLikeByArticles(articles),
-                commentsRepository.countByArticles(articles)));
+                fetchLikeCount(articles),
+                fetchCommentCount(articles)));
     }
 
     // 카테고리로 게시글 조회
@@ -179,7 +179,7 @@ public class ArticlesService {
 
     // 댓글 수 조회
     private Long fetchCommentCount(Articles article) {
-        return commentsRepository.countByArticles(article);
+        return commentsRepository.countNonDeletedCommentsByArticle(article);
     }
 
 }
