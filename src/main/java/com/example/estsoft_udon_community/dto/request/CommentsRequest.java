@@ -13,13 +13,14 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommentsRequest {
-    private long user_id;
+    private long userId;
     private String content;
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
+    private long likeCount;
 
     public CommentsRequest(Comments comments) {
-        this.user_id = comments.getUsers().getId();
+        this.userId = comments.getUsers().getId();
         this.content = comments.getContent();
-        this.created_at = comments.getCreatedAt();
+        this.createdAt = comments.getCreatedAt();
     }
 }

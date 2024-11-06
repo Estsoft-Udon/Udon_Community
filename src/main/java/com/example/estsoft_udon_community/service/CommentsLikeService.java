@@ -7,24 +7,19 @@ import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.repository.CommentsLikeRepository;
 import com.example.estsoft_udon_community.repository.CommentsRepository;
 import com.example.estsoft_udon_community.repository.UsersRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service
 public class CommentsLikeService {
-
     private final CommentsLikeRepository commentsLikeRepository;
     private final UsersRepository usersRepository;
     private final CommentsRepository commentsRepository;
-
-
-    public CommentsLikeService(CommentsLikeRepository commentsLikeRepository, UsersRepository usersRepository, CommentsRepository commentsRepository) {
-        this.commentsLikeRepository = commentsLikeRepository;
-        this.usersRepository = usersRepository;
-        this.commentsRepository = commentsRepository;
-    }
+    private final CommentsService commentsService;
 
     public CommentsLike pressCommentsLike(Long commentsId, Long userId) {
         Comments comment = commentsRepository.findById(commentsId)
@@ -53,5 +48,12 @@ public class CommentsLikeService {
 
     public List<Object[]> findCommentsByArticleIdOrderByLikesCountDesc(Long articleId) {
         return commentsLikeRepository.findCommentsByArticleIdOrderByLikesCountDesc(articleId);
+    }
+
+    public Long countCommentsLike(Long commentId) {
+        if(commentsService.isDeleted(commentId)) {
+            return 0L;
+        }
+        return commentsLikeRepository.countByCommentsId(commentId);
     }
 }

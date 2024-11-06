@@ -9,10 +9,7 @@ import com.example.estsoft_udon_community.entity.Comments;
 import com.example.estsoft_udon_community.entity.Location;
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.security.CustomUserDetails;
-import com.example.estsoft_udon_community.service.ArticlesService;
-import com.example.estsoft_udon_community.service.CommentsService;
-import com.example.estsoft_udon_community.service.LocationService;
-import com.example.estsoft_udon_community.service.UsersService;
+import com.example.estsoft_udon_community.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,9 +26,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ViewCommentController {
     private final ArticlesService articlesService;
-    private final LocationService locationService;
     private final CommentsService commentsService;
     private final UsersService usersService;
+    private final CommentsLikeService commentsLikeService;
 
     // 게시글 조회 / 댓글 조회
     @GetMapping("/articles/{id}")
@@ -44,6 +41,10 @@ public class ViewCommentController {
         Pageable pageable = PageRequest.of(page, size);
         Page<CommentsResponse> commentsPage = commentsService.findCommentsByArticleId(id, pageable);
 
+        commentsPage = commentsPage.map(comment -> {
+            comment.setLikeCount(commentsLikeService.countCommentsLike(comment.getId()));
+            return comment;
+        });
         if(!commentsPage.isEmpty()) {
             model.addAttribute("commentsPage", commentsPage);
         }

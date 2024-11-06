@@ -28,7 +28,7 @@ public class CommentsService {
 
     // 댓글 추가
     public Comments saveComment(Long articleId, CommentsRequest request) {
-        Long userId = request.getUser_id();
+        Long userId = request.getUserId();
 
         Users users = usersRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("not found user id : " + userId));
