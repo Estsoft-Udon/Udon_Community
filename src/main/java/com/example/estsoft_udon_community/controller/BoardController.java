@@ -29,18 +29,32 @@ public class BoardController {
 
     // 게시글 리스트 조회 (전체 or 동네별)
     @GetMapping("/articles")
-    public String getBoardList(@RequestParam(defaultValue = "0") int page,
+    public String getBoardList(@RequestParam(required = false) Long locationId,
+                               @RequestParam(defaultValue = "0") int page,
                                @RequestParam(defaultValue = "5") int size,
                                Model model) {
 
         // 페이지네이션을 위한 서비스 호출
-        Page<ArticleDetailResponse> articles = articlesService.findAll(page, size);
+        Page<ArticleDetailResponse> articles;
 
+        if (locationId != null) {
+            // location 정보가 있으면 지역별 게시글 나열
+            Location locationById = locationService.getLocationById(locationId);
+            articles = articlesService.findByLocationId(locationId, page, size);
+
+            model.addAttribute("location", locationById);
+        } else {
+            // 지역 정보가 없을 때 - 전체 지역 게시글 리스트
+            articles = articlesService.findAll(page, size);
+            model.addAttribute("location", null);
+        }
         model.addAttribute("articles", articles);
+
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", articles.getTotalPages());
         model.addAttribute("totalItems", articles.getTotalElements());
 
+        // location 정보가 있든 없든 있어야하는 topHashtags 정보
         List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();
         model.addAttribute("topHashtags", topHashtags);
 
@@ -56,23 +70,9 @@ public class BoardController {
 
         Page<ArticleDetailResponse> articles = articlesService.searchByTitle(title, page, size);
 
-//     public String getBoardList(@RequestParam(required = false) Long locationId, Model model) {
-
-//         List<ArticleDetailResponse> articles;
-//         if (locationId != null) {
-
-//             // location 정보가 있으면 지역별 게시글 나열
-//             Location locationById = locationService.getLocationById(locationId);
-//             model.addAttribute("location", locationById);
-
-//             articles = articlesService.findByLocationId(locationId);
-//         } else {
-//             // location 정보가 없을면 전체 게시글 날짜 순서대로
-//             model.addAttribute("location", null);
-//             articles = articlesService.findAll();
-//         }
         model.addAttribute("articles", articles);
         model.addAttribute("searchQuery", title);
+
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", articles.getTotalPages());
         model.addAttribute("totalItems", articles.getTotalElements());

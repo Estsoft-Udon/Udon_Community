@@ -41,7 +41,7 @@ public class MainController {
         }
 
         // 최신 게시글 5개 가져오기
-        List<ArticleDetailResponse> newestPosts = articlesService.findAll()
+        List<ArticleDetailResponse> newestPosts = articlesService.findAll(0,5)
                 .stream()
                 .sorted((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt())) // 최신 순 정렬
                 .limit(5)

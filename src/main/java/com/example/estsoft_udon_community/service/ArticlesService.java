@@ -94,11 +94,15 @@ public class ArticlesService {
     }
 
     // 특정 지역 게시글 조회
-    public Page<ArticleResponse> findByLocationId(Long locationId, int page, int size) {
+    public Page<ArticleDetailResponse> findByLocationId(Long locationId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Articles> articlesPage = articlesRepository.findByLocationIdAndIsDeletedFalse(locationId, pageable);
 
-        return articlesPage.map(ArticleResponse::new);
+        return articlesPage.map(article -> new ArticleDetailResponse(article,
+                articlesLikeRepository.countLikesByArticles(article),
+                commentsRepository.countByArticles(article)));
+
+
 //     public List<ArticleDetailResponse> findByLocationId(Long locationId) {
 //         return articlesRepository.findByLocationIdAndIsDeletedFalse(locationId).stream()
 //                 .map(article -> new ArticleDetailResponse(article,
