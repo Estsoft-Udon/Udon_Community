@@ -69,6 +69,7 @@ public class BoardController {
         return "board/board_list";
     }
 
+    // 게시글 검색
     @GetMapping("/articles/search")
     public String searchArticles(
             @RequestParam String title,
@@ -86,6 +87,48 @@ public class BoardController {
         model.addAttribute("totalItems", articles.getTotalElements());
 
         // 인기 해시태그 리스트 설정
+        List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();
+        model.addAttribute("topHashtags", topHashtags);
+
+        return "board/board_list";
+    }
+
+    // 해시태그로 게시글 조회
+    @GetMapping("/articles/hashtag/{hashtagId}")
+    public String getArticlesByHashtag(@PathVariable Long hashtagId,
+                                       @RequestParam(defaultValue = "0") int page,
+                                       @RequestParam(defaultValue = "5") int size,
+                                       Model model) {
+
+        Page<ArticleDetailResponse> articles = articlesService.findByHashtag(hashtagId, page, size);
+
+        model.addAttribute("articles", articles);
+
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", articles.getTotalPages());
+        model.addAttribute("totalItems", articles.getTotalElements());
+
+        List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();
+        model.addAttribute("topHashtags", topHashtags);
+
+        return "board/board_list";
+    }
+
+    // 카테고리별 게시글 조회
+    @GetMapping("/articles/category/{category}")
+    public String getArticlesByCategory(@PathVariable String category,
+                                        @RequestParam(defaultValue = "0") int page,
+                                        @RequestParam(defaultValue = "5") int size,
+                                        Model model) {
+
+        Page<ArticleDetailResponse> articles = articlesService.findByCategory(category, page, size);
+
+        model.addAttribute("articles", articles);
+
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", articles.getTotalPages());
+        model.addAttribute("totalItems", articles.getTotalElements());
+
         List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();
         model.addAttribute("topHashtags", topHashtags);
 
