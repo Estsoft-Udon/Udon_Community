@@ -10,8 +10,8 @@
                     <h3>#인기 태그</h3>
                     <div class="hash_box">
                         <div th:each="tag : ${topHashtags}" class="flex_box">
-                            <a href="javascript:void(0)" th:text="'#' + ${tag.hashtag.name}"
-                               th:onclick="'loadArticlesByHashtag(' + ${tag.hashtag.id} + ')'">#해시태그 이름</a>
+                            <a th:href="@{/articles/hashtag/{hashtagId}(hashtagId=${tag.hashtag.id})}"
+                               th:text="'#' + ${tag.hashtag.name}">#해시태그 이름</a>
                             <span class="count_num" th:text="${tag.usageCount}">사용 횟수</span>
                         </div>
                     </div>

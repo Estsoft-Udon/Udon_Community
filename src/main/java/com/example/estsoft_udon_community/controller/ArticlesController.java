@@ -70,17 +70,17 @@ public class ArticlesController {
 //    }
 
     // 해시태그로 게시글 조회
-    @GetMapping("/hashtag/{hashtagId}/articles")
-    public ResponseEntity<Page<ArticleResponse>> findByHashtag(
+    @GetMapping("/articles/hashtag/{hashtagId}")
+    public ResponseEntity<Page<ArticleDetailResponse>> findByHashtag(
             @PathVariable Long hashtagId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        Page<ArticleResponse> hashtagByArticle = articlesService.findByHashtag(hashtagId, page, size);
+        Page<ArticleDetailResponse> hashtagByArticle = articlesService.findByHashtag(hashtagId, page, size);
         return ResponseEntity.ok(hashtagByArticle);
     }
 
     // 카테고리로 게시글 조회
-    @GetMapping("/category/{category}/articles")
+    @GetMapping("/articles/category/{category}")
     public ResponseEntity<Page<ArticleResponse>> findByCategory(
             @PathVariable String category,
             @RequestParam(defaultValue = "0") int page,

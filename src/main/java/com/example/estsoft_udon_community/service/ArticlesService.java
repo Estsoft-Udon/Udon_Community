@@ -113,11 +113,13 @@ public class ArticlesService {
     }
 
     // 해시태그로 게시글 조회
-    public Page<ArticleResponse> findByHashtag(Long hashtagId, int page, int size) {
+    public Page<ArticleDetailResponse> findByHashtag(Long hashtagId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Articles> articlesPage = hashtagRepository.findArticlesByHashtagIdAndIsDeletedFalse(hashtagId, pageable);
 
-        return articlesPage.map(ArticleResponse::new);
+        return articlesPage.map(articles -> new ArticleDetailResponse(articles,
+                articlesLikeRepository.countArticlesLikeByArticles(articles),
+                commentsRepository.countByArticles(articles)));
     }
 
     // 카테고리로 게시글 조회
