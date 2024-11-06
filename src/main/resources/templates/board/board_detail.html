@@ -23,6 +23,12 @@
                 <div class="user_box">
                     <div class="t_box">
                         <p class="user_id" th:text="${article.nickname}">작성자 닉네임</p>
+                        <div class="btn_wr">
+                            <button class="edit_btn">수정</button>
+                            <button class="del_btn">삭제</button>
+                            <button class="edit_btn" th:if="${comment.user.id == loggedInUserId}">수정</button>
+                            <button class="del_btn" th:if="${comment.user.id == loggedInUserId}">삭제</button>
+                        </div>
                     </div>
                     <div class="b_box">
                         <p class="wt_time" th:text="|Posted on ${#temporals.format(article.createdAt, 'yyyy-MM-dd HH:mm')}|">2024.11.04</p>
@@ -52,10 +58,6 @@
                         <span th:each="hashtag : ${article.hashtags}" th:text="'#' + ${hashtag}">#해시태그</span>
                     </div>
                     <div class="btn_box">
-                        <svg width="20" height="10" viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg">
-                            <ellipse cx="50" cy="35" rx="45" ry="10" class="plate" />
-                            <ellipse cx="50" cy="15" rx="45" ry="10" class="plate" />
-                        </svg>
                         <button type="button" class="thumb_icon"></button>
                         <span class="count_num">0</span>
                     </div>
@@ -73,11 +75,11 @@
                                     <p class="comment_date" th:text="|Posted on ${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}|">2024.11.05</p>
                                 </div>
                                 <div class="com_txt_box">
-                                    <p id="origin_comment" th:text="${comment.content}">댓글 내용</p>
-                                    <input id="edit_comment" type="text" th:value="${comment.content}" class="comment-edit-input" style="display:none;">
+                                    <p th:id="'origin_comment_' + ${comment.id}" th:text="${comment.content}">댓글 내용</p>
+                                    <input th:id="'edit_comment_' + ${comment.id}" type="text" th:value="${comment.content}" class="comment-edit-input" style="display:none;">
                                 </div>
                                 <div class="btn_wr" th:if="${comment.user.id == loggedInUserId}">
-                                    <button class="edit_btn" id="comment_edit_btn" th:onclick="'press_edit(' + ${comment.id} + ')'">수정</button>
+                                    <button class="edit_btn" th:id="'comment_edit_btn_' + ${comment.id}" th:onclick="'press_edit(' + ${comment.id} + ')'">수정</button>
                                     <button class="del_btn" th:onclick="'delete_comment(' + ${comment.id} + ')'">삭제</button>
                                 </div>
                             </div>

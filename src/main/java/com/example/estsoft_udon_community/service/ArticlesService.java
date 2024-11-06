@@ -1,10 +1,7 @@
 package com.example.estsoft_udon_community.service;
 
 import com.example.estsoft_udon_community.dto.response.ArticleDetailResponse;
-import com.example.estsoft_udon_community.entity.ArticleHashtagJoin;
-import com.example.estsoft_udon_community.entity.Articles;
-import com.example.estsoft_udon_community.entity.Hashtag;
-import com.example.estsoft_udon_community.entity.Users;
+import com.example.estsoft_udon_community.entity.*;
 import com.example.estsoft_udon_community.dto.request.AddArticleRequest;
 import com.example.estsoft_udon_community.dto.response.ArticleResponse;
 import com.example.estsoft_udon_community.dto.request.UpdateArticleRequest;
@@ -30,6 +27,7 @@ public class ArticlesService {
     private final UsersRepository usersRepository;
     private final CommentsRepository commentsRepository;
     private final ArticlesLikeRepository articlesLikeRepository;
+    private final LocationService locationService;
 
     // 게시글 등록
     public Articles saveArticle(AddArticleRequest request) {
@@ -37,9 +35,10 @@ public class ArticlesService {
         Users user = usersRepository.findById(userId).orElseThrow();
 
         List<Hashtag> hashtagList = getOrCreateHashtags(request.getHashtagName());
+        Location location = locationService.getLocationById(request.getLocationId());
 
         Articles articles = new Articles(user, request.getTitle(), request.getContent(), request.getCategory(),
-                hashtagList, user.getLocation());
+                hashtagList, location);
         Articles savedArticle = articlesRepository.save(articles);
 
         for (Hashtag hashtag : hashtagList) {

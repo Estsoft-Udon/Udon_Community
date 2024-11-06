@@ -10,6 +10,7 @@ import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.security.CustomUserDetails;
 import com.example.estsoft_udon_community.service.ArticlesService;
 import com.example.estsoft_udon_community.service.HashtagService;
+import com.example.estsoft_udon_community.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -89,43 +90,35 @@ public class BoardController {
         return "board/board_list";
     }
 
-    // 게시글 생성
-    @GetMapping("/articles/new")
-    public String boardEdit(Model model) {
-        Articles article = new Articles();
-        AddArticleRequest addArticleRequest = new AddArticleRequest(null, null, "", null, "", null);
-
-        model.addAttribute("article", article);
-        model.addAttribute("addArticleRequest", addArticleRequest);
-
-        // 상위 지역 목록을 가져와서 모델에 추가
-        List<String> upperLocations = locationService.getDistinctUpperLocations();
-        model.addAttribute("upperLocations", upperLocations);
-
-        // 첫 번째 상위 지역에 대한 하위 지역 목록을 초기화하여 모델에 추가
-        if (!upperLocations.isEmpty()) {
-            String firstUpperLocation = upperLocations.get(0);
-            List<Location> lowerLocations = locationService.getLowerLocation(firstUpperLocation);
-            model.addAttribute("locations", lowerLocations);
-        }
-
-        return "board/board_edit";
-    }
-
+//    // 게시글 생성
 //    @GetMapping("/articles/new")
 //    public String boardEdit(Model model) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String loginId = authentication.getName();
-//
-//        Location userLocation = usersService.getUserLocationByLoginId(loginId);
-//
 //        Articles article = new Articles();
-//        AddArticleRequest addArticleRequest = new AddArticleRequest(null, null, "", null, "", userLocation);
+//        AddArticleRequest addArticleRequest = new AddArticleRequest(null, null, "", null, "", null);
 //
 //        model.addAttribute("article", article);
 //        model.addAttribute("addArticleRequest", addArticleRequest);
-//        model.addAttribute("userLocation", userLocation.getName());
+//
+//        // 상위 지역 목록을 가져와서 모델에 추가
+//        List<String> upperLocations = locationService.getDistinctUpperLocations();
+//        model.addAttribute("upperLocations", upperLocations);
+//
+//        // 첫 번째 상위 지역에 대한 하위 지역 목록을 초기화하여 모델에 추가
+//        if (!upperLocations.isEmpty()) {
+//            String firstUpperLocation = upperLocations.get(0);
+//            List<Location> lowerLocations = locationService.getLowerLocation(firstUpperLocation);
+//            model.addAttribute("locations", lowerLocations);
+//        }
 //
 //        return "board/board_edit";
 //    }
+
+    @PutMapping("/articles/")
+    public String boardEdit(Model model) {
+        String loginId = SecurityUtil.getLoggedInUser().getLoginId();
+
+
+
+        return "board/board_edit";
+    }
 }
