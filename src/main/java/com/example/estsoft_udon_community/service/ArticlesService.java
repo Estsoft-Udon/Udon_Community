@@ -166,6 +166,8 @@ public class ArticlesService {
         hashtagRepository.deleteUnusedHashtags();
     }
 
+    public Articles findJustArticle(Long id) {
+        return articlesRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Article not found"));
     // 좋아요 수 조회
     private Long fetchLikeCount(Articles article) {
         return articlesLikeRepository.countLikesByArticles(article);

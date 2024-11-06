@@ -20,7 +20,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer ignore() {
         return WebSecurity -> WebSecurity.ignoring()
-                .requestMatchers("/css/**", "js/**", "/img/**","/error"); // 정적 리소스 허용
+                .requestMatchers("/css/**", "js/**", "/img/**", "/error"); // 정적 리소스 허용
     }
 
     @Bean
@@ -28,7 +28,8 @@ public class SecurityConfig {
         return http.authorizeHttpRequests(
                         custom -> custom.requestMatchers("/api/**").permitAll()
                                 .requestMatchers("/", "/login", "/signup", "/find_id", "/find_pw","/getLowerLocations", "/success").permitAll()
-                                .anyRequest().hasAnyRole("UDON", "UDON_FRIEND", "UDON_SHERIFF", "UDON_MASTER", "UDON_ADMIN")
+                                .anyRequest().permitAll()
+//                                .anyRequest().hasAnyRole("UDON", "UDON_FRIEND", "UDON_SHERIFF", "UDON_MASTER", "UDON_ADMIN")
                 )
                 .formLogin(custom -> custom.loginPage("/login"))
 

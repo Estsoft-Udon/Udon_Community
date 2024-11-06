@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/layout">
 <head>
     <link rel="stylesheet" href="/css/board.css">
+    <script src="/js/comment.js"></script>
 </head>
 <th:block layout:fragment="content">
     <div class="wrap board_detail_wr">
@@ -31,7 +32,7 @@
                                 <span th:text="${article.viewCount}">68</span>
                             </div>
                             <div class="likes">
-                                <span class="thumb_icon icon_box"></span>1
+                                <span class="thumb_icon icon_box"></span>
                             </div>
                         </div>
                     </div>
@@ -48,7 +49,7 @@
                 <!-- Hashtags and Interaction Buttons -->
                 <div class="flex_box">
                     <div class="hash_box">
-                        <span th:each="hashtag : ${article.hashtags}" th:text="'#' + ${article.hashtags}">#해시태그</span>
+                        <span th:each="hashtag : ${article.hashtags}" th:text="'#' + ${hashtag}">#해시태그</span>
                     </div>
                     <div class="btn_box">
                         <svg width="20" height="10" viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg">
@@ -62,74 +63,67 @@
 
                 <!-- Comments Section -->
                 <div class="comment_box">
-                    <div class="cont">
-                        <div class="l_box">
-                            <div class="user_box">
-                                <div class="icon_box">
-                                    <svg width="20" height="10" viewBox="0 0 100 30" xmlns="http://www.w3.org/2000/svg">
-                                        <ellipse cx="50" cy="15" rx="45" ry="10" class="plate" />
-                                    </svg>
+                    <h3>댓글</h3>
+                    <div th:if="${commentsPage != null}">
+                    <div th:each="comment : ${commentsPage.content}">
+                        <div class="cont">
+                            <div class="l_box">
+                                <div class="user_box">
+                                    <p class="comment_user_id" th:text="${comment.nickName}">작성자</p>
+                                    <p class="comment_date" th:text="|Posted on ${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}|">2024.11.05</p>
                                 </div>
-                                <p class="comment_user_id">작성자</p>
-                                <p class="comment_date" th:text="|Posted on ${#temporals.format(article.createdAt, 'yyyy-MM-dd HH:mm')}|">2024.11.05</p>
+                                <div class="com_txt_box">
+                                    <p id="origin_comment" th:text="${comment.content}">댓글 내용</p>
+                                    <input id="edit_comment" type="text" th:value="${comment.content}" class="comment-edit-input" style="display:none;">
+                                </div>
+                                <div class="btn_wr" th:if="${comment.user.id == loggedInUserId}">
+                                    <button class="edit_btn" id="comment_edit_btn" th:onclick="'press_edit(' + ${comment.id} + ')'">수정</button>
+                                    <button class="del_btn" th:onclick="'delete_comment(' + ${comment.id} + ')'">삭제</button>
+                                </div>
                             </div>
-                            <div class="com_txt_box">
-                                <p>댓글 내용</p>
-                            </div>
-                            <div class="btn_wr">
-                                <button class="edit_btn">수정</button>
-                                <button class="del_btn">삭제</button>
+                            <div class="r_box">
+                                <button type="button" th:onclick="'press_like(' + ${comment.id} + ')'" class="thumb_icon"></button>
+                                <span class="comment-like-count" th:text="${comment.likeCount}">0</span>
                             </div>
                         </div>
-                        <div class="r_box">
-                            <button type="button" class="thumb_icon"></button>
-                        </div>
+
                     </div>
-                    <div class="pagination_wr">
+
+                    <!-- Pagination -->
+                    <div class="pagination_wr" >
                         <ul class="pagination">
-                            <!--
-                                li.on 현재 활성화 된 페이지
-                                5페이지 이후에 prev_btn 활성화
-                                마지막 페이지 노출되면 next_btn 비활성화
-                            -->
-                            <li class="prev_btn dn">
-                                <button type="button">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="arrow">
-                                        <path d="M15 19l-7-7 7-7" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                </button>
+                            <li th:classappend="${commentsPage.hasPrevious()} ? '' : 'disabled'">
+                                <a th:href="@{|/articles/${article.id}?page=${commentsPage.number - 1}|}">
+                                    <button type="button">이전</button>
+                                </a>
                             </li>
-                            <li class="on">
-                                <button type="button">1</button>
+                            <li th:each="i : ${#numbers.sequence(0, commentsPage.totalPages - 1)}" th:class="${i == commentsPage.number} ? 'on'">
+                                <a th:href="@{|/articles/${article.id}?page=${i}|}">
+                                    <button type="button" th:text="${i + 1}">1</button>
+                                </a>
                             </li>
-                            <li>
-                                <button type="button">2</button>
-                            </li>
-                            <li>
-                                <button type="button">3</button>
-                            </li>
-                            <li>
-                                <button type="button">4</button>
-                            </li>
-                            <li>
-                                <button type="button">5</button>
-                            </li>
-                            <li class="next_btn">
-                                <button type="button">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="arrow">
-                                        <path d="M9 5l7 7-7 7" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                </button>
+                            <li th:classappend="${commentsPage.hasNext()} ? '' : 'disabled'">
+                                <a th:href="@{|/articles/${article.id}?page=${commentsPage.number + 1}|}">
+                                    <button type="button">다음</button>
+                                </a>
                             </li>
                         </ul>
                     </div>
+                        </div>
+
+                    <!-- Comment Writing Section -->
                     <div class="cont wt_cont">
-                        <textarea placeholder="댓글을 작성해주세요."></textarea>
-                        <button type="button">댓글 쓰기</button>
+                        <textarea id="comment_content" placeholder="댓글을 작성해주세요." required></textarea>
+                        <button type="button" onclick="submit_comment()">댓글 쓰기</button>
                     </div>
+                </div>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        const article_id = [[${article.id}]];
+    </script>
 </th:block>
 </html>
+
