@@ -130,7 +130,7 @@ section{
 
 .default_btn{
     color: #fff;
-    background-color: rgba(0,133,249,1);
+    background-color: rgb(25 43 59);
     padding: 1.5rem 3.3rem 1.5rem 3.1rem;
     border-radius: 1rem;
     font-size: clamp(1.4rem,1.1vw,1.6rem);
@@ -141,12 +141,12 @@ section{
 }
 
 .reversal_btn{
-    color: rgba(0,133,249,1);
+    color: rgb(25 43 59);
     background-color: #fff;
     padding: 1.5rem 3.3rem 1.5rem 3.1rem;
     border-radius: 1rem;
     font-size: clamp(1.4rem,1.1vw,1.6rem);
-    border: 1px solid rgba(0,133,249,1);
+    border: 1px solid rgb(25 43 59);
 
     @media (max-width: 767px) {
         padding: 1.1rem 2.4rem;

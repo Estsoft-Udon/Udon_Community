@@ -1,8 +1,9 @@
 header {
     width: 25rem;
-    background-color: rgba(0,133,249,1);
+    background-color: rgb(25 43 59);
     color: white;
     padding: 3rem;
+    height: 100%;
 }
 
 header nav ul {
