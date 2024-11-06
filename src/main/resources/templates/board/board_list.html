@@ -64,14 +64,14 @@
                     </div>
 
                     <ul class="post_list">
-                        <!-- 게시글 리스트 반복 -->
-                        <li th:each="article : ${articles}" class="post_item">
+                        <li th:each="article, iterStat : ${articles}" class="post_item">
                             <div class="l_box">
                                 <div class="t_box">
-                                    <span class="post_num" th:text="${article.id} + '.'">1.</span>
+                                    <!-- 페이지 번호 표시 -->
+                                    <span class="post_num" th:text="${(currentPage * 5) + iterStat.index + 1}">1.</span>
                                     <a th:href="@{/articles/{id}(id=${article.id})}" th:text="${article.title}" class="post_title">글 제목</a>
 
-                                    <!--  위치만 바꿔주세요 -->
+                                    <!-- 위치만 바꿔주세요 -->
                                     <span th:text="${article.location}"></span>
                                 </div>
                                 <div class="post_author" th:text="${article.nickname}">작성자 닉네임</div>
@@ -83,6 +83,7 @@
                             </div>
                         </li>
                     </ul>
+
 
                     <div class="pagination_wr">
                         <ul class="pagination">
