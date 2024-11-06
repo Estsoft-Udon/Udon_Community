@@ -23,7 +23,7 @@ function updateLowerLocations() {
 
             data.forEach(location => {
                 const option = document.createElement('option');
-                // option.value = location.id; // location의 id 값으로 설정
+                option.value = location.id; // location의 id 값으로 설정
                 option.textContent = location.name; // location의 name 값으로 설정
                 locationSelect.appendChild(option);
             });

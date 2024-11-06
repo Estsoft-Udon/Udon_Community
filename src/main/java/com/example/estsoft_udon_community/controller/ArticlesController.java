@@ -34,7 +34,7 @@ public class ArticlesController {
         return ResponseEntity.ok(articles);
     }
 
-    // 특정 게시글 조회
+    // 특정 게시글 조회 articleId
     @GetMapping("/articles/{id}")
     public ResponseEntity<ArticleResponse> findByArticleId(@PathVariable Long id) {
         Optional<ArticleResponse> article = articlesService.findByArticleId(id);
@@ -52,15 +52,15 @@ public class ArticlesController {
 
     // 특정 게시글 삭제
     @DeleteMapping("/articles/{id}")
-    public ResponseEntity<Void> deleteByAritlceId(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteByArticleId(@PathVariable Long id) {
         articlesService.deleteArticle(id);
         return ResponseEntity.ok().build();
     }
 
     // 특정 지역 게시글 조회하기
     @GetMapping("/locations/{locationId}/articles")
-    public ResponseEntity<List<ArticleResponse>> findByLocationId(@PathVariable Long locationId) {
-        List<ArticleResponse> locationByIdArticle = articlesService.findByLocationId(locationId);
+    public ResponseEntity<List<ArticleDetailResponse>> findByLocationId(@PathVariable Long locationId) {
+        List<ArticleDetailResponse> locationByIdArticle = articlesService.findByLocationId(locationId);
         return ResponseEntity.ok(locationByIdArticle);
     }
 

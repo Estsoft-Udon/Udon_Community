@@ -33,10 +33,10 @@
             <div class="r_box">
                 <div class="tit_wr">
                     <div class="tit_box">
-                        <h2>서울특별시</h2>
-                        <span class="sub_tit">용산구</span>
+                        <h2 th:text="${location != null ? location.upperLocation : '대한민국'}"></h2>
+                        <span th:text="${location != null ? location.name : '우리동네'}"></span>
                     </div>
-                    지금 우리 동네 위치 입니다. 다양한 사람들을 만나고 우리 동네의 모든 정보를 공유해보아요.
+                    다양한 사람들을 만나고 우리 동네의 모든 정보를 공유해보아요.
                 </div>
 
                 <div class="container">
@@ -68,6 +68,9 @@
                                 <div class="t_box">
                                     <span class="post_num" th:text="${article.id} + '.'">1.</span>
                                     <a th:href="@{/articles/{id}(id=${article.id})}" th:text="${article.title}" class="post_title">글 제목</a>
+
+                                    <!--  위치만 바꿔주세요 -->
+                                    <span th:text="${article.location}"></span>
                                 </div>
                                 <div class="post_author" th:text="${article.nickname}">작성자 닉네임</div>
                             </div>

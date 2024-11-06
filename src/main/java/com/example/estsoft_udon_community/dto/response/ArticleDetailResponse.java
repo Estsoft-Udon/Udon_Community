@@ -40,7 +40,7 @@ public class ArticleDetailResponse {
         this.viewCount = article.getViewCount();
         this.createdAt = article.getCreatedAt();
         this.updatedAt = article.getUpdatedAt();
-        this.location = article.getLocation().getName();
+        this.location = article.getLocation().getUpperLocation() + " " + article.getLocation().getName();
         this.hashtags = article.getHashtags().stream()
                 .map(Hashtag::getName)
                 .toList();
