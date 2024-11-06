@@ -7,12 +7,14 @@ import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.service.ArticlesService;
 import com.example.estsoft_udon_community.service.HashtagService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import com.example.estsoft_udon_community.entity.Location;
 import com.example.estsoft_udon_community.service.LocationService;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,22 +29,53 @@ public class BoardController {
 
     // 게시글 리스트 조회 (전체 or 동네별)
     @GetMapping("/articles")
-    public String getBoardList(@RequestParam(required = false) Long locationId, Model model) {
+    public String getBoardList(@RequestParam(defaultValue = "0") int page,
+                               @RequestParam(defaultValue = "5") int size,
+                               Model model) {
 
-        List<ArticleDetailResponse> articles;
-        if (locationId != null) {
+        // 페이지네이션을 위한 서비스 호출
+        Page<ArticleDetailResponse> articles = articlesService.findAll(page, size);
 
-            // location 정보가 있으면 지역별 게시글 나열
-            Location locationById = locationService.getLocationById(locationId);
-            model.addAttribute("location", locationById);
-
-            articles = articlesService.findByLocationId(locationId);
-        } else {
-            // location 정보가 없을면 전체 게시글 날짜 순서대로
-            model.addAttribute("location", null);
-            articles = articlesService.findAll();
-        }
         model.addAttribute("articles", articles);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", articles.getTotalPages());
+        model.addAttribute("totalItems", articles.getTotalElements());
+
+        List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();
+        model.addAttribute("topHashtags", topHashtags);
+
+        return "board/board_list";
+    }
+
+    @GetMapping("/articles/search")
+    public String searchArticles(
+            @RequestParam String title,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            Model model) {
+
+        Page<ArticleDetailResponse> articles = articlesService.searchByTitle(title, page, size);
+
+//     public String getBoardList(@RequestParam(required = false) Long locationId, Model model) {
+
+//         List<ArticleDetailResponse> articles;
+//         if (locationId != null) {
+
+//             // location 정보가 있으면 지역별 게시글 나열
+//             Location locationById = locationService.getLocationById(locationId);
+//             model.addAttribute("location", locationById);
+
+//             articles = articlesService.findByLocationId(locationId);
+//         } else {
+//             // location 정보가 없을면 전체 게시글 날짜 순서대로
+//             model.addAttribute("location", null);
+//             articles = articlesService.findAll();
+//         }
+        model.addAttribute("articles", articles);
+        model.addAttribute("searchQuery", title);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", articles.getTotalPages());
+        model.addAttribute("totalItems", articles.getTotalElements());
 
         // 인기 해시태그 리스트 설정
         List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();

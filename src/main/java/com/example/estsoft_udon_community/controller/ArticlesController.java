@@ -7,11 +7,11 @@ import com.example.estsoft_udon_community.dto.response.ArticleResponse;
 import com.example.estsoft_udon_community.dto.request.UpdateArticleRequest;
 import com.example.estsoft_udon_community.service.ArticlesService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -29,8 +29,10 @@ public class ArticlesController {
 
     // 게시글 전체 조회
     @GetMapping("/articles")
-    public ResponseEntity<List<ArticleDetailResponse>> findAll() {
-        List<ArticleDetailResponse> articles = articlesService.findAll();
+    public ResponseEntity<Page<ArticleDetailResponse>> findAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<ArticleDetailResponse> articles = articlesService.findAll(page, size);
         return ResponseEntity.ok(articles);
     }
 
@@ -59,22 +61,44 @@ public class ArticlesController {
 
     // 특정 지역 게시글 조회하기
     @GetMapping("/locations/{locationId}/articles")
-    public ResponseEntity<List<ArticleDetailResponse>> findByLocationId(@PathVariable Long locationId) {
-        List<ArticleDetailResponse> locationByIdArticle = articlesService.findByLocationId(locationId);
+    public ResponseEntity<Page<ArticleResponse>> findByLocationId(
+            @PathVariable Long locationId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<ArticleResponse> locationByIdArticle = articlesService.findByLocationId(locationId, page, size);
         return ResponseEntity.ok(locationByIdArticle);
     }
 
     // 해시태그로 게시글 조회
     @GetMapping("/hashtag/{hashtagId}/articles")
-    public ResponseEntity<List<ArticleResponse>> findByHashtag(@PathVariable Long hashtagId) {
-        List<ArticleResponse> hashtagByArticle = articlesService.findByHashtag(hashtagId);
+    public ResponseEntity<Page<ArticleResponse>> findByHashtag(
+            @PathVariable Long hashtagId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<ArticleResponse> hashtagByArticle = articlesService.findByHashtag(hashtagId, page, size);
         return ResponseEntity.ok(hashtagByArticle);
     }
 
     // 카테고리로 게시글 조회
     @GetMapping("/category/{category}/articles")
-    public ResponseEntity<List<ArticleResponse>> findByCategory(@PathVariable String category) {
-        List<ArticleResponse> articles = articlesService.findByCategory(category);
+    public ResponseEntity<Page<ArticleResponse>> findByCategory(
+            @PathVariable String category,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<ArticleResponse> articles = articlesService.findByCategory(category, page, size);
+        return ResponseEntity.ok(articles);
+    }
+
+    // 제목 검색 기능
+    @GetMapping("/articles/search")
+    public ResponseEntity<Page<ArticleDetailResponse>> searchArticlesByTitle(
+            @RequestParam String title,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        if (title == null || title.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body(Page.empty());
+        }
+        Page<ArticleDetailResponse> articles = articlesService.searchByTitle(title, page, size);
         return ResponseEntity.ok(articles);
     }
 }
