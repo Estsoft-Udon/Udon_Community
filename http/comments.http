@@ -3,13 +3,13 @@ POST http://localhost:8080/api/register
 Content-Type: application/json
 
 {
-  "name": "test",
-  "email": "test@naver.com",
-  "loginId": "test123",
+  "name": "김진건",
+  "email": "jg@naver.com",
+  "loginId": "jg",
   "password": "1234",
   "passwordHint": "FAVORITE_COLOR",
   "passwordAnswer": "blue",
-  "nickname": "test",
+  "nickname": "jg",
   "locationId": 13
 }
 
@@ -17,7 +17,7 @@ Content-Type: application/json
 POST http://localhost:8080/api/login
 Content-Type: application/x-www-form-urlencoded
 
-loginId=songjuhwan33&password=1234
+loginId=jg&password=1234
 
 ### 전체조회
 GET http://localhost:8080/api/users
@@ -112,7 +112,7 @@ Content-Type: application/json
 {
   "user_id": 5,
   "article_id": {{articleId}},
-  "content": "댓글 내용입니다"
+  "content": "댓글 내용입니다12345"
 }
 
 
@@ -125,37 +125,17 @@ GET localhost:8080/api/articles/{{articleId}}/commentsonly
 
 
 ### 코멘트 수정
-@commentId = 2
+@commentId = 3
 PUT localhost:8080/api/comments/{{commentId}}
 Content-Type: application/json
 
 {
-  "content": "수정한 댓글입니다2"
+  "content": "수정한 댓글입니다200"
 }
 
 ### 코멘트 삭제
 DELETE localhost:8080/api/comments/{{commentId}}
 
-
-
-### 게시글 좋아요 등록
-POST localhost:8080/api/like/articles
-Content-Type: application/json
-
-{
-  "articleId": 8,
-  "userId": 5
-}
-
-
-### 게시글 좋아요 삭제
-DELETE localhost:8080/api/like/articles
-Content-Type: application/json
-
-{
-  "articleId": 8,
-  "userId": 5
-}
 
 ### 게시글 좋아요 등록 / 삭제
 POST localhost:8080/api/like/articlesLike
@@ -190,3 +170,15 @@ GET localhost:8080/api/like/comments
 ### 특정 게시글의 코멘트 조회 (좋아요 순으로)
 #@articleId=5
 GET localhost:8080/api/like/comments/{{articleId}}
+
+
+###특정 위치의 게시글 조회
+@locationId = 140
+GET http://localhost:8080/api/locations/{{locationId}}/articles
+Content-Type: application/json
+
+
+###해시태그로 게시글 조회
+@hashtagId = 74
+GET http://localhost:8080/api/hashtag/{{hashtagId}}/articles
+Content-Type: application/json

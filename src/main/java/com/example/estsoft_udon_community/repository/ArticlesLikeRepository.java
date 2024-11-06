@@ -16,5 +16,6 @@ public interface ArticlesLikeRepository extends JpaRepository<ArticlesLike, Long
             "ORDER BY COUNT(al.id) DESC")
     List<Object[]> findArticlesOrderByLikesCountDescWithCount();
 
+    Long countArticlesLikeByArticles(Articles article);
     Long countLikesByArticles(Articles article);
 }

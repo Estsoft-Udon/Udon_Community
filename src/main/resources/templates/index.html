@@ -53,18 +53,18 @@
                             <h2>
                                 <a href="/articles">🔺최신 게시글</a>
                             </h2>
-                            <ul class="post_list">
-                                <li class="post_item">
+                            <ul class="post_list" id="newest">
+                                <li th:each="article : ${articles}" class="post_item">
                                     <div class="l_box">
                                         <div class="top">
-                                            <span class="w_id">아이디</span>
-                                            <span class="w_pw">작성 시간</span>
+                                            <span class="w_id" th:text="${article.nickname}">아이디</span>
+                                            <span class="w_pw" th:text="|Posted on ${#temporals.format(article.createdAt, 'yyyy-MM-dd HH:mm')}|">작성 시간</span>
                                         </div>
                                         <div class="bot">
-                                            <a href="/" class="title">글 제목</a>
+                                            <a th:href="@{/articles/{id}(id=${article.id})}" th:text="${article.title}" class="title">글 제목</a>
                                             <div class="post_stats">
                                                 <div class="icon thumb_icon"></div>
-                                                <div class="likes">좋아요 수</div>
+                                                <div class="likes" th:text="${article.likeCount}">좋아요 수</div>
                                             </div>
                                         </div>
                                     </div>

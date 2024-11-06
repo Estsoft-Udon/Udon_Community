@@ -18,6 +18,11 @@ public class LocationService {
         return locationRepository.findAll();
     }
 
+    // LocationId로 Location 정보 가져오기
+    public Location getLocationById(Long id) {
+        return locationRepository.findById(id).orElseThrow();
+    }
+
     public List<String> getDistinctUpperLocations() {
         return locationRepository.findDistinctUpperLocations();
     }

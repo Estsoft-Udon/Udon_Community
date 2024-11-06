@@ -4,6 +4,7 @@ import com.example.estsoft_udon_community.entity.*;
 import com.example.estsoft_udon_community.repository.ArticlesLikeRepository;
 import com.example.estsoft_udon_community.repository.ArticlesRepository;
 import com.example.estsoft_udon_community.repository.UsersRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,5 +45,14 @@ public class ArticlesLikeService {
 
     public List<Object[]> findArticlesOrderByLikesCountDesc() {
         return articlesLikeRepository.findArticlesOrderByLikesCountDescWithCount();
+    }
+
+    public Long getLikeCountForArticle(Long articleId) {
+        // 게시글을 찾기 위해 ArticlesRepository를 사용
+        Articles article = articlesRepository.findById(articleId)
+                .orElseThrow(() -> new EntityNotFoundException("Article not found"));
+
+        // 좋아요 수 세기
+        return articlesLikeRepository.countArticlesLikeByArticles(article);
     }
 }

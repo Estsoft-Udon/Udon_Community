@@ -29,4 +29,6 @@ public interface CommentsLikeRepository extends JpaRepository<CommentsLike, Long
             "GROUP BY c " +
             "ORDER BY COUNT(cl.id) DESC")
     List<Object[]> findCommentsByArticleIdOrderByLikesCountDesc(@Param("articleId") Long articleId);
+
+    long countByCommentsId(Long commentId);
 }
