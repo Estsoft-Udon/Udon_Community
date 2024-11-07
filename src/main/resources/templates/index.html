@@ -163,11 +163,16 @@
                     <textarea id="content" name="content" rows="4" required></textarea>
 
                     <!-- (임시) 수정 필요 -->
-                    <input type="hidden" name="usersId" value="2">
-                    <input type="hidden" name="locationId" value="01">
-<!--                    <input type="hidden" name="userId" value="/*[[${userId}]]*/">-->
-<!--                    <input type="hidden" name="locationId" value="/*[[${locationId}]]*/">-->
-                    <!-- 수정 필요 -->
+                    <div th:if="${user != null}">
+                        <input type="hidden" name="loginId" th:text="${user.loginId}">
+                        <input type="hidden" name="locationId" value="01">
+
+                        <label for="location">거주하는 지역</label>
+                        <span id="locationUpper" th:text="${user.location.getUpperLocation()}"></span>
+
+                        <label for="location">상세 지역</label>
+                        <span id="location" th:text="${user.location.getName()}"></span>
+                    </div>
 
                     <div class="btn_sec">
                         <button type="submit" class="submit-btn default_btn">신청하기</button>

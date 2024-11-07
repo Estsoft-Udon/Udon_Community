@@ -3,6 +3,7 @@ package com.example.estsoft_udon_community.controller.admin;
 import com.example.estsoft_udon_community.dto.response.EventResponse;
 import com.example.estsoft_udon_community.service.admin.AdminEventService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,15 +22,18 @@ public class AdminEventViewController {
 
     // 이벤트 목록 조회 (기본적으로 전체 목록)
     @GetMapping("/event_list")
-    public String eventList(@RequestParam(value = "approved", required = false) Boolean approved, Model model) {
-        List<EventResponse> events;
+    public String eventList(@RequestParam(defaultValue = "0") int page,
+                            @RequestParam(defaultValue = "10") int size,
+                            @RequestParam(value = "approved", required = false) Boolean approved,
+                            Model model) {
+        Page<EventResponse> events;
 
         if (approved == null) {
-            events = adminEventService.getAllEvents();
+            events = adminEventService.getAllEvents(page, size);
         } else if (approved) {
-            events = adminEventService.getApprovedEvents();
+            events = adminEventService.getApprovedEvents(page, size);
         } else {
-            events = adminEventService.getUnapprovedEvents();
+            events = adminEventService.getUnapprovedEvents(page, size);
         }
 
         model.addAttribute("events", events);

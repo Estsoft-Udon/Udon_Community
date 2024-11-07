@@ -15,6 +15,6 @@ public class SecurityUtil {
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
             return userDetails.getUser(); // CustomUserDetails 에서 사용자 ID를 반환
         }
-        throw new IllegalStateException("현재 로그인된 사용자가 없습니다.");
+        return null;
     }
 }

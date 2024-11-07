@@ -51,7 +51,7 @@ public class EventController {
         Users loggedInUser = SecurityUtil.getLoggedInUser();
         if(loggedInUser != null) {
             eventRequest.setUsersId(loggedInUser.getId());
-            EventResponse createEvent = eventService.addEvent(eventRequest);
+            eventService.addEvent(eventRequest);
         } else {
             return ResponseEntity.ok("등록 요청 실패~!"); // 성공 메시지 반환
         }

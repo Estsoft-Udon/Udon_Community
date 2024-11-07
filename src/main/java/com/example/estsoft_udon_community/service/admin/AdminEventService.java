@@ -5,6 +5,10 @@ import com.example.estsoft_udon_community.entity.Event;
 import com.example.estsoft_udon_community.repository.EventRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,23 +21,24 @@ public class AdminEventService {
     private final EventRepository eventRepository;
 
     // 모든 이벤트 조회 (승인 여부 상관없이)
-    public List<EventResponse> getAllEvents() {
-        List<Event> events = eventRepository.findAll();
-        return events.stream().map(EventResponse::new).collect(Collectors.toList());
+    public Page<EventResponse> getAllEvents(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Event> allEvent = eventRepository.findAll(pageable);
+        return allEvent.map(EventResponse::new);
     }
 
     // 승인된 이벤트 목록 조회
-    public List<EventResponse> getApprovedEvents() {
-        return eventRepository.findByIsAcceptedTrue().stream()
-                .map(event -> new EventResponse(event)) // EventResponse로 변환
-                .collect(Collectors.toList());
+    public Page<EventResponse> getApprovedEvents(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Event> byIsAcceptedTrue = eventRepository.findByIsAcceptedTrue(pageable);
+        return byIsAcceptedTrue.map(EventResponse::new); // EventResponse로 변환
     }
 
     // 승인되지 않은 이벤트 목록 조회
-    public List<EventResponse> getUnapprovedEvents() {
-        return eventRepository.findByIsAcceptedFalse().stream()
-                .map(event -> new EventResponse(event)) // EventResponse로 변환
-                .collect(Collectors.toList());
+    public Page<EventResponse> getUnapprovedEvents(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Event> byIsAcceptedFalse = eventRepository.findByIsAcceptedFalse(pageable);
+        return byIsAcceptedFalse.map(EventResponse::new);
     }
 
     // 이벤트 승인

@@ -3,6 +3,7 @@ package com.example.estsoft_udon_community.controller;
 import com.example.estsoft_udon_community.dto.response.ArticleDetailResponse;
 import com.example.estsoft_udon_community.entity.Location;
 import com.example.estsoft_udon_community.entity.Users;
+import com.example.estsoft_udon_community.enums.PasswordHint;
 import com.example.estsoft_udon_community.service.ArticlesService;
 import com.example.estsoft_udon_community.service.EventService;
 import com.example.estsoft_udon_community.service.LocationService;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static com.example.estsoft_udon_community.util.SecurityUtil.getLoggedInUser;
 
 @Controller
 public class MainController {
@@ -53,12 +56,21 @@ public class MainController {
 
         model.addAttribute("articles", newestPosts); // 모델에 게시글 리스트 추가
 
+        // 로그인 사용자의 정보
+        if(getLoggedInUser() != null) {
+            Users users = usersService.findUserById(getLoggedInUser().getId());
+            model.addAttribute("user", users);
+            model.addAttribute("passwordHints", PasswordHint.values());
+
+            Location location = users.getLocation();
+            model.addAttribute("locationId", location.getName());
+            model.addAttribute("selectedUpperLocation", location.getUpperLocation());
+        }
         Map<Users, Long> topUserMap = usersService.getTopUsersByLikes(5);
 
         model.addAttribute("topUserMap", topUserMap);
 
         getTopUsers(model);
-
         return "index";
     }
 

@@ -5,6 +5,7 @@ import com.example.estsoft_udon_community.dto.response.EventResponse;
 import com.example.estsoft_udon_community.entity.Event;
 import com.example.estsoft_udon_community.service.admin.AdminEventService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +21,9 @@ public class AdminEventController {
 
     // 관리자용 모든 이벤트 목록 조회
     @GetMapping
-    public ResponseEntity<List<EventResponse>> getAllEvents() {
-        List<EventResponse> events = adminEventService.getAllEvents();
+    public ResponseEntity<Page<EventResponse>> getAllEvents(@RequestParam(defaultValue = "0") int page,
+                                                            @RequestParam(defaultValue = "10") int size) {
+        Page<EventResponse> events = adminEventService.getAllEvents(page, size);
         return ResponseEntity.ok(events);
     }
 

@@ -26,7 +26,8 @@ public class AdminService {
     // 관리자 로그인
     public Users adminLogin(String loginId, String password) {
         Users adminUser = usersRepository.findByLoginId(loginId);
-        if (adminUser == null || !adminUser.getPassword().equals(password) || !adminUser.getGrade().equals(Grade.UDON_ADMIN)) {
+        if (adminUser == null || !adminUser.getPassword().equals(password) || !adminUser.getGrade()
+                .equals(Grade.UDON_ADMIN)) {
             throw new IllegalArgumentException("관리자가 아님");
         }
         return adminUser;
@@ -41,12 +42,13 @@ public class AdminService {
     }
 
     // 회원 등급 수정
-    public UsersResponse updateUserGrade(Long userId, Grade grade) {
+    public Users updateUserGrade(Long userId, Grade grade) {
         Users user = usersRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("없는 유저"));
+
         user.setGrade(grade);
         usersRepository.save(user);
-        return new UsersResponse(user);
+        return user;
     }
 
 //    // 관리자 게시글 조회
