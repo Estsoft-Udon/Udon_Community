@@ -41,8 +41,9 @@
                                 <option th:value="${location.name}"
                                         th:text="${location.name}"
                                         th:selected="${article != null and originLocation != null and originLocation.name == location.name}">
-                                </option>
+
                             </th:block>
+                            </option>
                         </select>
                     </div>
 
@@ -94,11 +95,11 @@
     <script src="/js/board.js"></script>
     <script th:inline="javascript">
         window.onload = function() {
-            const article = [[${article != null}]]; // article이 null이 아닌 경우 true로 설정
+            const exist_article = [[${article != null}]]; // article이 null이 아닌 경우 true로 설정
             const form = document.getElementById('articleForm');
             const submitText = document.getElementById('submit_btn');
 
-            if (article) {
+            if (exist_article) {
                 // 수정 모드일 때
                 form.action = `/articles/edit/${article.id}`;
                 form.method = "post"; // HTML 폼에서 PUT은 지원되지 않으므로 POST로 사용

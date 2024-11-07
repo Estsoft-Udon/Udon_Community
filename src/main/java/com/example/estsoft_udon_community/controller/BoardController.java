@@ -3,13 +3,9 @@ package com.example.estsoft_udon_community.controller;
 import com.example.estsoft_udon_community.dto.request.AddArticleRequest;
 import com.example.estsoft_udon_community.dto.response.ArticleDetailResponse;
 import com.example.estsoft_udon_community.dto.response.ArticleResponse;
-import com.example.estsoft_udon_community.dto.response.CommentsResponse;
-import com.example.estsoft_udon_community.entity.Articles;
-import com.example.estsoft_udon_community.entity.Comments;
-import com.example.estsoft_udon_community.entity.Users;
+
 import com.example.estsoft_udon_community.enums.ArticleCategory;
-import com.example.estsoft_udon_community.enums.UpperLocationEnum;
-import com.example.estsoft_udon_community.security.CustomUserDetails;
+
 import com.example.estsoft_udon_community.service.ArticlesService;
 import com.example.estsoft_udon_community.service.HashtagService;
 import lombok.RequiredArgsConstructor;
@@ -174,16 +170,18 @@ public class BoardController {
 
     // 게시글 수정
     @PostMapping("/articles/edit/{articleId}")
-    public String boardEdit(Model model, @ModelAttribute AddArticleRequest addArticleRequest,
+    public String boardEdit(@PathVariable Long articleId, Model model,
+                            @ModelAttribute AddArticleRequest request,
                             String locationName) {
 
-        model.addAttribute("article", addArticleRequest);
+        model.addAttribute("article", request);
         model.addAttribute("articleCategories", ArticleCategory.values());
 
         Location location = locationService.findByName(locationName);
+        request.setLocationId(location.getId());
 
         //article 저장
-        articlesService.saveArticle(addArticleRequest, location.getId());
+        articlesService.updateArticle2(articleId, request);
 
         return "board/board_edit";
     }
