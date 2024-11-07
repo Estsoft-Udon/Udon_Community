@@ -78,8 +78,8 @@ public class ArticlesService {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
 
         Page<Articles> articlesPage = switch (sortOption) {
-            case "'likeCount'" -> articlesRepository.findAllOrderByLikeCount(pageable);
-            case "'commentCount'" -> articlesRepository.findAllOrderByCommentCount(pageable);
+            case "likeCount" -> articlesRepository.findAllOrderByLikeCount(pageable);
+            case "commentCount" -> articlesRepository.findAllOrderByCommentCount(pageable);
             default -> articlesRepository.findByIsDeletedFalse(pageable);
         };
 
@@ -127,20 +127,18 @@ public class ArticlesService {
     // 특정 지역 게시글 조회
     public Page<ArticleDetailResponse> findByLocationId(Long locationId, int page, int size, String sortOption) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
-        Page<Articles> articlesPage = articlesRepository.findByLocationIdAndIsDeletedFalse(locationId, pageable);
 
-        return articlesPage.map(article -> new ArticleDetailResponse(article,
+        Page<Articles> articlesPage = switch (sortOption) {
+            case "likeCount" -> articlesRepository.findByLocationIdOrderByLikeCount(locationId, pageable);
+            case "commentCount" -> articlesRepository.findByLocationIdOrderByCommentCount(locationId, pageable);
+            default -> articlesRepository.findByLocationIdAndIsDeletedFalse(locationId, pageable);
+        };
+
+        return articlesPage.map(article -> new ArticleDetailResponse(
+                article,
                 fetchLikeCount(article),
-                fetchCommentCount(article)));
-
-
-//     public List<ArticleDetailResponse> findByLocationId(Long locationId) {
-//         return articlesRepository.findByLocationIdAndIsDeletedFalse(locationId).stream()
-//                 .map(article -> new ArticleDetailResponse(article,
-//                         articlesLikeRepository.countLikesByArticles(article),
-//                         commentsRepository.countByArticles(article)))
-//                 .toList();
-
+                fetchCommentCount(article)
+        ));
     }
 
     // 해시태그로 게시글 조회

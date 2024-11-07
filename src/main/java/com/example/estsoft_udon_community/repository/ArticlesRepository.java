@@ -13,13 +13,10 @@ import java.util.Optional;
 
 @Repository
 public interface ArticlesRepository extends JpaRepository<Articles, Long> {
-    // 특정 지역에 대한 게시글 조회 (페이지네이션 추가)
-    Page<Articles> findByLocationIdAndIsDeletedFalse(Long locationId, Pageable pageable);
-
     // 삭제되지 않은 모든 게시글 조회 (페이지네이션 추가)
     Page<Articles> findByIsDeletedFalse(Pageable pageable);
 
-    // 좋아요 수로 정렬된 게시글 조회
+    // 좋아요 수로 정렬된 전체 게시글 조회
     @Query("SELECT a FROM Articles a " +
             "LEFT JOIN ArticlesLike al ON a.id = al.articles.id " +
             "WHERE a.isDeleted = false " +
@@ -27,13 +24,32 @@ public interface ArticlesRepository extends JpaRepository<Articles, Long> {
             "ORDER BY COUNT(al.id) DESC")
     Page<Articles> findAllOrderByLikeCount(Pageable pageable);
 
-    // 댓글 수로 정렬된 게시글 조회
+    // 댓글 수로 정렬된 전체 게시글 조회
     @Query("SELECT a FROM Articles a " +
             "LEFT JOIN Comments c ON a.id = c.articles.id " +
             "WHERE a.isDeleted = false " +
             "GROUP BY a.id " +
             "ORDER BY COUNT(c.id) DESC")
     Page<Articles> findAllOrderByCommentCount(Pageable pageable);
+
+    // 특정 지역에 대한 게시글 조회 (페이지네이션 추가)
+    Page<Articles> findByLocationIdAndIsDeletedFalse(Long locationId, Pageable pageable);
+
+    // 특정 지역의 게시글을 좋아요 수 기준으로 정렬하여 조회
+    @Query("SELECT a FROM Articles a " +
+            "LEFT JOIN ArticlesLike al ON a.id = al.articles.id " +
+            "WHERE a.location.id = :locationId AND a.isDeleted = false " +
+            "GROUP BY a.id " +
+            "ORDER BY COUNT(al.id) DESC")
+    Page<Articles> findByLocationIdOrderByLikeCount(@Param("locationId") Long locationId, Pageable pageable);
+
+    // 특정 지역의 게시글을 댓글 수 기준으로 정렬하여 조회
+    @Query("SELECT a FROM Articles a " +
+            "LEFT JOIN Comments c ON a.id = c.articles.id " +
+            "WHERE a.location.id = :locationId AND a.isDeleted = false " +
+            "GROUP BY a.id " +
+            "ORDER BY COUNT(c.id) DESC")
+    Page<Articles> findByLocationIdOrderByCommentCount(@Param("locationId") Long locationId, Pageable pageable);
 
     // 게시글 ID로 조회 (삭제되지 않은 것만)
     Optional<Articles> findByIdAndIsDeletedFalse(Long id);
