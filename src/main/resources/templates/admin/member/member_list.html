@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="admin/layout/layout">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="admin/layout/layout">
 <body>
 <th:block layout:fragment="content">
+    <link rel="stylesheet" href="/admin/css/calender.css">
     <section>
         <h1>회원 목록</h1>
         <div class="top">
@@ -23,37 +25,53 @@
                 </form>
             </div>
         </div>
-        <!-- 항목은 작업자 분 편하신 대로 바꾸시면 됩니다. -->
         <table>
             <thead>
             <tr>
-                <th>No.</th>
-                <th>회원 ID</th>
-                <th>이름</th>
-                <th>가입 일자</th>
-                <th>최종 접속 시간</th>
-                <th>접속 횟수</th>
-                <th>지역</th>
-                <th>등급</th>
-                <th>등업 신청 여부</th>
+                <th> ID</th>
+                <th> 이름</th>
+                <th> 이메일</th>
+                <th> 별명</th>
+                <th> 지역</th>
+                <th> 최종 접속 시간</th>
+                <th> 회원 만든 시간</th>
+
+                <th> 등급</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>1</td>
+            <tr th:each="user : ${allUser}">
                 <td>
-                    <a href="/admin/member/member_edit">회원 ID</a>
+                    <a th:href="@{/admin/member/member_edit/{id}(id = ${user.id})}"
+                       th:text="${user.loginId}"></a>
                 </td>
-                <td>이름123</td>
-                <td>가입 일자</td>
-                <td>최종 접속 시간</td>
-                <td>접속 횟수</td>
-                <td>지역</td>
-                <td>튀김 우동</td>
-                <td>True</td>
+                <td th:text="${user.name}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.nickname}"></td>
+                <td th:text="${user.location.name}"></td>
+                <td th:text="${user.updatedAt}"></td>
+                <td th:text="${user.createdAt}"></td>
+                <td th:text="${user.grade}"></td>
             </tr>
             </tbody>
         </table>
+        <div class="pagination">
+            <ul>
+                <li th:if="${allUser.hasPrevious()}" class="page-item">
+                    <a th:href="@{/admin/member/member_list(page=${allUser.number - 1}, size=${allUser.size})}"
+                       class="page-link">이전</a>
+                </li>
+                <li th:each="i : ${#numbers.sequence(0, allUser.totalPages - 1)}"
+                    th:classappend="${i == allUser.number} ? 'active'">
+                    <a th:href="@{/admin/member/member_list(page=${i}, size=${allUser.size})}"
+                       th:text="${i + 1}" class="page-link">1</a>
+                </li>
+                <li th:if="${allUser.hasNext()}" class="page-item">
+                    <a th:href="@{/admin/member/member_list(page=${allUser.number + 1}, size=${allUser.size})}"
+                       class="page-link">다음</a>
+                </li>
+            </ul>
+        </div>
     </section>
 </th:block>
 </body>

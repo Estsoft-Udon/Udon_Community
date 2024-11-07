@@ -18,51 +18,27 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class AdminService {
+public class AdminArticleService {
     private final UsersRepository usersRepository;
     private final ArticlesRepository articlesRepository;
     private final ArticlesService articlesService;
 
-    // 관리자 로그인
-    public Users adminLogin(String loginId, String password) {
-        Users adminUser = usersRepository.findByLoginId(loginId);
-        if (adminUser == null || !adminUser.getPassword().equals(password) || !adminUser.getGrade()
-                .equals(Grade.UDON_ADMIN)) {
-            throw new IllegalArgumentException("관리자가 아님");
-        }
-        return adminUser;
-    }
 
-    // 회원 관리 리스트
-    public List<UsersResponse> getAllUsers() {
-        List<Users> users = usersRepository.findAll();
-        return users.stream()
-                .map(UsersResponse::new)
+    //    // 관리자 게시글 조회
+    public List<ArticleResponse> getAdminArticles() {
+//        List<Articles> articles = articlesRepository.findByAuthorGrade(Grade.UDON_ADMIN);
+        List<Articles> articles = articlesRepository.findAll();
+        return articles.stream()
+                .map(ArticleResponse::new)
+//                .map(article -> new ArticleResponse(article, isAdmin))
                 .toList();
     }
 
-    // 회원 등급 수정
-    public Users updateUserGrade(Long userId, Grade grade) {
-        Users user = usersRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("없는 유저"));
-
-        user.setGrade(grade);
-        usersRepository.save(user);
-        return user;
-    }
-
-//    // 관리자 게시글 조회
-//    public List<ArticleResponse> getAdminArticles() {
-//        List<Articles> articles = articlesRepository.findByAuthorGrade(Grade.UDON_ADMIN);
-//        return articles.stream()
-//                .map(ArticleResponse::new)
-//                .toList();
-//    }
-
     // 관리자 특정 게시글 조회
-    public Optional<ArticleResponse> getAdminByArticleId(Long articleId) {
+    public Optional<ArticleResponse> getAdminByArticleId(Long articleId,boolean isAdmin) {
         return articlesRepository.findById(articleId)
                 .map(ArticleResponse::new);
+//                .map(article -> new ArticleResponse(article, isAdmin));
     }
 
     // 관리자 게시글 수정
@@ -70,4 +46,5 @@ public class AdminService {
     public Articles updateArticle(Long articleId, UpdateArticleRequest request) {
         return articlesService.updateArticle(articleId, request);
     }
+
 }

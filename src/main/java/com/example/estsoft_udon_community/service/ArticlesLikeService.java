@@ -22,7 +22,7 @@ public class ArticlesLikeService {
         this.articlesRepository = articlesRepository;
     }
 
-    public ArticlesLike pressArticlesLike(Long articlesId, Long userId) {
+    public Long pressArticlesLike(Long articlesId, Long userId) {
         Articles article = articlesRepository.findById(articlesId)
                 .orElseThrow(() -> new IllegalArgumentException("articles id: " + articlesId + " not found"));
 
@@ -35,12 +35,12 @@ public class ArticlesLikeService {
         if (foundLike.isPresent()) {
             // 좋아요가 이미 존재할 경우 삭제하고 null을 반환
             articlesLikeRepository.delete(foundLike.get());
-            return null;
         } else {
             // 좋아요가 없을 경우 새로 저장하고 저장된 객체 반환
             ArticlesLike newLike = new ArticlesLike(article, user);
-            return articlesLikeRepository.save(newLike);
+            articlesLikeRepository.save(newLike);
         }
+        return articlesLikeRepository.countLikesByArticles(article);
     }
 
     public List<Object[]> findArticlesOrderByLikesCountDesc() {

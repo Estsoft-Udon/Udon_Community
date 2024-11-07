@@ -10,6 +10,6 @@ public class LocationDTO {
 
     public LocationDTO(Location location) {
         this.id = location.getId();
-        this.name = location.getName();
+        this.name = location.getUpperLocation() + " " + location.getName();
     }
 }

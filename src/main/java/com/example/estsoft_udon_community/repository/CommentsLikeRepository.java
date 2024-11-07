@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface CommentsLikeRepository extends JpaRepository<CommentsLike, Long> {
@@ -31,4 +32,10 @@ public interface CommentsLikeRepository extends JpaRepository<CommentsLike, Long
     List<Object[]> findCommentsByArticleIdOrderByLikesCountDesc(@Param("articleId") Long articleId);
 
     long countByCommentsId(Long commentId);
+
+    // 유저별 likeCount 조회
+    @Query("SELECT cl.users.id AS userId, COUNT(cl) AS likeCount " +
+            "FROM CommentsLike cl " +
+            "GROUP BY cl.users.id")
+    List<Map<String, Object>> findTopUsersByCommentLikes();
 }

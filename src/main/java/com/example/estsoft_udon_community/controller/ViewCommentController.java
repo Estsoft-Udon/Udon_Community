@@ -27,8 +27,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ViewCommentController {
     private final ArticlesService articlesService;
+    private final ArticlesLikeService articlesLikeService;
     private final CommentsService commentsService;
-    private final UsersService usersService;
     private final CommentsLikeService commentsLikeService;
 
     // 게시글 조회 / 댓글 조회
@@ -38,6 +38,7 @@ public class ViewCommentController {
                               @RequestParam(defaultValue = "5") int size,
                               Model model) {
         Optional<ArticleResponse> article = articlesService.findByArticleId(id);
+        Long articleLikeCount = articlesLikeService.getLikeCountForArticle(id);
         Pageable pageable = PageRequest.of(page, size);
         Page<CommentsResponse> commentsPage = commentsService.findCommentsByArticleId(id, pageable);
 
@@ -49,6 +50,7 @@ public class ViewCommentController {
         if (!commentsPage.isEmpty()) {
             model.addAttribute("commentsPage", commentsPage);
         }
+        model.addAttribute("articleLikeCount", articleLikeCount);
         model.addAttribute("loggedInUserId", SecurityUtil.getLoggedInUser().getId());
 
         if (article.isPresent()) {
@@ -80,30 +82,4 @@ public class ViewCommentController {
             return "redirect:/articles"; // 게시글이 없으면 게시판 목록으로 리다이렉트
         }
     }
-//    // 코멘트 수정
-//    @PutMapping("/articles/{articleId}/comments/{commentId}")
-//    public String editComment(@PathVariable Long articleId,
-//                              @PathVariable Long commentId,
-//                              @RequestBody CommentsRequest request) {
-//        Comments comments = commentsService.findComment(commentId);
-//        System.out.println(request.getContent());
-//
-//        if(comments != null) {
-//            commentsService.update(commentId, request);
-//        }
-//
-//        return "redirect:/articles/{articleId}";
-//    }
-
-//    // 코멘트 삭제 => REST API
-//    @DeleteMapping("/articles/{articleId}/comments/{commentId}")
-//    public String deleteComment(@PathVariable Long articleId, @PathVariable Long commentId) {
-//        Comments comments = commentsService.findComment(commentId);
-//
-//        if(comments != null) {
-//            commentsService.softDelete(commentId);
-//        }
-//
-//        return "redirect:/articles/" + articleId;
-//    }
 }
