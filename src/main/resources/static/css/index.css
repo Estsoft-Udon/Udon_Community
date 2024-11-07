@@ -169,6 +169,7 @@ aside h2 a{
 .modal-header h2 {
     margin: 0;
     font-weight: 500;
+    background: none;
 }
 
 .modal-header p{
@@ -180,7 +181,7 @@ aside h2 a{
 
 .close-btn {
     cursor: pointer;
-    font-size: clamp(1.2rem, 2vw, 6rem);
+    font-size: clamp(1.2rem, 4vw, 6rem);
 }
 
 textarea {
@@ -255,6 +256,7 @@ th, td {
     font-size: 1.2rem;
     font-weight: 500;
     padding: 0.5rem;
+    cursor: pointer;
 }
 
 .calendar .event.festival{
@@ -308,16 +310,30 @@ th, td {
     max-width: 600px;
 }
 
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+.modal-content p{
+    margin-bottom: 2rem;
 }
 
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+.modal-content p.txt_box{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.modal-content p.txt_box span{
+    display: block;
+    border: 1px solid rgba(0, 133, 249, 1);
+    border-radius: 1rem;
+    padding: 2rem;
+}
+
+#eventModal .modal-header{
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    padding: 2rem 0;
+}
+
+#eventModal .modal-header h2{
+    padding: 0;
 }

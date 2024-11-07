@@ -115,12 +115,23 @@
         <!-- 일정 정보 모달 -->
         <div id="eventModal" class="modal">
             <div class="modal-content">
-                <span class="close" id="closeModal">&times;</span>
-                <h2 id="eventDetailsTitle"></h2>
-                <p><strong>이벤트 타입: </strong><span id="eventDetailsType"></span></p>
-                <p><strong>일시: </strong><span id="eventDetailsDateTime"></span></p>
-                <p><strong>작성자: </strong><span id="eventDetailsUser"></span></p>
-                <p><strong>상세 설명: </strong><span id="eventDetailsDescription"></span></p>
+                <span class="close-btn" id="closeModal">&times;</span>
+                <div class="modal-header">
+                    <span id="eventDetailsType"></span>
+                    <h2 id="eventDetailsTitle"></h2>
+                </div>
+                <p>
+                    <strong>일시 : </strong>
+                    <span id="eventDetailsDateTime"></span>
+                </p>
+                <p>
+                    <strong>주최자 : </strong>
+                    <span id="eventDetailsUser"></span>
+                </p>
+                <p class="txt_box">
+                    <strong>내용</strong>
+                    <span id="eventDetailsDescription"></span>
+                </p>
             </div>
         </div>
 

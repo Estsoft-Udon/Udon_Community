@@ -195,7 +195,7 @@ function showEventDetails(event) {
     const eventDescription = document.getElementById('eventDetailsDescription');
 
     eventTitle.textContent = event.title;
-    eventDateTime.textContent = `일시: ${new Date(event.dateTime).toLocaleString()}`;
+    eventDateTime.textContent = `${new Date(event.dateTime).toLocaleString()}`;
     eventDescription.textContent = event.content || '상세 설명이 없습니다.';
 
     eventDetails.style.display = 'block'; // 상세 정보를 표시
@@ -222,7 +222,7 @@ function showEventDetails(event) {
     // 모달에 이벤트 데이터 표시
     eventTitle.textContent = event.title;
     eventType.textContent = getEventTypeText(event.eventType);
-    eventDateTime.textContent = `일시: ${new Date(event.dateTime).toLocaleString()}`;
+    eventDateTime.textContent = `${new Date(event.dateTime).toLocaleString()}`;
     eventUser.textContent = event.usersId || '정보 없음';
     eventDescription.textContent = event.content || '상세 설명이 없습니다.';
 
