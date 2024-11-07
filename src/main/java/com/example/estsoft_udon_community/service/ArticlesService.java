@@ -178,7 +178,7 @@ public class ArticlesService {
 
     // 제목 검색 조회
     public Page<ArticleDetailResponse> searchByTitle(String title, int page, int size, String sortOption) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));  // 기본적으로 작성일 기준 내림차순
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
 
         Page<Articles> articlesPage = switch (sortOption) {
             case "likeCount" -> articlesRepository.findByTitleContainingIgnoreCaseOrderByLikeCount(title, pageable);
