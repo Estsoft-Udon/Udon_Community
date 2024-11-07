@@ -30,28 +30,24 @@ public class BoardController {
     public String getBoardList(@RequestParam(required = false) Long locationId,
                                @RequestParam(defaultValue = "0") int page,
                                @RequestParam(defaultValue = "5") int size,
+                               @RequestParam(defaultValue = "createdAt") String sortOption,
                                Model model) {
 
-        // 페이지네이션을 위한 서비스 호출
         Page<ArticleDetailResponse> articles;
-
         if (locationId != null) {
-            // location 정보가 있으면 지역별 게시글 나열
             Location locationById = locationService.getLocationById(locationId);
-            articles = articlesService.findByLocationId(locationId, page, size);
+            articles = articlesService.findByLocationId(locationId, page, size, sortOption);
             model.addAttribute("location", locationById);
-
         } else {
-            // 지역 정보가 없을 때 - 전체 지역 게시글 리스트
-            articles = articlesService.findAll(page, size);
+            articles = articlesService.findAll(page, size, sortOption);
             model.addAttribute("location", null);
         }
+
         model.addAttribute("articles", articles);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", articles.getTotalPages());
         model.addAttribute("totalItems", articles.getTotalElements());
 
-        // location 정보가 있든 없든 있어야 하는 topHashtags 정보
         List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();
         model.addAttribute("topHashtags", topHashtags);
 
@@ -64,9 +60,10 @@ public class BoardController {
             @RequestParam String title,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "createdAt") String sortOption,
             Model model) {
 
-        Page<ArticleDetailResponse> articles = articlesService.searchByTitle(title, page, size);
+        Page<ArticleDetailResponse> articles = articlesService.searchByTitle(title, page, size, sortOption);
 
         model.addAttribute("searchQuery", title);
 
@@ -87,9 +84,10 @@ public class BoardController {
     public String getArticlesByHashtag(@PathVariable Long hashtagId,
                                        @RequestParam(defaultValue = "0") int page,
                                        @RequestParam(defaultValue = "5") int size,
+                                       @RequestParam(defaultValue = "createdAt") String sortOption,
                                        Model model) {
 
-        Page<ArticleDetailResponse> articles = articlesService.findByHashtag(hashtagId, page, size);
+        Page<ArticleDetailResponse> articles = articlesService.findByHashtag(hashtagId, page, size, sortOption);
 
         model.addAttribute("articles", articles);
         model.addAttribute("currentPage", page);
@@ -107,9 +105,10 @@ public class BoardController {
     public String getArticlesByCategory(@PathVariable String category,
                                         @RequestParam(defaultValue = "0") int page,
                                         @RequestParam(defaultValue = "5") int size,
+                                        @RequestParam(defaultValue = "createdAt") String sortOption,
                                         Model model) {
 
-        Page<ArticleDetailResponse> articles = articlesService.findByCategory(category, page, size);
+        Page<ArticleDetailResponse> articles = articlesService.findByCategory(category, page, size, sortOption);
 
         model.addAttribute("articles", articles);
         model.addAttribute("currentPage", page);
