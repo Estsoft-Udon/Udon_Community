@@ -159,9 +159,15 @@ public class ArticlesService {
     }
 
     // 카테고리로 게시글 조회
-    public Page<ArticleDetailResponse> findByCategory(String category, int page, int size) {
+    public Page<ArticleDetailResponse> findByCategory(String category, int page, int size, String sortOption) {
+        ArticleCategory articleCategory = ArticleCategory.valueOf(category.toUpperCase());
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
-        Page<Articles> articlesPage = articlesRepository.findByCategory(ArticleCategory.valueOf(category), pageable);
+
+        Page<Articles> articlesPage = switch (sortOption) {
+            case "likeCount" -> articlesRepository.findByCategoryOrderByLikeCount(articleCategory, pageable);
+            case "commentCount" -> articlesRepository.findByCategoryOrderByCommentCount(articleCategory, pageable);
+            default -> articlesRepository.findByCategory(articleCategory, pageable);
+        };
 
         return articlesPage.map(article -> new ArticleDetailResponse(
                 article,

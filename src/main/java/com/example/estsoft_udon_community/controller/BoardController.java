@@ -103,9 +103,10 @@ public class BoardController {
     public String getArticlesByCategory(@PathVariable String category,
                                         @RequestParam(defaultValue = "0") int page,
                                         @RequestParam(defaultValue = "5") int size,
+                                        @RequestParam(defaultValue = "createdAt") String sortOption,
                                         Model model) {
 
-        Page<ArticleDetailResponse> articles = articlesService.findByCategory(category, page, size);
+        Page<ArticleDetailResponse> articles = articlesService.findByCategory(category, page, size, sortOption);
 
         model.addAttribute("articles", articles);
         model.addAttribute("currentPage", page);

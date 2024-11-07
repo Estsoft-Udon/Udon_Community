@@ -86,8 +86,9 @@ public class ArticlesController {
     public ResponseEntity<Page<ArticleDetailResponse>> findByCategory(
             @PathVariable String category,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Page<ArticleDetailResponse> articles = articlesService.findByCategory(category, page, size);
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sortOption) {
+        Page<ArticleDetailResponse> articles = articlesService.findByCategory(category, page, size, sortOption);
         return ResponseEntity.ok(articles);
     }
 
