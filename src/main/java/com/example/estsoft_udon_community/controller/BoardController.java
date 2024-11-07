@@ -22,9 +22,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -138,19 +137,7 @@ public class BoardController {
     // 게시글 생성
     @GetMapping("/articles/new")
     public String createBoard(Model model) {
-
-        model.addAttribute("articleCategories", ArticleCategory.values());
-
-        // 상위 지역 목록을 가져와서 모델에 추가
-        List<String> upperLocations = locationService.getDistinctUpperLocations();
-        model.addAttribute("upperLocations", upperLocations);
-
-        // 첫 번째 상위 지역에 대한 하위 지역 목록을 초기화하여 모델에 추가
-        if (!upperLocations.isEmpty()) {
-            String firstUpperLocation = upperLocations.get(0);
-            List<Location> lowerLocations = locationService.getLowerLocation(firstUpperLocation);
-            model.addAttribute("locations", lowerLocations);
-        }
+        setCategoriesAndLocations(model);
 
         return "board/board_edit";
     }
@@ -171,10 +158,49 @@ public class BoardController {
 
     // 게시글 수정
     @GetMapping("/articles/edit/{articleId}")
-    public String boardEditPage() {
+    public String boardEdit(@PathVariable Long articleId, Model model) {
+        setCategoriesAndLocations(model);
+
+        // 기존 게시글 데이터를 조회하여 모델에 추가
+        ArticleResponse article = articlesService.findByArticleId(articleId)
+                .orElseThrow(() -> new IllegalArgumentException("article이 존재하지 않습니다."));
+        model.addAttribute("article", article);
+
+        Location location = locationService.findByName(article.getLocation());
+        model.addAttribute("originLocation", location);
+
         return "board/board_edit";
     }
 
     // 게시글 수정
+    @PostMapping("/articles/edit/{articleId}")
+    public String boardEdit(Model model, @ModelAttribute AddArticleRequest addArticleRequest,
+                            String locationName) {
 
+        model.addAttribute("article", addArticleRequest);
+        model.addAttribute("articleCategories", ArticleCategory.values());
+
+        Location location = locationService.findByName(locationName);
+
+        //article 저장
+        articlesService.saveArticle(addArticleRequest, location.getId());
+
+        return "board/board_edit";
+    }
+
+    // 카테고리 및 로케이션 세팅
+    public void setCategoriesAndLocations(Model model) {
+        model.addAttribute("articleCategories", ArticleCategory.values());
+
+        // 상위 지역 목록을 가져와서 모델에 추가
+        List<String> upperLocations = locationService.getDistinctUpperLocations();
+        model.addAttribute("upperLocations", upperLocations);
+
+        // 첫 번째 상위 지역에 대한 하위 지역 목록을 초기화하여 모델에 추가
+        if (!upperLocations.isEmpty()) {
+            String firstUpperLocation = upperLocations.get(0);
+            List<Location> lowerLocations = locationService.getLowerLocation(firstUpperLocation);
+            model.addAttribute("locations", lowerLocations);
+        }
+    }
 }

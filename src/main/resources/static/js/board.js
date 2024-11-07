@@ -67,40 +67,7 @@ if (inputField) {
 }
 
 
-
-
-
-function submit_comment() {
-    const content = document.getElementById('comment_content').value;
-
-    console.log('submitComment 호출됨:', content, article_id); // 디버깅 로그
-
-    if (!content) {
-        alert('댓글 내용을 입력해 주세요.');
-        return;
-    }
-
-    fetch(`/articles/${article_id}/comments`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json', // JSON 형식으로 데이터 전송
-        },
-        body: JSON.stringify({ content: content }), // 댓글 내용을 JSON 형식으로 변환
-    })
-        .then(response => {
-            if (response.ok) {
-                alert('댓글이 등록되었습니다.'); // 성공 메시지
-                location.reload(); // 페이지 새로 고침
-            } else {
-                alert('댓글 등록에 실패했습니다.'); // 실패 메시지
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error); // 오류 로그
-            alert('댓글 등록 중 오류가 발생했습니다.'); // 오류 메시지
-        });
-}
-
+// 게시글 수정
 function edit_article(article_id) {
     const content_element = document.getElementById(`origin_comment_${comment_id}`);
     const input_element = document.getElementById(`edit_comment_${comment_id}`);
@@ -137,6 +104,7 @@ function edit_article(article_id) {
     edit_button.setAttribute('onclick', 'press_edit(' + comment_id + ')');
 }
 
+// 게시글 삭제
 function delete_article(article_id) {
     if (confirm('정말 삭제하시겠습니까?')) {
         fetch(`/api/articles/${article_id}`, {
