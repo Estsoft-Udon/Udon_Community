@@ -3,13 +3,7 @@ package com.example.estsoft_udon_community.controller;
 import com.example.estsoft_udon_community.dto.request.AddArticleRequest;
 import com.example.estsoft_udon_community.dto.response.ArticleDetailResponse;
 import com.example.estsoft_udon_community.dto.response.ArticleResponse;
-import com.example.estsoft_udon_community.dto.response.CommentsResponse;
-import com.example.estsoft_udon_community.entity.Articles;
-import com.example.estsoft_udon_community.entity.Comments;
-import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.enums.ArticleCategory;
-import com.example.estsoft_udon_community.enums.UpperLocationEnum;
-import com.example.estsoft_udon_community.security.CustomUserDetails;
 import com.example.estsoft_udon_community.service.ArticlesService;
 import com.example.estsoft_udon_community.service.HashtagService;
 import lombok.RequiredArgsConstructor;
@@ -22,10 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
@@ -134,33 +125,20 @@ public class BoardController {
     // 게시글 생성
     @GetMapping("/articles/new")
     public String createBoard(Model model) {
-
-        model.addAttribute("articleCategories", ArticleCategory.values());
-
-        // 상위 지역 목록을 가져와서 모델에 추가
-        List<String> upperLocations = locationService.getDistinctUpperLocations();
-        model.addAttribute("upperLocations", upperLocations);
-
-        // 첫 번째 상위 지역에 대한 하위 지역 목록을 초기화하여 모델에 추가
-        if (!upperLocations.isEmpty()) {
-            String firstUpperLocation = upperLocations.get(0);
-            List<Location> lowerLocations = locationService.getLowerLocations(firstUpperLocation);
-            model.addAttribute("locations", lowerLocations);
-        }
+        setCategoriesAndLocations(model);
 
         return "board/board_edit";
     }
 
     // 게시글 생성
     @PostMapping("/articles/new")
-    public String createBoard(Model model, @ModelAttribute AddArticleRequest addArticleRequest,
-                            String upperLocation, String locationName) {
+    public String createBoard(Model model, @ModelAttribute AddArticleRequest addArticleRequest, Long locationId) {
 
         model.addAttribute("article", addArticleRequest);
         model.addAttribute("articleCategories", ArticleCategory.values());
 
         //article 저장
-        articlesService.saveArticle(addArticleRequest, Long.valueOf(locationName));
+        articlesService.saveArticle(addArticleRequest, locationId);
 
         return "board/board_edit";
     }
@@ -185,13 +163,12 @@ public class BoardController {
     @PostMapping("/articles/edit/{articleId}")
     public String boardEdit(@PathVariable Long articleId, Model model,
                             @ModelAttribute AddArticleRequest request,
-                            String locationName) {
+                            Long locationId) {
 
         model.addAttribute("article", request);
         model.addAttribute("articleCategories", ArticleCategory.values());
 
-        Location location = locationService.findByName(locationName);
-        request.setLocationId(location.getId());
+        request.setLocationId(locationId);
 
         //article 저장
         articlesService.updateArticle2(articleId, request);
@@ -210,7 +187,7 @@ public class BoardController {
         // 첫 번째 상위 지역에 대한 하위 지역 목록을 초기화하여 모델에 추가
         if (!upperLocations.isEmpty()) {
             String firstUpperLocation = upperLocations.get(0);
-            List<Location> lowerLocations = locationService.getLowerLocation(firstUpperLocation);
+            List<Location> lowerLocations = locationService.getLowerLocations(firstUpperLocation);
             model.addAttribute("locations", lowerLocations);
         }
     }

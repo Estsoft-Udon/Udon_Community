@@ -14,7 +14,7 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
     @Query("SELECT DISTINCT upperLocation FROM Location")
     List<String> findDistinctUpperLocations();
 
-    List<Location> findByUpperLocation(UpperLocationEnum upperLocation);
+    List<Location> findLowerLocationsByUpperLocation(UpperLocationEnum upperLocation);
 
     Optional<Location> findByName(String name);
 }
