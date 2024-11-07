@@ -79,6 +79,7 @@ public class UsersService {
             Location location = locationRepository.findById(request.getLocationId()).orElseThrow();
             user.setLocation(location);
         }
+
         return usersRepository.save(request.updateEntity(user));
     }
 

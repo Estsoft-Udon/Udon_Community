@@ -1,6 +1,6 @@
 function updateLowerLocations() {
     const upperLocation = document.getElementById('upperLocation').value;
-    const locationSelect = document.getElementById('locationName');
+    const locationSelect = document.getElementById('locationId');
 
     // 선택된 상위 지역이 없으면 하위 지역을 초기화
     if (!upperLocation) {
@@ -24,7 +24,7 @@ function updateLowerLocations() {
             data.forEach(location => {
                 const option = document.createElement('option');
                 option.value = location.id;
-                option.textContent = location.name; // location의 name 값으로 설정
+                option.textContent = location.name;
                 locationSelect.appendChild(option);
             });
         })
@@ -51,4 +51,4 @@ function initializeSelectBox(selectors) {
     });
 }
 
-initializeSelectBox('.securityQuestion, #location, #upperLocation, #locationName');
+initializeSelectBox('#upperLocation, #locationId');

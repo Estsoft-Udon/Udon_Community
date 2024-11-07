@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LocationRepository extends JpaRepository<Location, Long> {
+
     @Query("SELECT DISTINCT upperLocation FROM Location")
     List<String> findDistinctUpperLocations();
 

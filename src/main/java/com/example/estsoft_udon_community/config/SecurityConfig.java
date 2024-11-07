@@ -36,7 +36,8 @@ public class SecurityConfig {
 
                 // 로그아웃 추가
                 .logout(custom -> {
-                    custom.logoutUrl("/logout");
+                    custom.logoutUrl("/logout")
+                            .logoutSuccessUrl("/");
                 })
 
                 .csrf(AbstractHttpConfigurer::disable)

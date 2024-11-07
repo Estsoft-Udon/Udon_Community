@@ -67,9 +67,6 @@ if (inputField) {
 }
 
 
-
-
-
 function submit_comment() {
     const content = document.getElementById('comment_content').value;
 
