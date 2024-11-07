@@ -13,4 +13,6 @@ public interface UsersRepository extends JpaRepository<Users, Long> {
     Users findByLoginIdAndPasswordHintAndPasswordAnswer(String loginId, PasswordHint passwordHint,
                                                                String passwordAnswer);
     Users findByLoginId(String loginId);
+
+    boolean existsByLoginIdIgnoreCase(String loginId);
 }

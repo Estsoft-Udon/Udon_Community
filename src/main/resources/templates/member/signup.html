@@ -14,8 +14,11 @@
                     <div class="id_box">
                         <label for="loginId" class="dn"></label>
                         <input type="text" id="loginId" name="loginId" required placeholder="아이디">
-                        <button type="button" onclick="checkId()" class="reversal_btn">중복확인</button>
+                        <button type="button" onclick="checkId()" class="reversal_btn">중복 확인</button>
                     </div>
+
+                    <!-- 중복 확인 메시지 표시 -->
+                    <div id="idCheckMessage" class="id-check-message"></div>
 
                     <label for="password"></label>
                     <input type="password" id="password" name="password" required placeholder="비밀번호 입력">

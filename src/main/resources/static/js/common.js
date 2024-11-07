@@ -51,4 +51,35 @@ function initializeSelectBox(selectors) {
     });
 }
 
+function checkId() {
+    const loginId = document.getElementById('loginId').value.trim();
+    if (!loginId) {
+        alert('아이디를 입력해주세요.');
+        return;
+    }
+
+    fetch('/api/checkId', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ loginId })
+    })
+        .then(response => response.json())
+        .then(isDuplicate => {
+            const messageElement = document.getElementById('idCheckMessage');
+
+            if (isDuplicate) {
+                messageElement.textContent = '이미 사용 중인 아이디입니다.';
+                messageElement.style.color = 'red';
+            } else {
+                messageElement.textContent = '사용 가능한 아이디입니다.';
+                messageElement.style.color = 'green';
+            }
+        })
+        .catch(error => {
+            console.error('아이디 중복 확인 오류:', error);
+        });
+}
+
 initializeSelectBox('#upperLocation, #locationId');

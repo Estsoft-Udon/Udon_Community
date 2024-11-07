@@ -114,6 +114,11 @@ public class UsersService {
         return users;
     }
 
+    // 회원가입시 아이디 중복체크
+    public boolean isLoginIdDuplicate(String loginId) {
+        return usersRepository.existsByLoginIdIgnoreCase(loginId);
+    }
+
 //    // 로그인 유저 지역정보 가져오기
 //    public Location getUserLocationByLoginId(String loginId) {
 //        Users user = usersRepository.findByLoginId(loginId);

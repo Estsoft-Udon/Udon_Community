@@ -5,6 +5,8 @@ import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.dto.request.UsersRequest;
 import com.example.estsoft_udon_community.service.UsersService;
 import java.util.List;
+import java.util.Map;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -78,4 +80,11 @@ public class UsersController {
         return ResponseEntity.ok(foundUser.getPassword());
     }
 
+    // 회원가입시 아이디 중복체크
+    @PostMapping("/checkId")
+    public ResponseEntity<Boolean> checkId(@RequestBody Map<String, String> requestBody) {
+        String loginId = requestBody.get("loginId");
+        boolean isDuplicate = usersService.isLoginIdDuplicate(loginId);
+        return ResponseEntity.ok(isDuplicate);
+    }
 }
