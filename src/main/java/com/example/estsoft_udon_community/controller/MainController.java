@@ -2,9 +2,12 @@ package com.example.estsoft_udon_community.controller;
 
 import com.example.estsoft_udon_community.dto.response.ArticleDetailResponse;
 import com.example.estsoft_udon_community.entity.Location;
+import com.example.estsoft_udon_community.entity.Users;
+import com.example.estsoft_udon_community.enums.PasswordHint;
 import com.example.estsoft_udon_community.service.ArticlesService;
 import com.example.estsoft_udon_community.service.EventService;
 import com.example.estsoft_udon_community.service.LocationService;
+import com.example.estsoft_udon_community.service.UsersService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,17 +15,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.example.estsoft_udon_community.util.SecurityUtil.getLoggedInUser;
+
 @Controller
 public class MainController {
 
     private final EventService eventService;
     private final LocationService locationService;
     private final ArticlesService articlesService;
+    private final UsersService usersService;
 
-    public MainController(EventService eventService, LocationService locationService, ArticlesService articlesService) {
+    public MainController(EventService eventService, LocationService locationService, ArticlesService articlesService, UsersService usersService) {
         this.eventService = eventService;
         this.locationService = locationService;
         this.articlesService = articlesService;
+        this.usersService = usersService;
     }
 
     @GetMapping("/")
@@ -47,6 +54,26 @@ public class MainController {
                 .collect(Collectors.toList());
 
         model.addAttribute("articles", newestPosts); // 모델에 게시글 리스트 추가
+
+        // 로그인 사용자의 정보
+        Users users = usersService.findUserById(getLoggedInUser().getId());
+        model.addAttribute("user", users);
+        model.addAttribute("passwordHints", PasswordHint.values());
+
+        Location location = users.getLocation();
+        model.addAttribute("locationId", location.getName());
+        model.addAttribute("selectedUpperLocation", location.getUpperLocation());
+
+        // upperLocation의 정보
+        List<String> eventupperLocations = locationService.getDistinctUpperLocations();
+        model.addAttribute("upperLocations", eventupperLocations);
+
+        // 해당 Upper Location의 하위 Location 리스트
+        if (!eventupperLocations.isEmpty()) {
+            String firstUpperLocation = eventupperLocations.get(0);
+            List<Location> lowerLocations = locationService.getLowerLocations(firstUpperLocation);
+            model.addAttribute("locations", lowerLocations);
+        }
 
         return "index";
     }
