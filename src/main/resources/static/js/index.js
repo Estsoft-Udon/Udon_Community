@@ -134,6 +134,9 @@ function renderCalendar(year, month) {
                             const eventDiv = document.createElement('div');
                             eventDiv.className = 'event ' + getEventTypeClass(event.eventType); // 이벤트 타입에 따라 클래스 추가
                             eventDiv.textContent = getEventTypeText(event.eventType) + ' ' + event.title; // 타입에 맞는 텍스트 추가
+                            eventDiv.onclick = function() {
+                                showEventDetails(event); // 클릭 시 상세 정보 표시
+                            };
                             cell.appendChild(eventDiv);
                         }
                     });
@@ -184,11 +187,60 @@ function changeMonth(direction) {
     updateCalendar(); // 달력을 업데이트
 }
 
+// 이벤트 상세 정보를 캘린더 아래에 표시하는 함수
+function showEventDetails(event) {
+    const eventDetails = document.getElementById('eventDetails');
+    const eventTitle = document.getElementById('eventDetailsTitle');
+    const eventDateTime = document.getElementById('eventDetailsDateTime');
+    const eventDescription = document.getElementById('eventDetailsDescription');
+
+    eventTitle.textContent = event.title;
+    eventDateTime.textContent = `일시: ${new Date(event.dateTime).toLocaleString()}`;
+    eventDescription.textContent = event.content || '상세 설명이 없습니다.';
+
+    eventDetails.style.display = 'block'; // 상세 정보를 표시
+}
+
 // 페이지가 로드되면 캘린더를 렌더링하고 이벤트를 가져옵니다.
 window.onload = () => {
     fetchEvents(); // 이벤트 데이터를 가져옵니다
     updateCalendar(); // 캘린더를 초기화
 };
+
+// 모달 관련 변수
+const modal = document.getElementById('eventModal');
+const closeModalBtn = document.getElementById('closeModal');
+
+// 이벤트 상세 정보를 모달에 표시하는 함수
+function showEventDetails(event) {
+    const eventTitle = document.getElementById('eventDetailsTitle');
+    const eventType = document.getElementById('eventDetailsType');
+    const eventDateTime = document.getElementById('eventDetailsDateTime');
+    const eventUser = document.getElementById('eventDetailsUser');
+    const eventDescription = document.getElementById('eventDetailsDescription');
+
+    // 모달에 이벤트 데이터 표시
+    eventTitle.textContent = event.title;
+    eventType.textContent = getEventTypeText(event.eventType);
+    eventDateTime.textContent = `일시: ${new Date(event.dateTime).toLocaleString()}`;
+    eventUser.textContent = event.usersId || '정보 없음';
+    eventDescription.textContent = event.content || '상세 설명이 없습니다.';
+
+    // 모달 표시
+    modal.style.display = 'block';
+}
+
+// 모달 닫기 버튼 클릭 시 모달 숨기기
+closeModalBtn.onclick = function() {
+    modal.style.display = 'none';
+}
+
+// 모달 외부 클릭 시 모달 숨기기
+window.onclick = function(event) {
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+}
 
 function toggleLocationName() {
     const upperLocation = document.getElementById('upperLocation');
