@@ -25,8 +25,8 @@
                     <div class="t_box">
                         <p class="user_id" th:text="${article.nickname}">작성자 닉네임</p>
                         <div class="btn_wr">
-                            <button class="edit_btn" th:if="${article.userId == loggedInUserId}" >수정</button>
-<!--                            <button class="edit_btn" th:if="${article.userId == loggedInUserId}" onclick="location.href='/articles/edit/{articleId}'">수정</button>-->
+                            <button class="edit_btn" th:if="${article.userId == loggedInUserId}"
+                                    th:onclick="|location.href='/articles/edit/' + ${article.id}|">수정</button>
                             <button class="del_btn" th:if="${article.userId == loggedInUserId}" th:onclick="'delete_article(' + ${article.id} + ')'">삭제</button>
                         </div>
                     </div>
@@ -49,7 +49,7 @@
 
                 <!-- Post Content -->
                 <div class="txt_box">
-                    <p th:text="${article.content}">테스트 내용입니다. 테스트 내용. 테스트 내용입니다. 테스트 내용. 테스트 내용입니다. 테스트 내용.</p>
+                    <pre id="article_content" th:text="${article.content}">테스트 내용입니다. 테스트 내용. 테스트 내용입니다. 테스트 내용. 테스트 내용입니다. 테스트 내용.</pre>
                 </div>
 
                 <!-- Hashtags and Interaction Buttons -->
@@ -75,7 +75,7 @@
                                     <p class="comment_date" th:text="|Posted on ${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}|">2024.11.05</p>
                                 </div>
                                 <div class="com_txt_box">
-                                    <p th:id="'origin_comment_' + ${comment.id}" th:text="${comment.content}">댓글 내용</p>
+                                    <pre th:id="'origin_comment_' + ${comment.id}" th:text="${comment.content}">댓글 내용</pre>
                                     <input th:id="'edit_comment_' + ${comment.id}" type="text" th:value="${comment.content}" class="comment-edit-input" style="display:none;">
                                 </div>
                                 <div class="btn_wr" th:if="${comment.user.id == loggedInUserId}">
