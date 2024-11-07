@@ -56,23 +56,14 @@ public class MainController {
         model.addAttribute("articles", newestPosts); // 모델에 게시글 리스트 추가
 
         // 로그인 사용자의 정보
-        Users users = usersService.findUserById(getLoggedInUser().getId());
-        model.addAttribute("user", users);
-        model.addAttribute("passwordHints", PasswordHint.values());
+        if(getLoggedInUser() != null) {
+            Users users = usersService.findUserById(getLoggedInUser().getId());
+            model.addAttribute("user", users);
+            model.addAttribute("passwordHints", PasswordHint.values());
 
-        Location location = users.getLocation();
-        model.addAttribute("locationId", location.getName());
-        model.addAttribute("selectedUpperLocation", location.getUpperLocation());
-
-        // upperLocation의 정보
-        List<String> eventupperLocations = locationService.getDistinctUpperLocations();
-        model.addAttribute("upperLocations", eventupperLocations);
-
-        // 해당 Upper Location의 하위 Location 리스트
-        if (!eventupperLocations.isEmpty()) {
-            String firstUpperLocation = eventupperLocations.get(0);
-            List<Location> lowerLocations = locationService.getLowerLocations(firstUpperLocation);
-            model.addAttribute("locations", lowerLocations);
+            Location location = users.getLocation();
+            model.addAttribute("locationId", location.getName());
+            model.addAttribute("selectedUpperLocation", location.getUpperLocation());
         }
 
         return "index";
