@@ -28,7 +28,7 @@ public class EventService {
     }
 
     // 캘린더 추가
-    public EventResponse addEvent(EventRequest eventRequest) {
+    public void addEvent(EventRequest eventRequest) {
         // 작성자 ID가 null이면 예외 발생
         if (eventRequest.getUsersId() == null) {
             throw new IllegalArgumentException("User ID must not be null");
@@ -42,8 +42,7 @@ public class EventService {
         Event event = eventRequest.toEvent(users.getLocation());
         event.setUsers(users);
 
-        Event saveEvent = eventRepository.save(event);
-        return new EventResponse(saveEvent);
+        eventRepository.save(event);
     }
 
     // 캘린더 수정
