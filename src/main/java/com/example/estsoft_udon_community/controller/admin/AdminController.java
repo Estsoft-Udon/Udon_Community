@@ -39,8 +39,8 @@ public class AdminController {
     // 회원 등급 수정
     @PutMapping("/users/{userId}")
     public ResponseEntity<UsersResponse> updateUserGrade(@PathVariable Long userId, @RequestBody Grade grade) {
-        UsersResponse updateUser = adminService.updateUserGrade(userId, grade);
-        return ResponseEntity.ok(updateUser);
+        Users updateUser = adminService.updateUserGrade(userId, grade);
+        return ResponseEntity.ok(new UsersResponse(updateUser));
     }
 
     // 관리자 게시글 조회
@@ -60,7 +60,8 @@ public class AdminController {
 
     // 관리자 게시글 수정
     @PutMapping("/articles/{articleId}")
-    public ResponseEntity<ArticleResponse> updateAdminArticle(@PathVariable Long articleId, @RequestBody UpdateArticleRequest request) {
+    public ResponseEntity<ArticleResponse> updateAdminArticle(@PathVariable Long articleId,
+                                                              @RequestBody UpdateArticleRequest request) {
         Articles updatedArticle = adminService.updateArticle(articleId, request);
         return ResponseEntity.ok(new ArticleResponse(updatedArticle));
     }
