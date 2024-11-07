@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="admin/layout/layout">
 <body>
 <th:block layout:fragment="content">
+    <link rel="stylesheet" href="/admin/css/calender.css">
     <section>
         <h1>캘린더 승인 요청 목록</h1>
         <div class="filter">
@@ -37,6 +38,22 @@
             </tr>
             </tbody>
         </table>
+
+        <div class="pagination">
+            <ul>
+                <li th:if="${events.hasPrevious()}">
+                    <a th:href="@{/admin/event/event_list(page=${events.number - 1}, size=${events.size}, approved=${approved})}">이전</a>
+                </li>
+                <li th:each="pageNumber : ${#numbers.sequence(0, events.totalPages - 1)}"
+                    th:classappend="${pageNumber == events.number} ? 'active'">
+                    <a th:href="@{/admin/event/event_list(page=${pageNumber}, size=${events.size}, approved=${approved})}"
+                       th:text="${pageNumber + 1}">1</a>
+                </li>
+                <li th:if="${events.hasNext()}">
+                    <a th:href="@{/admin/event/event_list(page=${events.number + 1}, size=${events.size}, approved=${approved})}">다음</a>
+                </li>
+            </ul>
+        </div>
     </section>
 </th:block>
 </body>

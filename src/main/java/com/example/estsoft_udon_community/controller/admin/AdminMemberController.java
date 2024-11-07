@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("admin/member")
-public class AdminMemverController {
+public class AdminMemberController {
 
     // 회원 목록
     @GetMapping("/member_list")
