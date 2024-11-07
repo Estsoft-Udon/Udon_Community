@@ -43,10 +43,30 @@
                     <!-- Navigation and Search Bar -->
                     <div class="table_hd">
                         <div class="btn_wr">
-                            <!-- locationId가 있을 때만 포함되도록 수정 -->
-                            <a th:href="@{${location != null ? '/articles?locationId=' + location.id + '&sortOption=likeCount' : '/articles?sortOption=likeCount'}}" class="nav_btn">좋아요 많은 순</a>
-                            /
-                            <a th:href="@{${location != null ? '/articles?locationId=' + location.id + '&sortOption=commentCount' : '/articles?sortOption=commentCount'}}" class="nav_btn">댓글 많은 순</a>
+                            <!-- 일반 게시글일 때 -->
+                            <div th:if="${hashtagId == null and category == null and searchQuery == null}">
+                                <a th:href="@{${location != null ? '/articles?locationId=' + location.id + '&sortOption=likeCount' : '/articles?sortOption=likeCount'}}" class="nav_btn">좋아요 많은 순</a>
+                                /
+                                <a th:href="@{${location != null ? '/articles?locationId=' + location.id + '&sortOption=commentCount' : '/articles?sortOption=commentCount'}}" class="nav_btn">댓글 많은 순</a>
+                            </div>
+                            <!-- 해시태그 게시글일 때 -->
+                            <div th:if="${hashtagId != null}">
+                                <a th:href="@{${location != null ? '/articles/hashtag/' + hashtagId + '?locationId=' + location.id + '&sortOption=likeCount' : '/articles/hashtag/' + hashtagId + '?sortOption=likeCount'}}" class="nav_btn">좋아요 많은 순</a>
+                                /
+                                <a th:href="@{${location != null ? '/articles/hashtag/' + hashtagId + '?locationId=' + location.id + '&sortOption=commentCount' : '/articles/hashtag/' + hashtagId + '?sortOption=commentCount'}}" class="nav_btn">댓글 많은 순</a>
+                            </div>
+                            <!-- 카테고리 게시글일 때 -->
+                            <div th:if="${category != null}">
+                                <a th:href="@{${location != null ? '/articles/category/' + category + '?locationId=' + location.id + '&sortOption=likeCount' : '/articles/category/' + category + '?sortOption=likeCount'}}" class="nav_btn">좋아요 많은 순</a>
+                                /
+                                <a th:href="@{${location != null ? '/articles/category/' + category + '?locationId=' + location.id + '&sortOption=commentCount' : '/articles/category/' + category + '?sortOption=commentCount'}}" class="nav_btn">댓글 많은 순</a>
+                            </div>
+                            <!-- 검색한 게시글일 때 -->
+                            <div th:if="${searchQuery != null}">
+                                <a th:href="@{${location != null ? '/articles/search?title=' + searchQuery + '&locationId=' + location.id + '&sortOption=likeCount' : '/articles/search?title=' + searchQuery + '&sortOption=likeCount'}}" class="nav_btn">좋아요 많은 순</a>
+                                /
+                                <a th:href="@{${location != null ? '/articles/search?title=' + searchQuery + '&locationId=' + location.id + '&sortOption=commentCount' : '/articles/search?title=' + searchQuery + '&sortOption=commentCount'}}" class="nav_btn">댓글 많은 순</a>
+                            </div>
                         </div>
                         <form th:action="@{/articles/search}" method="get">
                             <div class="search_box">

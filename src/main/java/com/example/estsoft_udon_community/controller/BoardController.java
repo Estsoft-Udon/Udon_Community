@@ -82,9 +82,10 @@ public class BoardController {
     public String getArticlesByHashtag(@PathVariable Long hashtagId,
                                        @RequestParam(defaultValue = "0") int page,
                                        @RequestParam(defaultValue = "5") int size,
+                                       @RequestParam(defaultValue = "createdAt") String sortOption,
                                        Model model) {
 
-        Page<ArticleDetailResponse> articles = articlesService.findByHashtag(hashtagId, page, size);
+        Page<ArticleDetailResponse> articles = articlesService.findByHashtag(hashtagId, page, size, sortOption);
 
         model.addAttribute("articles", articles);
         model.addAttribute("currentPage", page);

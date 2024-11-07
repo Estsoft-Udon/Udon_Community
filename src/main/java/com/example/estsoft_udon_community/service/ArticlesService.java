@@ -142,13 +142,20 @@ public class ArticlesService {
     }
 
     // 해시태그로 게시글 조회
-    public Page<ArticleDetailResponse> findByHashtag(Long hashtagId, int page, int size) {
+    public Page<ArticleDetailResponse> findByHashtag(Long hashtagId, int page, int size, String sortOption) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
-        Page<Articles> articlesPage = hashtagRepository.findArticlesByHashtagIdAndIsDeletedFalse(hashtagId, pageable);
 
-        return articlesPage.map(articles -> new ArticleDetailResponse(articles,
-                fetchLikeCount(articles),
-                fetchCommentCount(articles)));
+        Page<Articles> articlesPage = switch (sortOption) {
+            case "likeCount" -> hashtagRepository.findArticlesByHashtagIdOrderByLikeCount(hashtagId, pageable);
+            case "commentCount" -> hashtagRepository.findArticlesByHashtagIdOrderByCommentCount(hashtagId, pageable);
+            default -> hashtagRepository.findArticlesByHashtagIdAndIsDeletedFalse(hashtagId, pageable);
+        };
+
+        return articlesPage.map(article -> new ArticleDetailResponse(
+                article,
+                fetchLikeCount(article),
+                fetchCommentCount(article)
+        ));
     }
 
     // 카테고리로 게시글 조회

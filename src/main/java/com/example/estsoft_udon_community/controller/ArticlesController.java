@@ -75,8 +75,9 @@ public class ArticlesController {
     public ResponseEntity<Page<ArticleDetailResponse>> findByHashtag(
             @PathVariable Long hashtagId,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Page<ArticleDetailResponse> hashtagByArticle = articlesService.findByHashtag(hashtagId, page, size);
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sortOption) {
+        Page<ArticleDetailResponse> hashtagByArticle = articlesService.findByHashtag(hashtagId, page, size, sortOption);
         return ResponseEntity.ok(hashtagByArticle);
     }
 
