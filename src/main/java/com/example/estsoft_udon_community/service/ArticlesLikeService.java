@@ -7,7 +7,9 @@ import com.example.estsoft_udon_community.repository.UsersRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -54,5 +56,17 @@ public class ArticlesLikeService {
 
         // 좋아요 수 세기
         return articlesLikeRepository.countArticlesLikeByArticles(article);
+    }
+
+    public Map<Long, Long> countArticlesLikeGroupByUser() {
+        List<ArticlesLike> articlesLikes = articlesLikeRepository.findAll();
+
+        Map<Long, Long> articlesMap = new HashMap<>();      // userId, likeCount;
+        for(ArticlesLike articlesLike : articlesLikes) {
+            Long userId = articlesLike.getUsers().getId();
+            articlesMap.merge(userId, 1L, Long::sum);
+        }
+
+        return articlesMap;
     }
 }

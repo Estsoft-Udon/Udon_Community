@@ -10,7 +10,9 @@ import com.example.estsoft_udon_community.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -57,5 +59,19 @@ public class CommentsLikeService {
             return 0L;
         }
         return commentsLikeRepository.countByCommentsId(commentId);
+    }
+
+    public Map<Long, Long> countCommentsLikeGroupByUser() {
+        List<CommentsLike> commentsLikes = commentsLikeRepository.findAll();
+
+        Map<Long, Long> commentsMap = new HashMap<>();      // userId, likeCount;
+        for(CommentsLike commentsLike : commentsLikes) {
+            Long userId = commentsLike.getUsers().getId();
+            commentsMap.merge(userId, 1L, Long::sum);
+        }
+
+        System.out.println(commentsMap);
+
+        return commentsMap;
     }
 }
