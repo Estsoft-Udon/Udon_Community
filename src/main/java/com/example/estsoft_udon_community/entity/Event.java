@@ -62,4 +62,5 @@ public class Event {
     public void setAccepted(boolean accepted) {
         this.isAccepted = accepted;
     }
+
 }

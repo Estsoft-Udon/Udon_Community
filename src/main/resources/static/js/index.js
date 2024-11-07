@@ -16,14 +16,23 @@ function handleSubmit(event) {
     event.preventDefault();
 
     const formData = new FormData(event.target);
+    const data = {};
+    formData.forEach((value, key) => {
+        data[key] = value;
+    });
 
     fetch('/api/event', {
         method: 'POST',
-        body: formData
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data) // JSON 형식으로 전송
     })
         .then(response => {
-            if (!response.ok) throw new Error('Network response was not ok.');
-            return response.text();
+            if (!response.ok) {
+                throw new Error('Network response was not ok.');
+            }
+            return response.json();  // 응답을 JSON으로 파싱
         })
         .then(message => {
             alert(message);
@@ -31,7 +40,10 @@ function handleSubmit(event) {
             event.target.reset();
             updateCalendar();
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => {
+            console.error('Error:', error);
+            alert('이벤트 제출 중 오류가 발생했습니다. 다시 시도해 주세요.');
+        });
 
     return false;
 }
