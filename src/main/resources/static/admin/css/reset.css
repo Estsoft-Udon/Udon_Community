@@ -445,3 +445,8 @@ td a:hover {
     margin: 0;
     cursor: pointer;
 }
+
+.user_location{
+    display: flex;
+    gap: 1rem;
+}

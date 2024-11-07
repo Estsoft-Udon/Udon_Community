@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="admin/layout/layout">
+<body>
+<th:block layout:fragment="content">
+    <section>
+        <h1>회원 수정</h1>
+        <div class="btn_box">
+            <a href="/admin/board/board_list">
+                <button type="button" class="reversal_btn">목록으로</button>
+            </a>
+            <button type="button" class="reversal_btn">회원 탈퇴</button>
+            <form>
+                <button type="submit" class="default_btn">저장하기</button>
+            </form>
+        </div>
+        <!-- 회원 목록에 맞추어 수정하셔도 괜찮습니다. -->
+        <div class="info">
+            <div class="info_item">
+                <p class="info_label">회원 ID</p>
+                <span>회원 아이디</span>
+            </div>
+            <div class="info_item">
+                <p class="info_label">이름</p>
+                <span>이름123</span>
+            </div>
+            <div class="info_item">
+                <p class="info_label">가입 일자</p>
+                <span>가입 일자</span>
+            </div>
+            <div class="info_item">
+                <p class="info_label">최종 접속 시간</p>
+                <span>최종 접속 시간</span>
+            </div>
+            <div class="info_item">
+                <p class="info_label">접속 횟수</p>
+                <span>접속 횟수</span>
+            </div>
+            <div class="info_item">
+                <p class="info_label">지역</p>
+                <p class="user_location">
+                    <span>서울특별시</span>
+                    <span>동대문구</span>
+                </p>
+            </div>
+            <div class="info_item">
+                <p class="info_label">등급</p>
+                <span>튀김 우동</span>
+            </div>
+            <div class="info_item">
+                <p class="info_label">등업 신청 여부</p>
+                <span>True</span>
+            </div>
+            <div class="info_item">
+                <p class="info_label">등급 관리</p>
+                <select>
+                    <option value="">우동</option>
+                    <option value="">튀김 우동</option>
+                    <option value="">우동 보안관</option>
+                    <option value="">우동 마스터</option>
+                </select>
+            </div>
+        </div>
+    </section>
+</th:block>
+</body>
+</html>
