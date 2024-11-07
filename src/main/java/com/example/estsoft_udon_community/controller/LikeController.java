@@ -17,7 +17,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,14 +31,14 @@ public class LikeController {
 
     // 코멘트 좋아요 등록 / 삭제
     @PostMapping("/commentsLike")
-    public ResponseEntity<Void> pressCommentsLike(@RequestBody CommentsLikeRequest request) {
-        CommentsLike commentsLike = commentsLikeService.pressCommentsLike(request.getCommentId(), request.getUserId());
-        if(commentsLike == null) {
-            // 좋아요가 삭제된 경우
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); // 204 No Content
-        }
-        // 좋아요가 추가된 경우 (존재하던 좋아요를 클릭했을 때)
-        return ResponseEntity.status(HttpStatus.CREATED).build(); // 201 Created
+    public ResponseEntity<Map<String, Object>> pressCommentsLike(@RequestBody CommentsLikeRequest request) {
+        Long newLikeCount = commentsLikeService.pressCommentsLike(request.getCommentId(), request.getUserId());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("newLikeCount", newLikeCount);
+        response.put("success", true);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     // 게시글 좋아요 등록 / 삭제

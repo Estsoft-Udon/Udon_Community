@@ -84,8 +84,8 @@
                                 </div>
                             </div>
                             <div class="r_box">
-                                <button type="button" th:onclick="'press_like(' + ${comment.id} + ')'" class="thumb_icon"></button>
-                                <span class="comment-like-count" th:text="${comment.likeCount}">0</span>
+                                <button type="button" th:onclick="'press_like('+ ${comment.user.id} + ','+ ${comment.id} + ')'" class="thumb_icon"></button>
+                                <span class="comment-like-count" th:id="'like_count_' + ${comment.id}" th:text="${comment.likeCount}">0</span>
                             </div>
                         </div>
 

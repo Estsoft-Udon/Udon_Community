@@ -93,9 +93,3 @@ public class CommentsController {
 
 
 }
-/*
-댓글 추가	POST	/api/articles/{articleId}/comments
-댓글목록조회	GET	/api/articles/{articleId}/comments
-댓글 수정	PUT	/api/comments/{commentId}
-댓글 삭제	DELETE	/api/comments/{commentId}
- */
