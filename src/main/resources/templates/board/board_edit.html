@@ -5,7 +5,7 @@
     <div class="wrap board_detail_wr">
         <div class="w_1280">
             <div class="form_wr">
-                <form th:action="@{/articles/new}" method="post">
+                <form id="articleForm" method="post">
                     <!-- 카테고리 선택 -->
                     <div class="form_cont">
                         <span>카테고리</span>
@@ -13,7 +13,8 @@
                         <select id="category" name="category" class="input-field">
                             <option value="" disabled selected>카테고리 선택</option>
                             <th:block th:each="category : ${articleCategories}">
-                                <option th:value="${category}" th:text="${category.getDisplayName()}"></option>
+                                <option th:value="${category}" th:text="${category.getDisplayName()}"
+                                        th:selected="${article != null and article.category==category}"></option>
                             </th:block>
                         </select>
                     </div>
@@ -22,20 +23,26 @@
                     <div class="form_cont">
                         <span>지역</span>
                         <label for="upperLocation" class="dn">지역을 선택</label>
-<!--                        <input type="text" id="region" class="input-field" placeholder="지역 입력" readonly th:text="${userLocation}">-->
+                        <!--                        <input type="text" id="region" class="input-field" placeholder="지역 입력" readonly th:text="${userLocation}">-->
                         <select id="upperLocation" name="upperLocation" onchange="updateLowerLocations()">
                             <option value="" disabled selected> 지역을 선택하세요</option>
                             <th:block th:each="upperLocation : ${upperLocations}">
-                                <option th:value="${upperLocation}" th:text="${upperLocation}"></option>
+                                <option th:value="${upperLocation}" th:text="${upperLocation}"
+                                        th:selected="${article != null and originLocation != null and originLocation.upperLocation.name==upperLocation}"></option>
                             </th:block>
+                            <!--                            <th:block th:if="${article != null}">-->
+                            <!--                                <option th:value="${article.location.upperLocation.name()}" th:text="${article.location.upperLocation.name()}"></option>-->
+                            <!--                            </th:block>-->
                         </select>
 
                         <label for="locationId" class="dn"> 상세 지역을 선택</label>
-                        <select id="locationId" name="locationId" required>
-                            <option value="" disabled selected> 상세 지역을 선택하세요</option>
+                        <select id="locationId" name="locationId" class="input-field" required>
                             <th:block th:each="location : ${locations}">
-                                <option th:text="${location.name}"></option>
+                                <option th:value="${location.id}"
+                                        th:text="${location.name}"
+                                        th:selected="${article != null and originLocation != null and originLocation.name == location.name}">
                             </th:block>
+                            </option>
                         </select>
                     </div>
 
@@ -43,14 +50,15 @@
                     <div class="form_cont">
                         <span>제목</span>
                         <label for="title" class="dn">제목 작성</label>
-                        <input type="text" id="title" name="title" class="input-field" placeholder="제목 입력" required>
+                        <input type="text" id="title" name="title" class="input-field" placeholder="제목 입력" required
+                               th:value="${article != null ? article.title : ''}" >
                     </div>
 
                     <!-- 해시 태그 작성 이전 코드 -->
-<!--                    <div class="form_cont">-->
-<!--                        <label for="hashtag">해시 태그 작성</label>-->
-<!--                        <input type="text" id="hashtag" th:field="${addArticleRequest.hashtagName}" class="input-field" placeholder="해시태그 입력" required>-->
-<!--                    </div>-->
+                    <!--                    <div class="form_cont">-->
+                    <!--                        <label for="hashtag">해시 태그 작성</label>-->
+                    <!--                        <input type="text" id="hashtag" th:field="${addArticleRequest.hashtagName}" class="input-field" placeholder="해시태그 입력">-->
+                    <!--                    </div>-->
 
                     <!-- 해시 태그 작성 -->
                     <div class="form_cont">
@@ -65,17 +73,17 @@
                     <!-- 글 입력 -->
                     <div class="text-area-section">
                         <span>글 입력</span>
-                        <textarea name="content" class="input-field" placeholder="내용을 입력하세요" required></textarea>
+                        <textarea name="content" class="input-field" placeholder="내용을 입력하세요" required
+                                  th:if="${article != null}" th:text="${article.content}" ></textarea>
+                        <textarea name="content" class="input-field" placeholder="내용을 입력하세요" required
+                                  th:unless="${article != null}"></textarea>
                     </div>
 
                     <!-- 버튼 영역 -->
                     <div class="btn_wr">
                         <button type="button" class="cancel_btn" onclick="location.href='/board_list'">취소하기</button>
-                        <button type="submit" class="submit_btn">
-                            <!-- 새글 작성 일 때 활성화-->
-                            <span>작성하기</span>
-                            <!-- 작성글 수정하기 일 때 활성화-->
-                            <span class="dn">수정하기</span>
+                        <button type="submit" class="submit_btn" id="submit_btn">
+                            작성하기
                         </button>
                     </div>
                 </form>
@@ -84,5 +92,27 @@
     </div>
     <script src="/js/common.js"></script>
     <script src="/js/board.js"></script>
+    <script th:inline="javascript">
+        window.onload = function() {
+            const exist_article = [[${article != null}]]; // article이 null이 아닌 경우 true로 설정
+            const form = document.getElementById('articleForm');
+            const submitText = document.getElementById('submit_btn');
+            const article = [[${article}]];
+
+            if (exist_article) {
+                console.log("수정");
+                // 수정 모드일 때
+                form.action = `/articles/edit/${article.id}`;
+                form.method = "post"; // HTML 폼에서 PUT은 지원되지 않으므로 POST로 사용
+                submitText.innerText = "수정하기";
+            } else {
+                console.log("작성");
+                // 새글 작성일 때
+                form.action = "/articles/new";
+                form.method = "post";
+                submitText.innerText = "작성하기";
+            }
+        };
+    </script>
 </th:block>
 </html>

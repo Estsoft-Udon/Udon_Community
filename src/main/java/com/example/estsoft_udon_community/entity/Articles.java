@@ -1,5 +1,6 @@
 package com.example.estsoft_udon_community.entity;
 
+import com.example.estsoft_udon_community.dto.request.AddArticleRequest;
 import com.example.estsoft_udon_community.enums.ArticleCategory;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -74,6 +75,15 @@ public class Articles {
         this.category = category;
         this.hashtags = hashtags;
         this.location = location;
+    }
+
+    public void updateArticle2(AddArticleRequest request) {
+        this.title = request.getTitle();
+        this.content = request.getContent();
+        this.category = request.getCategory();
+        if(request.getHashtagName() != null) {
+            this.hashtags = request.getHashtagName().stream().map(Hashtag::new).toList();
+        }
     }
 
     // 뷰카운트 증가

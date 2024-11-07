@@ -216,4 +216,11 @@ public class ArticlesService {
         return commentsRepository.countNonDeletedCommentsByArticle(article);
     }
 
+    public Articles updateArticle2(Long id, AddArticleRequest request) {
+        Articles article = findJustArticle(id);
+        article.setUpdatedAt(LocalDateTime.now());
+        article.updateArticle2(request);
+        article.setLocation(locationService.getLocationById(request.getLocationId()));
+        return articlesRepository.save(article);
+    }
 }
