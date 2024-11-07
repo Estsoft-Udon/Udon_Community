@@ -23,6 +23,13 @@
             </section>
         </div>
     </div>
+    <script th:if="${successMessage}" type="text/javascript">
+        alert('비밀번호가 성공적으로 변경되었습니다.');
+        window.location.href = '/mypage';
+    </script>
+    <script th:if="${errorMessage}" type="text/javascript">
+        alert('현재 비밀번호가 일치하지 않습니다.');
+    </script>
     <script src="/js/common.js"></script>
     <script src="/js/password_change.js"></script>
 </th:block>

@@ -83,8 +83,8 @@ public class ViewController {
         boolean isUpdated = usersService.changePassword(getLoggedInUser().getId(), currentPassword, newPassword);
 
         if (isUpdated) {
-            model.addAttribute("successMessage", "비밀번호 변경이 완료되었습니다.");
-            return "redirect:/mypage";
+            model.addAttribute("successMessage", "비밀번호가 성공적으로 변경되었습니다.");
+            return "member/change_pw";
         } else {
             model.addAttribute("errorMessage", "현재 비밀번호가 일치하지 않습니다.");
             return "member/change_pw";
