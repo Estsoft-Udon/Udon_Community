@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="admin/layout/layout">
+<body>
+<th:block layout:fragment="content">
+    <section>
+        <h1>회원 목록</h1>
+        <div class="top">
+            <div class="search">
+                <form action="" method="get">
+                    <input type="text" name="keyword" placeholder="검색어를 입력하세요" class="search-input"/>
+                    <button type="submit" class="search-button">검색</button>
+                </form>
+            </div>
+            <div class="filter">
+                <form action="" method="get">
+                    <!-- 필터 옵션 내용은 작업자 분 편하신 대로 바꾸시면 됩니다. -->
+                    <select>
+                        <option value="">전체 목록</option>
+                        <option value="">최신가입순</option>
+                        <option value="">등급순</option>
+                        <option value="">등업 신청자</option>
+                    </select>
+                </form>
+            </div>
+        </div>
+        <!-- 항목은 작업자 분 편하신 대로 바꾸시면 됩니다. -->
+        <table>
+            <thead>
+            <tr>
+                <th>No.</th>
+                <th>회원 ID</th>
+                <th>이름</th>
+                <th>가입 일자</th>
+                <th>최종 접속 시간</th>
+                <th>접속 횟수</th>
+                <th>지역</th>
+                <th>등급</th>
+                <th>등업 신청 여부</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1</td>
+                <td>
+                    <a href="/admin/member/member_edit">회원 ID</a>
+                </td>
+                <td>이름123</td>
+                <td>가입 일자</td>
+                <td>최종 접속 시간</td>
+                <td>접속 횟수</td>
+                <td>지역</td>
+                <td>튀김 우동</td>
+                <td>True</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</th:block>
+</body>
+</html>

@@ -8,7 +8,6 @@ import java.util.Optional;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,26 +20,20 @@ public class LocationService {
         return locationRepository.findAll();
     }
 
-    // LocationId로 Location 정보 가져오기
+    // locationId -> Location
     public Location getLocationById(Long id) {
         return locationRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("위치 정보가 없습니다."));
     }
 
+    // Distinct UpperLocation 정보
     public List<String> getDistinctUpperLocations() {
         return locationRepository.findDistinctUpperLocations();
     }
 
-    public List<Location> getLowerLocation(String locationName) {
-        UpperLocationEnum upperLocationEnum = UpperLocationEnum.fromString(locationName);
-        return locationRepository.findByUpperLocation(upperLocationEnum);
-    }
-
-    // UpperLocation과 name을 통해 Location id를 리턴하는 메서드
-    public Long getLocationIdByUpperLocationAndName(String upperLocation, String name) {
+    // upperLocation 에 해당하는 LowerLocation 의 List<Location> return
+    public List<Location> getLowerLocations(String upperLocation) {
         UpperLocationEnum upperLocationEnum = UpperLocationEnum.fromString(upperLocation);
-        Location location = locationRepository.findByUpperLocationAndName(upperLocationEnum, name);
-
-        return location.getId();
+        return locationRepository.findLowerLocationsByUpperLocation(upperLocationEnum);
     }
 
     public Location findByName(String name) {

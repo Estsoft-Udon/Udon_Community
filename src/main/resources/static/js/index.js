@@ -146,7 +146,7 @@ window.onload = () => updateCalendar();
 
 function toggleLocationName() {
     const upperLocation = document.getElementById('upperLocation');
-    const locationName = document.getElementById('locationName');
+    const locationName = document.getElementById('locationId');
     const submitButton = document.getElementById('submitButton');
 
     if (upperLocation.value) {
@@ -163,7 +163,7 @@ function toggleLocationName() {
 }
 
 function redirectToLocationBoard() {
-    const locationId = document.getElementById('locationName').value;
+    const locationId = document.getElementById('locationId').value;
 
     if (!locationId) {
         alert("지역을 선택하세요.");
@@ -175,7 +175,7 @@ function redirectToLocationBoard() {
 
     // 선택된 지역 초기화
     document.getElementById('upperLocation').selectedIndex = 0;
-    document.getElementById('locationName').selectedIndex = 0;
+    document.getElementById('locationId').selectedIndex = 0;
 }
 
-document.getElementById('locationName').disabled = true;
+document.getElementById('locationId').disabled = true;

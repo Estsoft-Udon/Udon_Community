@@ -3,9 +3,13 @@ package com.example.estsoft_udon_community.controller;
 import com.example.estsoft_udon_community.dto.request.AddArticleRequest;
 import com.example.estsoft_udon_community.dto.response.ArticleDetailResponse;
 import com.example.estsoft_udon_community.dto.response.ArticleResponse;
-
+import com.example.estsoft_udon_community.dto.response.CommentsResponse;
+import com.example.estsoft_udon_community.entity.Articles;
+import com.example.estsoft_udon_community.entity.Comments;
+import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.enums.ArticleCategory;
-
+import com.example.estsoft_udon_community.enums.UpperLocationEnum;
+import com.example.estsoft_udon_community.security.CustomUserDetails;
 import com.example.estsoft_udon_community.service.ArticlesService;
 import com.example.estsoft_udon_community.service.HashtagService;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +22,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.*;
-
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -42,17 +47,15 @@ public class BoardController {
         if (locationId != null) {
             // location 정보가 있으면 지역별 게시글 나열
             Location locationById = locationService.getLocationById(locationId);
-
             articles = articlesService.findByLocationId(locationId, page, size);
-
             model.addAttribute("location", locationById);
+
         } else {
             // 지역 정보가 없을 때 - 전체 지역 게시글 리스트
             articles = articlesService.findAll(page, size);
             model.addAttribute("location", null);
         }
         model.addAttribute("articles", articles);
-
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", articles.getTotalPages());
         model.addAttribute("totalItems", articles.getTotalElements());
@@ -74,9 +77,9 @@ public class BoardController {
 
         Page<ArticleDetailResponse> articles = articlesService.searchByTitle(title, page, size);
 
-        model.addAttribute("articles", articles);
         model.addAttribute("searchQuery", title);
 
+        model.addAttribute("articles", articles);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", articles.getTotalPages());
         model.addAttribute("totalItems", articles.getTotalElements());
@@ -98,7 +101,6 @@ public class BoardController {
         Page<ArticleDetailResponse> articles = articlesService.findByHashtag(hashtagId, page, size);
 
         model.addAttribute("articles", articles);
-
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", articles.getTotalPages());
         model.addAttribute("totalItems", articles.getTotalElements());
@@ -119,7 +121,6 @@ public class BoardController {
         Page<ArticleDetailResponse> articles = articlesService.findByCategory(category, page, size);
 
         model.addAttribute("articles", articles);
-
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", articles.getTotalPages());
         model.addAttribute("totalItems", articles.getTotalElements());
@@ -133,7 +134,19 @@ public class BoardController {
     // 게시글 생성
     @GetMapping("/articles/new")
     public String createBoard(Model model) {
-        setCategoriesAndLocations(model);
+
+        model.addAttribute("articleCategories", ArticleCategory.values());
+
+        // 상위 지역 목록을 가져와서 모델에 추가
+        List<String> upperLocations = locationService.getDistinctUpperLocations();
+        model.addAttribute("upperLocations", upperLocations);
+
+        // 첫 번째 상위 지역에 대한 하위 지역 목록을 초기화하여 모델에 추가
+        if (!upperLocations.isEmpty()) {
+            String firstUpperLocation = upperLocations.get(0);
+            List<Location> lowerLocations = locationService.getLowerLocations(firstUpperLocation);
+            model.addAttribute("locations", lowerLocations);
+        }
 
         return "board/board_edit";
     }

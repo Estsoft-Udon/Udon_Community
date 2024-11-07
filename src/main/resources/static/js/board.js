@@ -66,8 +66,6 @@ if (inputField) {
     }
 }
 
-
-// 게시글 수정
 function edit_article(article_id) {
     const content_element = document.getElementById(`origin_comment_${comment_id}`);
     const input_element = document.getElementById(`edit_comment_${comment_id}`);
@@ -104,7 +102,6 @@ function edit_article(article_id) {
     edit_button.setAttribute('onclick', 'press_edit(' + comment_id + ')');
 }
 
-// 게시글 삭제
 function delete_article(article_id) {
     if (confirm('정말 삭제하시겠습니까?')) {
         fetch(`/api/articles/${article_id}`, {

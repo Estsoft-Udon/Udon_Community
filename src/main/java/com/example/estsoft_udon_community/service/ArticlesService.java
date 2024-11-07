@@ -35,15 +35,12 @@ public class ArticlesService {
     private final ArticlesLikeRepository articlesLikeRepository;
     private final LocationService locationService;
 
-    // 게시글 등록
+    // 게시글 등록 - api
     public Articles saveArticle(AddArticleRequest request) {
         Long userId = SecurityUtil.getLoggedInUser().getId();
-
         Users user = usersRepository.findById(userId).orElseThrow();
 
         List<Hashtag> hashtagList = getOrCreateHashtags(request.getHashtagName());
-
-        // location 정보를 가져다 주는데?
         Location locationById = locationService.getLocationById(request.getLocationId());
 
         Articles articles = new Articles(user, request.getTitle(), request.getContent(), request.getCategory(),
@@ -57,23 +54,23 @@ public class ArticlesService {
         return savedArticle;
     }
 
-    // 게시글 등록
-    public Articles saveArticle(AddArticleRequest request, Long locationId) {
+    // 게시글 등록 - boardController
+    public void saveArticle(AddArticleRequest request, Long locationId) {
         Long userId = SecurityUtil.getLoggedInUser().getId();
-
         Users user = usersRepository.findById(userId).orElseThrow();
-
         List<Hashtag> hashtagList = getOrCreateHashtags(request.getHashtagName());
 
+        // 게시글 생성
         Articles articles = new Articles(user, request.getTitle(), request.getContent(), request.getCategory(),
                 hashtagList, locationService.getLocationById(locationId));
 
+        // 데이터베이스에 저장
         Articles savedArticle = articlesRepository.save(articles);
 
+        // 해시태그 저장
         for (Hashtag hashtag : hashtagList) {
             articleHashtagJoinRepository.save(new ArticleHashtagJoin(savedArticle, hashtag));
         }
-        return savedArticle;
     }
 
     // 전체 게시글 조회

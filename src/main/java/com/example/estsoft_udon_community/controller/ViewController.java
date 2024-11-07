@@ -1,15 +1,15 @@
 package com.example.estsoft_udon_community.controller;
 
+import static com.example.estsoft_udon_community.util.SecurityUtil.*;
+
 import com.example.estsoft_udon_community.dto.request.UsersRequest;
 import com.example.estsoft_udon_community.entity.Location;
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.enums.PasswordHint;
-import com.example.estsoft_udon_community.security.CustomUserDetails;
 import com.example.estsoft_udon_community.service.LocationService;
 import com.example.estsoft_udon_community.service.UsersService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,9 +60,11 @@ public class ViewController {
     @PostMapping("/find_pw")
     public String findPw(Model model, String loginId, PasswordHint passwordHint, String passwordAnswer) {
         Users users = usersService.searchPassword(loginId, passwordHint, passwordAnswer);
+        // 비밀번호 찾기 성공
         if (users != null) {
             return changePw();
         }
+        // 비밀번호 찾기 실패
         model.addAttribute("errorMessage", "일치하는 정보가 없습니다.");
         return "member/find_pw";
     }
@@ -72,6 +74,7 @@ public class ViewController {
         return "member/change_pw";
     }
 
+    // 회원가입 
     @GetMapping("/signup")
     public String signup(Model model) {
         List<String> upperLocations = locationService.getDistinctUpperLocations();
@@ -80,7 +83,7 @@ public class ViewController {
 
         if (!upperLocations.isEmpty()) {
             String firstUpperLocation = upperLocations.get(0);
-            List<Location> lowerLocations = locationService.getLowerLocation(firstUpperLocation);
+            List<Location> lowerLocations = locationService.getLowerLocations(firstUpperLocation);
             model.addAttribute("locations", lowerLocations);
         }
 
@@ -89,13 +92,9 @@ public class ViewController {
 
     @PostMapping("/signup")
     public String signup(@ModelAttribute UsersRequest request,
-                         Model model) {
+                         Model model, Long locationId) {
         try {
-            // AddArticleRequest 에는 upper, name이 없음
-            Long locationId = locationService.getLocationIdByUpperLocationAndName(request.getUpperLocation(),
-                    request.getLocationName());
             request.setLocationId(locationId);
-
             usersService.registerUser(request);
             return "redirect:/success";
         } catch (Exception e) {
@@ -115,53 +114,41 @@ public class ViewController {
     }
 
     @GetMapping("/mypage")
-    public String mypage(Model model, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        Users users = usersService.findByLoginId(customUserDetails.getUsername());
-        model.addAttribute("user", users);
+    public String mypage(Model model) {
+        Users userById = usersService.findUserById(getLoggedInUser().getId());
+        model.addAttribute("user", userById);
         return "member/mypage";
     }
 
     @GetMapping("/edit_profile")
-    public String editProfile(Model model, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        // 사용자의 정보
-        Users users = usersService.findUserById(getLoggedInUserId(customUserDetails));
+    public String editProfile(Model model) {
+        // 로그인 사용자의 정보
+        Users users = usersService.findUserById(getLoggedInUser().getId());
         model.addAttribute("user", users);
-
         model.addAttribute("passwordHints", PasswordHint.values());
+
+        Location location = users.getLocation();
+        model.addAttribute("locationId", location.getName());
+        model.addAttribute("selectedUpperLocation", location.getUpperLocation());
 
         // upperLocation의 정보
         List<String> upperLocations = locationService.getDistinctUpperLocations();
         model.addAttribute("upperLocations", upperLocations);
 
-        // 사용자의 현재 Location 정보 - 회원정보 수정을 누르면 원래 내 값을 가져오고 싶었으나 실패
-        Location userLocation = users.getLocation();
-        model.addAttribute("currentUpperLocation", userLocation.getUpperLocation()); // 사용자의 Upper Location
-        model.addAttribute("locations", locationService.getLowerLocation(
-                String.valueOf(userLocation.getUpperLocation()))); // 해당 Upper Location의 하위 Location 리스트
-
         // 해당 Upper Location의 하위 Location 리스트
         if (!upperLocations.isEmpty()) {
-
             String firstUpperLocation = upperLocations.get(0);
-            List<Location> lowerLocations = locationService.getLowerLocation(firstUpperLocation);
+            List<Location> lowerLocations = locationService.getLowerLocations(firstUpperLocation);
             model.addAttribute("locations", lowerLocations);
         }
         return "member/edit_profile";
     }
 
     @PostMapping("/edit_profile")
-    public String editProfile(@ModelAttribute UsersRequest request,
-                              @AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        Long locationId = locationService.getLocationIdByUpperLocationAndName(request.getUpperLocation(),
-                request.getLocationName());
+    public String editProfile(@ModelAttribute UsersRequest request, Long locationId) {
         request.setLocationId(locationId);
 
-        usersService.updateUser(getLoggedInUserId(customUserDetails), request);
+        usersService.updateUser(getLoggedInUser().getId(), request);
         return "redirect:/mypage";
-    }
-
-    // 로그인 정보 가져오기
-    private Long getLoggedInUserId(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        return usersService.findByLoginId(customUserDetails.getUsername()).getId();
     }
 }

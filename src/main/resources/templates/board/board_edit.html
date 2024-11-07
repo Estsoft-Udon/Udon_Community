@@ -35,8 +35,8 @@
                             <!--                            </th:block>-->
                         </select>
 
-                        <label for="locationName" class="dn"> 상세 지역을 선택</label>
-                        <select id="locationName" name="locationName" class="input-field" required>
+                        <label for="locationId" class="dn"> 상세 지역을 선택</label>
+                        <select id="locationId" name="locationId" class="input-field" required>
                             <th:block th:each="location : ${locations}">
                                 <option th:value="${location.name}"
                                         th:text="${location.name}"
