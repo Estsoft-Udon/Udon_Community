@@ -16,8 +16,7 @@
     padding: 1rem;
 }
 
-.main main{
-    padding: 0 3.2rem;
+.main .top_section{
     display: grid;
     grid-template-columns: 1fr 3fr;
     gap: 3rem;
@@ -230,7 +229,7 @@ table {
 
 th, td {
     width: 14.28%;
-    height: 8rem;
+    height: 11rem;
     text-align: center;
     border: 1px solid #ccc;
     padding: 1rem;
@@ -251,6 +250,21 @@ th, td {
     font-size: 2rem;
 }
 
+.calendar .event{
+    text-align: left;
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding: 0.5rem;
+}
+
+.calendar .event.festival{
+    background: rgba(32, 201, 151, 0.082);
+}
+
+.calendar .event.gathering{
+    background: rgba(255, 152, 0, 0.082);
+}
+
 .today{
     position: relative;
     color: #fff;
@@ -267,4 +281,8 @@ th, td {
     left: 50%;
     transform: translateX(-50%);
     z-index: -1;
+}
+
+.today div{
+    color: #000;
 }
