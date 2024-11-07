@@ -3,8 +3,10 @@ package com.example.estsoft_udon_community.controller;
 import com.example.estsoft_udon_community.dto.response.EventResponse;
 import com.example.estsoft_udon_community.dto.request.EventRequest;
 import com.example.estsoft_udon_community.entity.Event;
+import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.repository.EventRepository;
 import com.example.estsoft_udon_community.service.EventService;
+import com.example.estsoft_udon_community.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -46,7 +48,13 @@ public class EventController {
     // 캘린더 추가
     @PostMapping
     public ResponseEntity<String> addEvent(@ModelAttribute EventRequest eventRequest) {
-        EventResponse createEvent = eventService.addEvent(eventRequest);
+        Users loggedInUser = SecurityUtil.getLoggedInUser();
+        if(loggedInUser != null) {
+            eventRequest.setUsersId(loggedInUser.getId());
+            EventResponse createEvent = eventService.addEvent(eventRequest);
+        } else {
+            return ResponseEntity.ok("등록 요청 실패~!"); // 성공 메시지 반환
+        }
         return ResponseEntity.ok("등록 요청이 완료되었습니다."); // 성공 메시지 반환
     }
 
