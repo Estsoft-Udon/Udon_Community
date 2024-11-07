@@ -28,72 +28,76 @@
             </section>
 
             <main>
-                <aside class="left_sec">
-                    <h2>
-                        <a href="javascript:void(0)">🔥 HOT 한 우동</a>
-                    </h2>
-                    <ul class="post_list">
-                        <li class="post_item">
-                            <div class="l_box">
-                                <div class="ranking">1.</div>
-                                <div class="id">아이디</div>
-                                <div class="grade">(등급)</div>
-                            </div>
-                            <div class="post_stats">
-                                <div class="icon thumb_icon on"></div>
-                                <div class="likes">누적 좋아요 수</div>
-                            </div>
-                        </li>
-                    </ul>
-                </aside>
+                <section class="top_section">
+                    <aside class="left_sec">
+                        <h2>
+                            <a href="javascript:void(0)">🔥 HOT 한 우동</a>
+                        </h2>
+                        <ul class="post_list">
+                            <li class="post_item">
+                                <div class="l_box">
+                                    <div class="ranking">1.</div>
+                                    <div class="id">아이디</div>
+                                    <div class="grade">(등급)</div>
+                                </div>
+                                <div class="post_stats">
+                                    <div class="icon thumb_icon on"></div>
+                                    <div class="likes">누적 좋아요 수</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </aside>
 
-                <section class="right_sec">
-                    <div class="board_list">
-                        <article class="newest">
-                            <h2>
-                                <a href="/articles">🔺최신 게시글</a>
-                            </h2>
-                            <ul class="post_list" id="newest">
-                                <li th:each="article : ${articles}" class="post_item">
-                                    <div class="l_box">
-                                        <div class="top">
-                                            <span class="w_id" th:text="${article.nickname}">아이디</span>
-                                            <span class="w_pw" th:text="|Posted on ${#temporals.format(article.createdAt, 'yyyy-MM-dd HH:mm')}|">작성 시간</span>
-                                        </div>
-                                        <div class="bot">
-                                            <a th:href="@{/articles/{id}(id=${article.id})}" th:text="${article.title}" class="title">글 제목</a>
-                                            <div class="post_stats">
-                                                <div class="icon thumb_icon"></div>
-                                                <div class="likes" th:text="${article.likeCount}">좋아요 수</div>
+                    <section class="right_sec">
+                        <div class="board_list">
+                            <article class="newest">
+                                <h2>
+                                    <a href="/articles">🔺최신 게시글</a>
+                                </h2>
+                                <ul class="post_list" id="newest">
+                                    <li th:each="article : ${articles}" class="post_item">
+                                        <div class="l_box">
+                                            <div class="top">
+                                                <span class="w_id" th:text="${article.nickname}">아이디</span>
+                                                <span class="w_pw" th:text="|Posted on ${#temporals.format(article.createdAt, 'yyyy-MM-dd HH:mm')}|">작성 시간</span>
+                                            </div>
+                                            <div class="bot">
+                                                <a th:href="@{/articles/{id}(id=${article.id})}" th:text="${article.title}" class="title">글 제목</a>
+                                                <div class="post_stats">
+                                                    <div class="icon thumb_icon"></div>
+                                                    <div class="likes" th:text="${article.likeCount}">좋아요 수</div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </article>
-                        <article class="hotplace">
-                            <h2>
-                                <a href="/">🍚 한 뚝배기 하실래요?</a>
-                            </h2>
-                            <ul class="post_list">
-                                <li class="post_item">
-                                    <div class="l_box">
-                                        <div class="top">
-                                            <span class="w_id">아이디</span>
-                                            <span class="w_pw">작성 시간</span>
-                                        </div>
-                                        <div class="bot">
-                                            <a href="/" class="title">글 제목</a>
-                                            <div class="post_stats">
-                                                <div class="icon thumb_icon"></div>
-                                                <div class="likes">좋아요 수</div>
+                                    </li>
+                                </ul>
+                            </article>
+                            <article class="hotplace">
+                                <h2>
+                                    <a href="/">🍚 한 뚝배기 하실래요?</a>
+                                </h2>
+                                <ul class="post_list">
+                                    <li class="post_item">
+                                        <div class="l_box">
+                                            <div class="top">
+                                                <span class="w_id">아이디</span>
+                                                <span class="w_pw">작성 시간</span>
+                                            </div>
+                                            <div class="bot">
+                                                <a href="/" class="title">글 제목</a>
+                                                <div class="post_stats">
+                                                    <div class="icon thumb_icon"></div>
+                                                    <div class="likes">좋아요 수</div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </article>
-                    </div>
+                                    </li>
+                                </ul>
+                            </article>
+                        </div>
+                    </section>
+                </section>
+                <section class="bot_section">
                     <article class="event calendar">
                         <h2>
                             <a href="/">👟 동네 한바퀴</a>
@@ -108,7 +112,30 @@
                 </section>
             </main>
         </div>
-        <!-- 모달 창 -->
+        <!-- 일정 정보 모달 -->
+        <div id="eventModal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn" id="closeModal">&times;</span>
+                <div class="modal-header">
+                    <span id="eventDetailsType"></span>
+                    <h2 id="eventDetailsTitle"></h2>
+                </div>
+                <p>
+                    <strong>일시 : </strong>
+                    <span id="eventDetailsDateTime"></span>
+                </p>
+                <p>
+                    <strong>주최자 : </strong>
+                    <span id="eventDetailsUser"></span>
+                </p>
+                <p class="txt_box">
+                    <strong>내용</strong>
+                    <span id="eventDetailsDescription"></span>
+                </p>
+            </div>
+        </div>
+
+        <!-- 일정 등록 신청 모달 -->
         <dialog class="modal-overlay" id="modal">
             <div class="modal-content">
                 <div class="modal-header">

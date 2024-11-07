@@ -7,8 +7,6 @@ import com.example.estsoft_udon_community.dto.request.EventRequest;
 import com.example.estsoft_udon_community.repository.EventRepository;
 import com.example.estsoft_udon_community.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -56,5 +54,20 @@ public class EventService {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new IllegalArgumentException("Event not found"));
         eventRepository.delete(event);
+    }
+
+    // 승인된 이벤트만 조회
+    public List<EventResponse> getAcceptedEvents() {
+        List<Event> acceptedEvents = eventRepository.findByIsAcceptedTrue();  // 승인된 이벤트 조회
+        return acceptedEvents.stream()
+                .map(event -> new EventResponse(event))  // EventResponse로 변환
+                .collect(Collectors.toList());
+    }
+
+    // 승인되지 않은 이벤트만 조회
+    public List<EventResponse> getPendingEvents() {
+        return eventRepository.findByIsAcceptedFalse().stream()
+                .map(event -> new EventResponse(event)) // EventResponse로 변환
+                .collect(Collectors.toList());
     }
 }

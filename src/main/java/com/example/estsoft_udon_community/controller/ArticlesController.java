@@ -31,8 +31,9 @@ public class ArticlesController {
     @GetMapping("/articles")
     public ResponseEntity<Page<ArticleDetailResponse>> findAll(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Page<ArticleDetailResponse> articles = articlesService.findAll(page, size);
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sortOption) {
+        Page<ArticleDetailResponse> articles = articlesService.findAll(page, size, sortOption);
         return ResponseEntity.ok(articles);
     }
 
@@ -74,8 +75,9 @@ public class ArticlesController {
     public ResponseEntity<Page<ArticleDetailResponse>> findByHashtag(
             @PathVariable Long hashtagId,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Page<ArticleDetailResponse> hashtagByArticle = articlesService.findByHashtag(hashtagId, page, size);
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sortOption) {
+        Page<ArticleDetailResponse> hashtagByArticle = articlesService.findByHashtag(hashtagId, page, size, sortOption);
         return ResponseEntity.ok(hashtagByArticle);
     }
 
@@ -84,8 +86,9 @@ public class ArticlesController {
     public ResponseEntity<Page<ArticleDetailResponse>> findByCategory(
             @PathVariable String category,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Page<ArticleDetailResponse> articles = articlesService.findByCategory(category, page, size);
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sortOption) {
+        Page<ArticleDetailResponse> articles = articlesService.findByCategory(category, page, size, sortOption);
         return ResponseEntity.ok(articles);
     }
 
@@ -94,11 +97,12 @@ public class ArticlesController {
     public ResponseEntity<Page<ArticleDetailResponse>> searchArticlesByTitle(
             @RequestParam String title,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sortOption) {
         if (title == null || title.trim().isEmpty()) {
             return ResponseEntity.badRequest().body(Page.empty());
         }
-        Page<ArticleDetailResponse> articles = articlesService.searchByTitle(title, page, size);
+        Page<ArticleDetailResponse> articles = articlesService.searchByTitle(title, page, size, sortOption);
         return ResponseEntity.ok(articles);
     }
 }

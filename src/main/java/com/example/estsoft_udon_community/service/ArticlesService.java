@@ -74,14 +74,20 @@ public class ArticlesService {
     }
 
     // 전체 게시글 조회
-    public Page<ArticleDetailResponse> findAll(int page, int size) {
+    public Page<ArticleDetailResponse> findAll(int page, int size, String sortOption) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
-        Page<Articles> articlesPage = articlesRepository.findByIsDeletedFalse(pageable);
+
+        Page<Articles> articlesPage = switch (sortOption) {
+            case "likeCount" -> articlesRepository.findAllOrderByLikeCount(pageable);
+            case "commentCount" -> articlesRepository.findAllOrderByCommentCount(pageable);
+            default -> articlesRepository.findByIsDeletedFalse(pageable);
+        };
 
         return articlesPage.map(article -> new ArticleDetailResponse(
                 article,
                 fetchLikeCount(article),
-                fetchCommentCount(article)));
+                fetchCommentCount(article)
+        ));
     }
 
     // 특정 게시글 조회
@@ -119,38 +125,14 @@ public class ArticlesService {
     }
 
     // 특정 지역 게시글 조회
-    public Page<ArticleDetailResponse> findByLocationId(Long locationId, int page, int size) {
+    public Page<ArticleDetailResponse> findByLocationId(Long locationId, int page, int size, String sortOption) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
-        Page<Articles> articlesPage = articlesRepository.findByLocationIdAndIsDeletedFalse(locationId, pageable);
 
-        return articlesPage.map(article -> new ArticleDetailResponse(article,
-                fetchLikeCount(article),
-                fetchCommentCount(article)));
-
-
-//     public List<ArticleDetailResponse> findByLocationId(Long locationId) {
-//         return articlesRepository.findByLocationIdAndIsDeletedFalse(locationId).stream()
-//                 .map(article -> new ArticleDetailResponse(article,
-//                         articlesLikeRepository.countLikesByArticles(article),
-//                         commentsRepository.countByArticles(article)))
-//                 .toList();
-
-    }
-
-    // 해시태그로 게시글 조회
-    public Page<ArticleDetailResponse> findByHashtag(Long hashtagId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
-        Page<Articles> articlesPage = hashtagRepository.findArticlesByHashtagIdAndIsDeletedFalse(hashtagId, pageable);
-
-        return articlesPage.map(articles -> new ArticleDetailResponse(articles,
-                fetchLikeCount(articles),
-                fetchCommentCount(articles)));
-    }
-
-    // 카테고리로 게시글 조회
-    public Page<ArticleDetailResponse> findByCategory(String category, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
-        Page<Articles> articlesPage = articlesRepository.findByCategory(ArticleCategory.valueOf(category), pageable);
+        Page<Articles> articlesPage = switch (sortOption) {
+            case "likeCount" -> articlesRepository.findByLocationIdOrderByLikeCount(locationId, pageable);
+            case "commentCount" -> articlesRepository.findByLocationIdOrderByCommentCount(locationId, pageable);
+            default -> articlesRepository.findByLocationIdAndIsDeletedFalse(locationId, pageable);
+        };
 
         return articlesPage.map(article -> new ArticleDetailResponse(
                 article,
@@ -159,14 +141,56 @@ public class ArticlesService {
         ));
     }
 
-    // 제목 검색 기능
-    public Page<ArticleDetailResponse> searchByTitle(String title, int page, int size) {
+    // 해시태그로 게시글 조회
+    public Page<ArticleDetailResponse> findByHashtag(Long hashtagId, int page, int size, String sortOption) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
-        Page<Articles> articlesPage = articlesRepository.findByTitleContainingIgnoreCase(title, pageable);
+
+        Page<Articles> articlesPage = switch (sortOption) {
+            case "likeCount" -> hashtagRepository.findArticlesByHashtagIdOrderByLikeCount(hashtagId, pageable);
+            case "commentCount" -> hashtagRepository.findArticlesByHashtagIdOrderByCommentCount(hashtagId, pageable);
+            default -> hashtagRepository.findArticlesByHashtagIdAndIsDeletedFalse(hashtagId, pageable);
+        };
+
         return articlesPage.map(article -> new ArticleDetailResponse(
                 article,
                 fetchLikeCount(article),
-                fetchCommentCount(article)));
+                fetchCommentCount(article)
+        ));
+    }
+
+    // 카테고리로 게시글 조회
+    public Page<ArticleDetailResponse> findByCategory(String category, int page, int size, String sortOption) {
+        ArticleCategory articleCategory = ArticleCategory.valueOf(category.toUpperCase());
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
+
+        Page<Articles> articlesPage = switch (sortOption) {
+            case "likeCount" -> articlesRepository.findByCategoryOrderByLikeCount(articleCategory, pageable);
+            case "commentCount" -> articlesRepository.findByCategoryOrderByCommentCount(articleCategory, pageable);
+            default -> articlesRepository.findByCategory(articleCategory, pageable);
+        };
+
+        return articlesPage.map(article -> new ArticleDetailResponse(
+                article,
+                fetchLikeCount(article),
+                fetchCommentCount(article)
+        ));
+    }
+
+    // 제목 검색 조회
+    public Page<ArticleDetailResponse> searchByTitle(String title, int page, int size, String sortOption) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
+
+        Page<Articles> articlesPage = switch (sortOption) {
+            case "likeCount" -> articlesRepository.findByTitleContainingIgnoreCaseOrderByLikeCount(title, pageable);
+            case "commentCount" -> articlesRepository.findByTitleContainingIgnoreCaseOrderByCommentCount(title, pageable);
+            default -> articlesRepository.findByTitleContainingIgnoreCase(title, pageable);
+        };
+
+        return articlesPage.map(article -> new ArticleDetailResponse(
+                article,
+                fetchLikeCount(article),
+                fetchCommentCount(article)
+        ));
     }
 
     // 새로운 해시태그를 생성하거나 기존 해시태그를 가져오는 메서드

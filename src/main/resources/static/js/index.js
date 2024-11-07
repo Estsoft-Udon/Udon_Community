@@ -37,10 +37,20 @@ function handleSubmit(event) {
 }
 
 let currentDate = new Date();
+let events = [];
 
-// 서버에서 전달된 이벤트 배열 (타임리프를 통해 초기화)
-const events = /*[[${userEvents}]]*/ [];
+// 이벤트를 API에서 가져오는 함수
+function fetchEvents() {
+    fetch('/api/event/accepted') // 승인된 이벤트 데이터를 가져옵니다
+        .then(response => response.json()) // 응답을 JSON 형식으로 변환
+        .then(data => {
+            events = data; // 이벤트 배열에 데이터 업데이트
+            updateCalendar(); // 데이터를 받은 후 달력을 갱신
+        })
+        .catch(error => console.error('Error fetching events:', error));
+}
 
+// 캘린더 렌더링 함수
 function renderCalendar(year, month) {
     const calendarElement = document.getElementById('calendar');
     calendarElement.innerHTML = ''; // 기존 내용 초기화
@@ -112,16 +122,25 @@ function renderCalendar(year, month) {
                     cell.classList.add('today');
                 }
 
-                // 이벤트 표시
-                events.forEach(event => {
-                    const eventDate = new Date(event.dateTime);
-                    if (eventDate.getDate() === dateCounter && eventDate.getMonth() === month && eventDate.getFullYear() === year) {
-                        const eventDiv = document.createElement('div');
-                        eventDiv.className = 'event';
-                        eventDiv.textContent = event.title; // 이벤트 제목
-                        cell.appendChild(eventDiv);
-                    }
-                });
+                // 이벤트가 있는 경우 이벤트를 추가
+                if (Array.isArray(events)) {
+                    events.forEach(event => {
+                        const eventDate = new Date(event.dateTime); // Date 객체로 변환
+                        if (
+                            eventDate.getDate() === dateCounter &&
+                            eventDate.getMonth() === month &&
+                            eventDate.getFullYear() === year
+                        ) {
+                            const eventDiv = document.createElement('div');
+                            eventDiv.className = 'event ' + getEventTypeClass(event.eventType); // 이벤트 타입에 따라 클래스 추가
+                            eventDiv.textContent = getEventTypeText(event.eventType) + ' ' + event.title; // 타입에 맞는 텍스트 추가
+                            eventDiv.onclick = function() {
+                                showEventDetails(event); // 클릭 시 상세 정보 표시
+                            };
+                            cell.appendChild(eventDiv);
+                        }
+                    });
+                }
 
                 dateCounter++; // 다음 날짜로 이동
             }
@@ -133,16 +152,95 @@ function renderCalendar(year, month) {
     calendarElement.appendChild(table);
 }
 
+// 이벤트 타입에 맞는 클래스 반환 함수
+function getEventTypeClass(eventType) {
+    switch (eventType) {
+        case 'GATHERING':
+            return 'gathering';
+        case 'FESTIVAL':
+            return 'festival';
+        default:
+            return ''; // 기본 클래스 (없을 경우)
+    }
+}
+
+// 이벤트 타입에 맞는 텍스트 반환 함수
+function getEventTypeText(eventType) {
+    switch (eventType) {
+        case 'GATHERING':
+            return '[소모임]';
+        case 'FESTIVAL':
+            return '[축제]';
+        default:
+            return ''; // 기본 텍스트 (없을 경우)
+    }
+}
+
+// 캘린더 업데이트 함수
 function updateCalendar() {
     renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
 }
 
+// 월을 변경하는 함수
 function changeMonth(direction) {
     currentDate.setMonth(currentDate.getMonth() + direction);
     updateCalendar(); // 달력을 업데이트
 }
 
-window.onload = () => updateCalendar();
+// 이벤트 상세 정보를 캘린더 아래에 표시하는 함수
+function showEventDetails(event) {
+    const eventDetails = document.getElementById('eventDetails');
+    const eventTitle = document.getElementById('eventDetailsTitle');
+    const eventDateTime = document.getElementById('eventDetailsDateTime');
+    const eventDescription = document.getElementById('eventDetailsDescription');
+
+    eventTitle.textContent = event.title;
+    eventDateTime.textContent = `${new Date(event.dateTime).toLocaleString()}`;
+    eventDescription.textContent = event.content || '상세 설명이 없습니다.';
+
+    eventDetails.style.display = 'block'; // 상세 정보를 표시
+}
+
+// 페이지가 로드되면 캘린더를 렌더링하고 이벤트를 가져옵니다.
+window.onload = () => {
+    fetchEvents(); // 이벤트 데이터를 가져옵니다
+    updateCalendar(); // 캘린더를 초기화
+};
+
+// 모달 관련 변수
+const modal = document.getElementById('eventModal');
+const closeModalBtn = document.getElementById('closeModal');
+
+// 이벤트 상세 정보를 모달에 표시하는 함수
+function showEventDetails(event) {
+    const eventTitle = document.getElementById('eventDetailsTitle');
+    const eventType = document.getElementById('eventDetailsType');
+    const eventDateTime = document.getElementById('eventDetailsDateTime');
+    const eventUser = document.getElementById('eventDetailsUser');
+    const eventDescription = document.getElementById('eventDetailsDescription');
+
+    // 모달에 이벤트 데이터 표시
+    eventTitle.textContent = event.title;
+    eventType.textContent = getEventTypeText(event.eventType);
+    eventDateTime.textContent = `${new Date(event.dateTime).toLocaleString()}`;
+    eventUser.textContent = event.usersId || '정보 없음';
+    eventDescription.textContent = event.content || '상세 설명이 없습니다.';
+
+    // 모달 표시
+    modal.style.display = 'block';
+}
+
+// 모달 닫기 버튼 클릭 시 모달 숨기기
+closeModalBtn.onclick = function() {
+    modal.style.display = 'none';
+}
+
+// 모달 외부 클릭 시 모달 숨기기
+window.onclick = function(event) {
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+}
 
 function toggleLocationName() {
     const upperLocation = document.getElementById('upperLocation');
