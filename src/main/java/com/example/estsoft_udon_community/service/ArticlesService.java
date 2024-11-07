@@ -74,14 +74,20 @@ public class ArticlesService {
     }
 
     // 전체 게시글 조회
-    public Page<ArticleDetailResponse> findAll(int page, int size) {
+    public Page<ArticleDetailResponse> findAll(int page, int size, String sortOption) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
-        Page<Articles> articlesPage = articlesRepository.findByIsDeletedFalse(pageable);
+
+        Page<Articles> articlesPage = switch (sortOption) {
+            case "'likeCount'" -> articlesRepository.findAllOrderByLikeCount(pageable);
+            case "'commentCount'" -> articlesRepository.findAllOrderByCommentCount(pageable);
+            default -> articlesRepository.findByIsDeletedFalse(pageable);
+        };
 
         return articlesPage.map(article -> new ArticleDetailResponse(
                 article,
                 fetchLikeCount(article),
-                fetchCommentCount(article)));
+                fetchCommentCount(article)
+        ));
     }
 
     // 특정 게시글 조회
@@ -119,7 +125,7 @@ public class ArticlesService {
     }
 
     // 특정 지역 게시글 조회
-    public Page<ArticleDetailResponse> findByLocationId(Long locationId, int page, int size) {
+    public Page<ArticleDetailResponse> findByLocationId(Long locationId, int page, int size, String sortOption) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
         Page<Articles> articlesPage = articlesRepository.findByLocationIdAndIsDeletedFalse(locationId, pageable);
 
@@ -215,5 +221,4 @@ public class ArticlesService {
     private Long fetchCommentCount(Articles article) {
         return commentsRepository.countNonDeletedCommentsByArticle(article);
     }
-
 }

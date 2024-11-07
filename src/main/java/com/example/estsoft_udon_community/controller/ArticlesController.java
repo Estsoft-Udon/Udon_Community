@@ -31,8 +31,9 @@ public class ArticlesController {
     @GetMapping("/articles")
     public ResponseEntity<Page<ArticleDetailResponse>> findAll(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Page<ArticleDetailResponse> articles = articlesService.findAll(page, size);
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sortOption) {
+        Page<ArticleDetailResponse> articles = articlesService.findAll(page, size, sortOption);
         return ResponseEntity.ok(articles);
     }
 

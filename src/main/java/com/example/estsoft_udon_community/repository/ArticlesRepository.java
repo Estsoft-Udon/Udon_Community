@@ -19,6 +19,22 @@ public interface ArticlesRepository extends JpaRepository<Articles, Long> {
     // 삭제되지 않은 모든 게시글 조회 (페이지네이션 추가)
     Page<Articles> findByIsDeletedFalse(Pageable pageable);
 
+    // 좋아요 수로 정렬된 게시글 조회
+    @Query("SELECT a FROM Articles a " +
+            "LEFT JOIN ArticlesLike al ON a.id = al.articles.id " +
+            "WHERE a.isDeleted = false " +
+            "GROUP BY a.id " +
+            "ORDER BY COUNT(al.id) DESC")
+    Page<Articles> findAllOrderByLikeCount(Pageable pageable);
+
+    // 댓글 수로 정렬된 게시글 조회
+    @Query("SELECT a FROM Articles a " +
+            "LEFT JOIN Comments c ON a.id = c.articles.id " +
+            "WHERE a.isDeleted = false " +
+            "GROUP BY a.id " +
+            "ORDER BY COUNT(c.id) DESC")
+    Page<Articles> findAllOrderByCommentCount(Pageable pageable);
+
     // 게시글 ID로 조회 (삭제되지 않은 것만)
     Optional<Articles> findByIdAndIsDeletedFalse(Long id);
 

@@ -43,9 +43,9 @@
                     <!-- Navigation and Search Bar -->
                     <div class="table_hd">
                         <div class="btn_wr">
-                            <button class="nav_btn">최신순</button>
+                            <a th:href="@{/articles?sortOption='likeCount'}" class="nav_btn">좋아요 많은 순</a>
                             /
-                            <button class="nav_btn">인기순</button>
+                            <a th:href="@{/articles?sortOption='commentCount'}" class="nav_btn">댓글 많은 순</a>
                         </div>
                         <form th:action="@{/articles/search}" method="get">
                             <div class="search_box">
