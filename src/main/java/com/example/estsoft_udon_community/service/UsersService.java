@@ -119,12 +119,17 @@ public class UsersService {
         return usersRepository.existsByLoginIdIgnoreCase(loginId);
     }
 
-//    // 로그인 유저 지역정보 가져오기
-//    public Location getUserLocationByLoginId(String loginId) {
-//        Users user = usersRepository.findByLoginId(loginId);
-//        if (user == null) {
-//            throw new IllegalArgumentException("유저를 찾을 수 없습니다.");
-//        }
-//        return user.getLocation();
-//    }
+    // 비밀번호 변경
+    public boolean changePassword(Long userId, String currentPassword, String newPassword) {
+        Users user = usersRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        // 현재 비밀번호 확인
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            return false;
+        }
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        user.setPassword(encodedPassword);
+
+        usersRepository.save(user);
+        return true;
+    }
 }

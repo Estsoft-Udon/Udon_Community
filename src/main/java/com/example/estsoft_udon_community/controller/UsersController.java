@@ -1,5 +1,6 @@
 package com.example.estsoft_udon_community.controller;
 
+import com.example.estsoft_udon_community.dto.request.ChangePasswordRequest;
 import com.example.estsoft_udon_community.dto.response.UsersResponse;
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.dto.request.UsersRequest;
@@ -86,5 +87,22 @@ public class UsersController {
         String loginId = requestBody.get("loginId");
         boolean isDuplicate = usersService.isLoginIdDuplicate(loginId);
         return ResponseEntity.ok(isDuplicate);
+    }
+
+    // 유저 비밀번호 변경
+    @PutMapping("/users/{userId}/changePassword")
+    public ResponseEntity<Void> changePassword(@PathVariable Long userId,
+                                               @RequestBody ChangePasswordRequest changePasswordRequest) {
+        boolean isUpdated = usersService.changePassword(
+                userId,
+                changePasswordRequest.getCurrentPassword(),
+                changePasswordRequest.getNewPassword()
+        );
+
+        if (isUpdated) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

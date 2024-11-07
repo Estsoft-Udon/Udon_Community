@@ -6,18 +6,24 @@
         <div class="w_1280">
             <h1 class="tit">비밀번호 변경</h1>
             <section>
-                <form id="changePasswordForm" method="POST">
+                <form id="changePasswordForm" method="POST" action="/change_pw">
+                    <label for="currentPassword"></label>
+                    <input type="password" id="currentPassword" name="currentPassword" required placeholder="현재 비밀번호">
+
+                    <div id="passwordMessage"></div>
                     <label for="newPassword"></label>
                     <input type="password" id="newPassword" name="newPassword" required placeholder="변경할 비밀번호">
 
+                    <div id="passwordMatchMessage"></div>
                     <label for="confirmPassword"></label>
                     <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="변경할 비밀번호 확인">
-                    <!-- 비밀번호 일치 후 확인 클릭 시 변경 확인 알럿이 노출됩니다. -->
+
                     <button type="submit" class="default_btn btn_layout change_btn">확인</button>
                 </form>
             </section>
         </div>
     </div>
     <script src="/js/common.js"></script>
+    <script src="/js/password_change.js"></script>
 </th:block>
 </html>
