@@ -176,14 +176,21 @@ public class ArticlesService {
         ));
     }
 
-    // 제목 검색 기능
-    public Page<ArticleDetailResponse> searchByTitle(String title, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
-        Page<Articles> articlesPage = articlesRepository.findByTitleContainingIgnoreCase(title, pageable);
+    // 제목 검색 조회
+    public Page<ArticleDetailResponse> searchByTitle(String title, int page, int size, String sortOption) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));  // 기본적으로 작성일 기준 내림차순
+
+        Page<Articles> articlesPage = switch (sortOption) {
+            case "likeCount" -> articlesRepository.findByTitleContainingIgnoreCaseOrderByLikeCount(title, pageable);
+            case "commentCount" -> articlesRepository.findByTitleContainingIgnoreCaseOrderByCommentCount(title, pageable);
+            default -> articlesRepository.findByTitleContainingIgnoreCase(title, pageable);
+        };
+
         return articlesPage.map(article -> new ArticleDetailResponse(
                 article,
                 fetchLikeCount(article),
-                fetchCommentCount(article)));
+                fetchCommentCount(article)
+        ));
     }
 
     // 새로운 해시태그를 생성하거나 기존 해시태그를 가져오는 메서드

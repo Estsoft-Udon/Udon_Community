@@ -77,4 +77,20 @@ public interface ArticlesRepository extends JpaRepository<Articles, Long> {
 
     // 제목으로 게시글 검색 (페이지네이션 추가)
     Page<Articles> findByTitleContainingIgnoreCase(String title, Pageable pageable);
+
+    // 제목검색 좋아요 수 정렬 조회
+    @Query("SELECT a FROM Articles a " +
+            "LEFT JOIN ArticlesLike al ON a.id = al.articles.id " +
+            "WHERE LOWER(a.title) LIKE LOWER(CONCAT('%', :title, '%')) AND a.isDeleted = false " +
+            "GROUP BY a.id " +
+            "ORDER BY COUNT(al.id) DESC")
+    Page<Articles> findByTitleContainingIgnoreCaseOrderByLikeCount(@Param("title") String title, Pageable pageable);
+
+    // 제목검색 댓글 수 정렬 조회
+    @Query("SELECT a FROM Articles a " +
+            "LEFT JOIN Comments c ON a.id = c.articles.id " +
+            "WHERE LOWER(a.title) LIKE LOWER(CONCAT('%', :title, '%')) AND a.isDeleted = false " +
+            "GROUP BY a.id " +
+            "ORDER BY COUNT(c.id) DESC")
+    Page<Articles> findByTitleContainingIgnoreCaseOrderByCommentCount(@Param("title") String title, Pageable pageable);
 }

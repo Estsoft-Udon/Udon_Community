@@ -97,11 +97,12 @@ public class ArticlesController {
     public ResponseEntity<Page<ArticleDetailResponse>> searchArticlesByTitle(
             @RequestParam String title,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sortOption) {
         if (title == null || title.trim().isEmpty()) {
             return ResponseEntity.badRequest().body(Page.empty());
         }
-        Page<ArticleDetailResponse> articles = articlesService.searchByTitle(title, page, size);
+        Page<ArticleDetailResponse> articles = articlesService.searchByTitle(title, page, size, sortOption);
         return ResponseEntity.ok(articles);
     }
 }

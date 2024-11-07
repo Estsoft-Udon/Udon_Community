@@ -59,9 +59,10 @@ public class BoardController {
             @RequestParam String title,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "createdAt") String sortOption,
             Model model) {
 
-        Page<ArticleDetailResponse> articles = articlesService.searchByTitle(title, page, size);
+        Page<ArticleDetailResponse> articles = articlesService.searchByTitle(title, page, size, sortOption);
 
         model.addAttribute("searchQuery", title);
 
