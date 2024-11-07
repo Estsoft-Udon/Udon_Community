@@ -2,14 +2,17 @@ package com.example.estsoft_udon_community.controller;
 
 import com.example.estsoft_udon_community.dto.response.ArticleDetailResponse;
 import com.example.estsoft_udon_community.entity.Location;
+import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.service.ArticlesService;
 import com.example.estsoft_udon_community.service.EventService;
 import com.example.estsoft_udon_community.service.LocationService;
+import com.example.estsoft_udon_community.service.UsersService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
@@ -18,11 +21,13 @@ public class MainController {
     private final EventService eventService;
     private final LocationService locationService;
     private final ArticlesService articlesService;
+    private final UsersService usersService;
 
-    public MainController(EventService eventService, LocationService locationService, ArticlesService articlesService) {
+    public MainController(EventService eventService, LocationService locationService, ArticlesService articlesService, UsersService usersService) {
         this.eventService = eventService;
         this.locationService = locationService;
         this.articlesService = articlesService;
+        this.usersService = usersService;
     }
 
     @GetMapping("/")
@@ -48,6 +53,18 @@ public class MainController {
 
         model.addAttribute("articles", newestPosts); // 모델에 게시글 리스트 추가
 
+        Map<Users, Long> topUserMap = usersService.getTopUsersByLikes(5);
+
+        model.addAttribute("topUserMap", topUserMap);
+
+        getTopUsers(model);
+
         return "index";
+    }
+
+    public void getTopUsers(Model model) {
+        Map<Users, Long> topUserMap = usersService.getTopUsersByLikes(5);
+
+        model.addAttribute("topUserMap", topUserMap);
     }
 }
