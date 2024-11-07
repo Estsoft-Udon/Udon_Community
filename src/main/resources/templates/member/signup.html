@@ -11,18 +11,20 @@
                     <label for="name"></label>
                     <input type="text" id="name" name="name" required placeholder="이름">
 
+                    <!-- 중복 확인 메시지 표시 -->
+                    <div id="idCheckMessage" class="id-check-message"></div>
                     <div class="id_box">
                         <label for="loginId" class="dn"></label>
                         <input type="text" id="loginId" name="loginId" required placeholder="아이디">
                         <button type="button" onclick="checkId()" class="reversal_btn">중복 확인</button>
                     </div>
 
-                    <!-- 중복 확인 메시지 표시 -->
-                    <div id="idCheckMessage" class="id-check-message"></div>
-
+                    <!-- 비밀번호 정규식 검증 메시지 -->
+                    <div id="passwordMessage"></div>
                     <label for="password"></label>
                     <input type="password" id="password" name="password" required placeholder="비밀번호 입력">
-
+                    <!-- 비밀번호 일치 여부 메시지 표시 -->
+                    <div id="passwordMatchMessage"></div>
                     <label for="confirmPassword"></label>
                     <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="비밀번호 확인">
 
