@@ -99,14 +99,13 @@ function delete_comment(comment_id) {
     }
 }
 
-function press_like(userId, commentId) {
+function comment_press_like(commentId) {
     fetch(`/api/like/commentsLike`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json', // JSON 형식으로 데이터 전송
         },
         body: JSON.stringify({
-            userId: userId,
             commentId: commentId
         }), // 댓글 내용을 JSON 형식으로 변환
     })
@@ -114,7 +113,7 @@ function press_like(userId, commentId) {
         .then(data => {
             if (data.success) {
                 // 댓글의 좋아요 숫자 갱신
-                const likeCountElement = document.getElementById(`like_count_${commentId}`);
+                const likeCountElement = document.getElementById(`comment_like_count_${commentId}`);
                 likeCountElement.textContent = data.newLikeCount; // 서버에서 받은 새로운 좋아요 수로 갱신
             } else {
                 alert('좋아요 처리에 실패했습니다.');

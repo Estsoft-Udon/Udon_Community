@@ -58,8 +58,8 @@
                         <span th:each="hashtag : ${article.hashtags}" th:text="'#' + ${hashtag}">#해시태그</span>
                     </div>
                     <div class="btn_box">
-                        <button type="button" class="thumb_icon"></button>
-                        <span class="count_num">0</span>
+                        <button type="button" th:onclick="'article_press_like(' + ${article.id} + ')'" class="thumb_icon"></button>
+                        <span class="article-like-count" th:id="'article_like_count_' + ${article.id}" th:text="${articleLikeCount}">0</span>
                     </div>
                 </div>
 
@@ -84,8 +84,8 @@
                                 </div>
                             </div>
                             <div class="r_box">
-                                <button type="button" th:onclick="'press_like('+ ${comment.user.id} + ','+ ${comment.id} + ')'" class="thumb_icon"></button>
-                                <span class="comment-like-count" th:id="'like_count_' + ${comment.id}" th:text="${comment.likeCount}">0</span>
+                                <button type="button" th:onclick="'comment_press_like('+ ${comment.id} + ')'" class="thumb_icon"></button>
+                                <span class="comment-like-count" th:id="'comment_like_count_' + ${comment.id}" th:text="${comment.likeCount}">0</span>
                             </div>
                         </div>
 

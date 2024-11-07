@@ -85,3 +85,29 @@ function delete_article(article_id) {
             });
     }
 }
+
+function article_press_like(articleId) {
+    fetch(`/api/like/articlesLike`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json', // JSON 형식으로 데이터 전송
+        },
+        body: JSON.stringify({
+            articleId: articleId
+        }), // 댓글 내용을 JSON 형식으로 변환
+    })
+        .then(response => response.json()) // 서버에서 응답을 JSON으로 받음
+        .then(data => {
+            if (data.success) {
+                // 댓글의 좋아요 숫자 갱신
+                const likeCountElement = document.getElementById(`article_like_count_${articleId}`);
+                likeCountElement.textContent = data.newLikeCount; // 서버에서 받은 새로운 좋아요 수로 갱신
+            } else {
+                alert('좋아요 처리에 실패했습니다.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error); // 오류 로그
+            alert('좋아요 중 오류가 발생했습니다.'); // 오류 메시지
+        });
+}

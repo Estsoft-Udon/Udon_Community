@@ -27,6 +27,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ViewCommentController {
     private final ArticlesService articlesService;
+    private final ArticlesLikeService articlesLikeService;
     private final CommentsService commentsService;
     private final CommentsLikeService commentsLikeService;
 
@@ -37,6 +38,7 @@ public class ViewCommentController {
                               @RequestParam(defaultValue = "5") int size,
                               Model model) {
         Optional<ArticleResponse> article = articlesService.findByArticleId(id);
+        Long articleLikeCount = articlesLikeService.getLikeCountForArticle(id);
         Pageable pageable = PageRequest.of(page, size);
         Page<CommentsResponse> commentsPage = commentsService.findCommentsByArticleId(id, pageable);
 
@@ -48,6 +50,7 @@ public class ViewCommentController {
         if (!commentsPage.isEmpty()) {
             model.addAttribute("commentsPage", commentsPage);
         }
+        model.addAttribute("articleLikeCount", articleLikeCount);
         model.addAttribute("loggedInUserId", SecurityUtil.getLoggedInUser().getId());
 
         if (article.isPresent()) {
