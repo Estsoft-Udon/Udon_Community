@@ -1,6 +1,5 @@
 package com.example.estsoft_udon_community.controller;
 
-import com.example.estsoft_udon_community.dto.request.ChangePasswordRequest;
 import com.example.estsoft_udon_community.dto.response.UsersResponse;
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.dto.request.UsersRequest;
@@ -9,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
