@@ -57,13 +57,14 @@
             <div class="info_item">
                 <p class="info_label">등급 관리</p>
                 <label>
-                    <select name="grade" th:field="*{grades}"
+<!--                    th:field 속성 사용하셔서 충돌난겁니다~!-->
+                    <select name="grade"
                             onchange="document.querySelector('#updateGrade').value = this.value;">
                         <option value="" disabled selected> 선택하세요</option>
                         <option th:each="grade : ${grades}"
                                 th:value="${grade}"
                                 th:text="${grade}"
-                                th:selected="${user.grade}"></option>
+                                th:selected="${user.grade.toString() == grade.toString()}"></option>
                     </select>
                 </label>
             </div>
