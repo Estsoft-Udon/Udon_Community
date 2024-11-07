@@ -89,7 +89,7 @@ public class ViewController {
 
         return "member/signup";
     }
-    
+
     @PostMapping("/signup")
     public String signup(@ModelAttribute UsersRequest request,
                          Model model, Long locationId) {
@@ -102,7 +102,7 @@ public class ViewController {
             return "member/signup";
         }
     }
-        
+
     @GetMapping("/success")
     public String success() {
         return "member/success";
@@ -131,22 +131,21 @@ public class ViewController {
         List<String> upperLocations = locationService.getDistinctUpperLocations();
         model.addAttribute("upperLocations", upperLocations);
 
-        // 사용자의 마이페이지 Location 정보
-        Location userLocation = users.getLocation();
-        model.addAttribute("userLocation", userLocation);
-
         // 해당 Upper Location의 하위 Location 리스트
         if (!upperLocations.isEmpty()) {
-
             String firstUpperLocation = upperLocations.get(0);
             List<Location> lowerLocations = locationService.getLowerLocations(firstUpperLocation);
             model.addAttribute("locations", lowerLocations);
         }
+
+        Location location = users.getLocation();
+        model.addAttribute("originLocation", location);
+
         return "member/edit_profile";
     }
 
     @PostMapping("/edit_profile")
-    public String editProfile(@ModelAttribute UsersRequest request,Long locationId) {
+    public String editProfile(@ModelAttribute UsersRequest request, Model model, Long locationId) {
         request.setLocationId(locationId);
 
         usersService.updateUser(getLoggedInUser().getId(), request);

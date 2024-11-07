@@ -5,20 +5,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/admin/board")
-public class AdminBoardViewController {
+@RequestMapping("admin/member")
+public class AdminMemverController {
 
-    // 게시글 목록
-    @GetMapping("/board_list")
+    // 회원 목록
+    @GetMapping("/member_list")
     public String boardList() {
 
-        return "admin/board/board_list";
+        return "admin/member/member_list";
     }
 
-    // 게시글 수정(공개/비공개)
-    @GetMapping("/board_edit")
+    // 회원 정보 수정(등급 수정)
+    @GetMapping("/member_edit")
     public String boardEdit() {
 
-        return "admin/board/board_edit";
+        return "admin/member/member_edit";
     }
 }

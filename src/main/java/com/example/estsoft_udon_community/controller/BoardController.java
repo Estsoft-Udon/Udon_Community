@@ -2,6 +2,7 @@ package com.example.estsoft_udon_community.controller;
 
 import com.example.estsoft_udon_community.dto.request.AddArticleRequest;
 import com.example.estsoft_udon_community.dto.response.ArticleDetailResponse;
+import com.example.estsoft_udon_community.dto.response.ArticleResponse;
 import com.example.estsoft_udon_community.enums.ArticleCategory;
 import com.example.estsoft_udon_community.service.ArticlesService;
 import com.example.estsoft_udon_community.service.HashtagService;
@@ -123,19 +124,7 @@ public class BoardController {
     // 게시글 생성
     @GetMapping("/articles/new")
     public String createBoard(Model model) {
-
-        model.addAttribute("articleCategories", ArticleCategory.values());
-
-        // 상위 지역 목록을 가져와서 모델에 추가
-        List<String> upperLocations = locationService.getDistinctUpperLocations();
-        model.addAttribute("upperLocations", upperLocations);
-
-        // 첫 번째 상위 지역에 대한 하위 지역 목록을 초기화하여 모델에 추가
-        if (!upperLocations.isEmpty()) {
-            String firstUpperLocation = upperLocations.get(0);
-            List<Location> lowerLocations = locationService.getLowerLocations(firstUpperLocation);
-            model.addAttribute("locations", lowerLocations);
-        }
+        setCategoriesAndLocations(model);
 
         return "board/board_edit";
     }
@@ -155,10 +144,50 @@ public class BoardController {
 
     // 게시글 수정
     @GetMapping("/articles/edit/{articleId}")
-    public String boardEditPage() {
+    public String boardEdit(@PathVariable Long articleId, Model model) {
+        setCategoriesAndLocations(model);
+
+        // 기존 게시글 데이터를 조회하여 모델에 추가
+        ArticleResponse article = articlesService.findByArticleId(articleId)
+                .orElseThrow(() -> new IllegalArgumentException("article이 존재하지 않습니다."));
+        model.addAttribute("article", article);
+
+        Location location = locationService.findByName(article.getLocation());
+        model.addAttribute("originLocation", location);
+
         return "board/board_edit";
     }
 
     // 게시글 수정
+    @PostMapping("/articles/edit/{articleId}")
+    public String boardEdit(@PathVariable Long articleId, Model model,
+                            @ModelAttribute AddArticleRequest request,
+                            Long locationId) {
 
+        model.addAttribute("article", request);
+        model.addAttribute("articleCategories", ArticleCategory.values());
+
+        request.setLocationId(locationId);
+
+        //article 저장
+        articlesService.updateArticle2(articleId, request);
+
+        return "board/board_edit";
+    }
+
+    // 카테고리 및 로케이션 세팅
+    public void setCategoriesAndLocations(Model model) {
+        model.addAttribute("articleCategories", ArticleCategory.values());
+
+        // 상위 지역 목록을 가져와서 모델에 추가
+        List<String> upperLocations = locationService.getDistinctUpperLocations();
+        model.addAttribute("upperLocations", upperLocations);
+
+        // 첫 번째 상위 지역에 대한 하위 지역 목록을 초기화하여 모델에 추가
+        if (!upperLocations.isEmpty()) {
+            String firstUpperLocation = upperLocations.get(0);
+            List<Location> lowerLocations = locationService.getLowerLocations(firstUpperLocation);
+            model.addAttribute("locations", lowerLocations);
+        }
+    }
 }

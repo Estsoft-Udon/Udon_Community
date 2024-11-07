@@ -4,6 +4,9 @@ import com.example.estsoft_udon_community.entity.Location;
 import com.example.estsoft_udon_community.enums.UpperLocationEnum;
 import com.example.estsoft_udon_community.repository.LocationRepository;
 import java.util.List;
+import java.util.Optional;
+
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,5 +34,12 @@ public class LocationService {
     public List<Location> getLowerLocations(String upperLocation) {
         UpperLocationEnum upperLocationEnum = UpperLocationEnum.fromString(upperLocation);
         return locationRepository.findLowerLocationsByUpperLocation(upperLocationEnum);
+    }
+
+    public Location findByName(String name) {
+        Location location = locationRepository.findByName(name)
+                .orElseThrow(() -> new EntityNotFoundException("No Found Location By Name"));
+
+        return location;
     }
 }
