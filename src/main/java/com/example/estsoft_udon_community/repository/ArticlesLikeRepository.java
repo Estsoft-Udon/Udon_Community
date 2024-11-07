@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface ArticlesLikeRepository extends JpaRepository<ArticlesLike, Long> {
@@ -18,4 +19,10 @@ public interface ArticlesLikeRepository extends JpaRepository<ArticlesLike, Long
 
     Long countArticlesLikeByArticles(Articles article);
     Long countLikesByArticles(Articles article);
+
+    // 유저별 articleLike 조회
+    @Query("SELECT al.users.id AS userId, COUNT(al) AS likeCount " +
+            "FROM ArticlesLike al " +
+            "GROUP BY al.users.id")
+    List<Map<String, Object>> findTopUsersByArticleLikes();
 }

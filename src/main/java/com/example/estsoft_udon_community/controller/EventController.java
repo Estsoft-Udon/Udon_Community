@@ -49,9 +49,12 @@ public class EventController {
     @PostMapping
     public ResponseEntity<String> addEvent(@ModelAttribute EventRequest eventRequest) {
         Users loggedInUser = SecurityUtil.getLoggedInUser();
-        eventRequest.setUsersId(loggedInUser.getId());
-
-        eventService.addEvent(eventRequest);
+        if(loggedInUser != null) {
+            eventRequest.setUsersId(loggedInUser.getId());
+            eventService.addEvent(eventRequest);
+        } else {
+            return ResponseEntity.ok("등록 요청 실패~!"); // 성공 메시지 반환
+        }
         return ResponseEntity.ok("등록 요청이 완료되었습니다."); // 성공 메시지 반환
     }
 

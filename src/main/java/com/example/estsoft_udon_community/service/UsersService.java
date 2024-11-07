@@ -4,9 +4,16 @@ import com.example.estsoft_udon_community.entity.Location;
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.dto.request.UsersRequest;
 import com.example.estsoft_udon_community.enums.PasswordHint;
+import com.example.estsoft_udon_community.repository.ArticlesLikeRepository;
+import com.example.estsoft_udon_community.repository.CommentsLikeRepository;
 import com.example.estsoft_udon_community.repository.LocationRepository;
 import com.example.estsoft_udon_community.repository.UsersRepository;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +24,8 @@ public class UsersService {
     private final UsersRepository usersRepository;
     private final LocationRepository locationRepository;
     private final BCryptPasswordEncoder passwordEncoder; // BCryptPasswordEncoder 주입
+    private final ArticlesLikeRepository articlesLikeRepository;
+    private final CommentsLikeRepository commentsLikeRepository;
 
     // 회원가입
     public Users registerUser(UsersRequest request) {
@@ -122,4 +131,37 @@ public class UsersService {
 //        }
 //        return user.getLocation();
 //    }
+
+    public Map<Users, Long> getTopUsersByLikes(int limit) {
+        List<Map<String, Object>> articleLikeUsers = articlesLikeRepository.findTopUsersByArticleLikes();
+        List<Map<String, Object>> commentLikeUsers = commentsLikeRepository.findTopUsersByCommentLikes();
+
+        Map<Long, Long> userLikeCounts = new HashMap<>();
+
+        articleLikeUsers.forEach(record -> {
+            Long userId = (Long) record.get("userId");
+            Long likeCount = (Long) record.get("likeCount");
+            userLikeCounts.merge(userId, likeCount, Long::sum);
+        });
+
+        commentLikeUsers.forEach(record -> {
+            Long userId = (Long) record.get("userId");
+            Long likeCount = (Long) record.get("likeCount");
+            userLikeCounts.merge(userId, likeCount, Long::sum);
+        });
+
+        Map<Users, Long> topUsersMap = new LinkedHashMap<>(); // 순서를 보장하는 LinkedHashMap 사용
+
+        userLikeCounts.entrySet().stream()
+                .sorted((entry1, entry2) -> Long.compare(entry2.getValue(), entry1.getValue())) // likeCount 기준 내림차순 정렬
+                .limit(5) // 상위 5개만 가져오기
+                .forEach(entry -> {
+                    Long userId = entry.getKey(); // userId
+                    Long likeCount = entry.getValue(); // likeCount
+                    Users user = findUserById(userId); // userId로 Users 객체 조회
+                    topUsersMap.put(user, likeCount); // Map에 저장
+                });
+
+        return topUsersMap;
+    }
 }

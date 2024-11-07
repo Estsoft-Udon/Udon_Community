@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.example.estsoft_udon_community.util.SecurityUtil.getLoggedInUser;
@@ -65,7 +66,17 @@ public class MainController {
             model.addAttribute("locationId", location.getName());
             model.addAttribute("selectedUpperLocation", location.getUpperLocation());
         }
+        Map<Users, Long> topUserMap = usersService.getTopUsersByLikes(5);
 
+        model.addAttribute("topUserMap", topUserMap);
+
+        getTopUsers(model);
         return "index";
+    }
+
+    public void getTopUsers(Model model) {
+        Map<Users, Long> topUserMap = usersService.getTopUsersByLikes(5);
+
+        model.addAttribute("topUserMap", topUserMap);
     }
 }
