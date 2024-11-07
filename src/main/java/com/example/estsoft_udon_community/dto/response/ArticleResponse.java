@@ -27,6 +27,7 @@ public class ArticleResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String location;
+    private boolean isBlind;
 
     public ArticleResponse(Articles article) {
         // pk primary Key
