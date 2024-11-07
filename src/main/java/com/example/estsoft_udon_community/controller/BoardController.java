@@ -131,20 +131,19 @@ public class BoardController {
 
     // 게시글 생성
     @PostMapping("/articles/new")
-    public String createBoard(Model model, @ModelAttribute AddArticleRequest addArticleRequest, Long locationId) {
-
+    public String createBoard(Model model, @RequestBody AddArticleRequest addArticleRequest) {
         model.addAttribute("article", addArticleRequest);
         model.addAttribute("articleCategories", ArticleCategory.values());
 
         //article 저장
-        articlesService.saveArticle(addArticleRequest, locationId);
+        articlesService.saveArticle(addArticleRequest, addArticleRequest.getLocationId());
 
         return "board/board_edit";
     }
 
     // 게시글 수정
     @GetMapping("/articles/edit/{articleId}")
-    public String boardEdit(@PathVariable Long articleId, Model model) {
+    public String editBoard(@PathVariable Long articleId, Model model) {
         setCategoriesAndLocations(model);
 
         // 기존 게시글 데이터를 조회하여 모델에 추가
@@ -160,7 +159,7 @@ public class BoardController {
 
     // 게시글 수정
     @PostMapping("/articles/edit/{articleId}")
-    public String boardEdit(@PathVariable Long articleId, Model model,
+    public String editBoard(@PathVariable Long articleId, Model model,
                             @ModelAttribute AddArticleRequest request,
                             Long locationId) {
 

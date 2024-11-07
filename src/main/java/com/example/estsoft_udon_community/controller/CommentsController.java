@@ -2,13 +2,10 @@ package com.example.estsoft_udon_community.controller;
 
 import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Comments;
-import com.example.estsoft_udon_community.entity.Users;
-import com.example.estsoft_udon_community.dto.response.ArticleResponse;
 import com.example.estsoft_udon_community.dto.response.CommentsArticlesResponse;
 import com.example.estsoft_udon_community.dto.request.CommentsRequest;
 import com.example.estsoft_udon_community.dto.response.CommentsResponse;
 import com.example.estsoft_udon_community.repository.ArticlesRepository;
-import com.example.estsoft_udon_community.repository.UsersRepository;
 import com.example.estsoft_udon_community.service.ArticlesService;
 import com.example.estsoft_udon_community.service.CommentsService;
 import lombok.RequiredArgsConstructor;
@@ -71,7 +68,6 @@ public class CommentsController {
     // 코멘트 삭제
     @DeleteMapping("/articles/{articleId}/comments/{commentId}")
     public ResponseEntity<Void> softDelete(@PathVariable Long articleId, @PathVariable Long commentId) {
-        System.out.println("실행은 됐다");
         commentsService.softDelete(commentId);
 
         return ResponseEntity.ok().build();
