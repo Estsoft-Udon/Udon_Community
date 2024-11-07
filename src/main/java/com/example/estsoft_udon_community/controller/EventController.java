@@ -1,29 +1,46 @@
 package com.example.estsoft_udon_community.controller;
 
 import com.example.estsoft_udon_community.dto.response.EventResponse;
-import com.example.estsoft_udon_community.dto.response.UsersResponse;
-import com.example.estsoft_udon_community.entity.Event;
 import com.example.estsoft_udon_community.dto.request.EventRequest;
+import com.example.estsoft_udon_community.entity.Event;
+import com.example.estsoft_udon_community.repository.EventRepository;
 import com.example.estsoft_udon_community.service.EventService;
-import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/event")
 @RequiredArgsConstructor
 public class EventController {
     private final EventService eventService;
+    private final EventRepository eventRepository;
 
     // 캘린더 메인(이벤트 전체 조회)
     @GetMapping
     public ResponseEntity<List<EventResponse>> getAllEvents() {
         return ResponseEntity.ok(eventService.getAllEvents().stream()
                 .map(EventResponse::new).toList());
+    }
+
+    // 승인된 이벤트 조회
+    @GetMapping("/accepted")
+    public ResponseEntity<List<EventResponse>> getAcceptedEvents() {
+        List<EventResponse> acceptedEvents = eventService.getAcceptedEvents();
+        if (acceptedEvents.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(acceptedEvents);
+    }
+
+    // 승인되지 않은 이벤트 조회
+    @GetMapping("/pending")
+    public List<EventResponse> getPendingEvents() {
+        return eventService.getPendingEvents();
     }
 
     // 캘린더 추가
