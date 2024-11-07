@@ -127,10 +127,6 @@ public class ViewController {
         model.addAttribute("user", users);
         model.addAttribute("passwordHints", PasswordHint.values());
 
-        Location location = users.getLocation();
-        model.addAttribute("locationId", location.getName());
-        model.addAttribute("selectedUpperLocation", location.getUpperLocation());
-
         // upperLocation의 정보
         List<String> upperLocations = locationService.getDistinctUpperLocations();
         model.addAttribute("upperLocations", upperLocations);
@@ -141,11 +137,15 @@ public class ViewController {
             List<Location> lowerLocations = locationService.getLowerLocations(firstUpperLocation);
             model.addAttribute("locations", lowerLocations);
         }
+
+        Location location = users.getLocation();
+        model.addAttribute("originLocation", location);
+
         return "member/edit_profile";
     }
 
     @PostMapping("/edit_profile")
-    public String editProfile(@ModelAttribute UsersRequest request, Long locationId) {
+    public String editProfile(@ModelAttribute UsersRequest request, Model model, Long locationId) {
         request.setLocationId(locationId);
 
         usersService.updateUser(getLoggedInUser().getId(), request);
