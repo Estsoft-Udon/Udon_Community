@@ -129,5 +129,6 @@ public interface ArticlesRepository extends JpaRepository<Articles, Long> {
                                                                     @Param("location") Location location,
                                                                     Pageable pageable);
 
+    // 관리자 게시글 검색기능
     Page<Articles> findByTitleContaining(String keyword, Pageable pageable);
 }

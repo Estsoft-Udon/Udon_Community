@@ -6,6 +6,8 @@ import com.example.estsoft_udon_community.service.ArticlesService;
 import com.example.estsoft_udon_community.service.admin.AdminArticleService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,21 +32,28 @@ public class AdminBoardViewController {
     public String boardList(@RequestParam(value = "page", defaultValue = "0") int page,
                             @RequestParam(value = "size", defaultValue = "10") int size,
                             @RequestParam(value = "keyword", required = false) String keyword,
+                            @RequestParam(value = "sort", defaultValue = "createdAt,desc") String sort,
                             Model model) {
+
+        String[] sortParams = sort.split(",");
+        Sort sortOrder = Sort.by(Sort.Direction.fromString(sortParams[1]), sortParams[0]);
+        Pageable pageable = PageRequest.of(page, size, sortOrder);
 
         Page<ArticleResponse> articles;
         if (keyword != null && !keyword.isEmpty()) {
-            articles = adminArticleService.findByTitleContaining(keyword, PageRequest.of(page, size));
+            articles = adminArticleService.findByTitleContaining(keyword, pageable);
         } else {
-            articles = adminArticleService.getAdminArticles(PageRequest.of(page, size));
+            articles = adminArticleService.getAdminArticles(pageable);
         }
 
         model.addAttribute("articles", articles);
         model.addAttribute("page", page);
         model.addAttribute("size", size);
-        model.addAttribute("keyword", keyword); // 검색어를 뷰에 전달
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("sort", sort); // 뷰에서 정렬 기준 유지
         return "admin/board/board_list";
     }
+
 
 
     // 게시글 수정(공개/비공개)
