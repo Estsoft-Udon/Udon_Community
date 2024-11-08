@@ -115,7 +115,6 @@ public class BoardController {
         model.addAttribute("currentPageContext", "hotRestaurant");
 
         // 조회된 게시글 정보를 모델에 추가
-        setArticleModel(model, hotRestaurantArticles, page);
         setArticleModel(model, articles, page);
 
         return "board/board_list";
