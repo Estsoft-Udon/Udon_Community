@@ -17,5 +17,7 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
     List<Location> findLowerLocationsByUpperLocation(UpperLocationEnum upperLocation);
 
     Optional<Location> findByName(String name);
+
+    Optional<Location> findByNameAndUpperLocation(String name, UpperLocationEnum upperLocation);
 }
 

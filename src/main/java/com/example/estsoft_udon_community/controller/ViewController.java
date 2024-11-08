@@ -5,10 +5,15 @@ import static com.example.estsoft_udon_community.util.SecurityUtil.*;
 import com.example.estsoft_udon_community.dto.request.UsersRequest;
 import com.example.estsoft_udon_community.entity.Location;
 import com.example.estsoft_udon_community.entity.Users;
+import com.example.estsoft_udon_community.enums.ArticleCategory;
 import com.example.estsoft_udon_community.enums.PasswordHint;
 import com.example.estsoft_udon_community.service.LocationService;
 import com.example.estsoft_udon_community.service.UsersService;
+
+import java.util.ArrayList;
 import java.util.List;
+
+import com.example.estsoft_udon_community.util.ModelUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -140,20 +145,12 @@ public class ViewController {
     @GetMapping("/edit_profile")
     public String editProfile(Model model) {
         // 로그인 사용자의 정보
-        Users users = usersService.findUserById(getLoggedInUser().getId());
+        Users users = getLoggedInUser();
         model.addAttribute("user", users);
         model.addAttribute("passwordHints", PasswordHint.values());
 
-        // upperLocation의 정보
-        List<String> upperLocations = locationService.getDistinctUpperLocations();
-        model.addAttribute("upperLocations", upperLocations);
-
-        // 해당 Upper Location의 하위 Location 리스트
-        if (!upperLocations.isEmpty()) {
-            String firstUpperLocation = upperLocations.get(0);
-            List<Location> lowerLocations = locationService.getLowerLocations(firstUpperLocation);
-            model.addAttribute("locations", lowerLocations);
-        }
+        ModelUtil modelUtil = new ModelUtil(locationService);
+        modelUtil.setLocations(model);
 
         Location location = users.getLocation();
         model.addAttribute("originLocation", location);

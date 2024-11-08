@@ -23,26 +23,21 @@
                     <div class="form_cont">
                         <span>지역</span>
                         <label for="upperLocation" class="dn">지역을 선택</label>
-                        <!--                        <input type="text" id="region" class="input-field" placeholder="지역 입력" readonly th:text="${userLocation}">-->
                         <select id="upperLocation" name="upperLocation" onchange="updateLowerLocations()">
                             <option value="" disabled selected> 지역을 선택하세요</option>
                             <th:block th:each="upperLocation : ${upperLocations}">
                                 <option th:value="${upperLocation}" th:text="${upperLocation}"
                                         th:selected="${article != null and originLocation != null and originLocation.upperLocation.name==upperLocation}"></option>
                             </th:block>
-                            <!--                            <th:block th:if="${article != null}">-->
-                            <!--                                <option th:value="${article.location.upperLocation.name()}" th:text="${article.location.upperLocation.name()}"></option>-->
-                            <!--                            </th:block>-->
                         </select>
 
                         <label for="locationId" class="dn"> 상세 지역을 선택</label>
                         <select id="locationId" name="locationId" class="input-field" required>
                             <th:block th:each="location : ${locations}">
-                                <option th:value="${location.id}"
-                                        th:text="${location.name}"
-                                        th:selected="${article != null and originLocation != null and originLocation.name == location.name}">
+                                <option th:value="${location.id}" th:text="${location.name}"
+                                        th:selected="${originLocation != null and originLocation.id == location.id}">
+                                </option>
                             </th:block>
-                            </option>
                         </select>
                     </div>
 
@@ -67,9 +62,9 @@
                     <!-- 글 입력 -->
                     <div class="text-area-section">
                         <span>글 입력</span>
-                        <textarea name="content" class="input-field" placeholder="내용을 입력하세요" required
+                        <textarea name="content" class="input-field" id="edit_content" placeholder="내용을 입력하세요" required
                                   th:if="${article != null}" th:text="${article.content}" ></textarea>
-                        <textarea name="content" id="content" class="input-field" placeholder="내용을 입력하세요" required
+                        <textarea name="content" class="input-field" id="post_content" placeholder="내용을 입력하세요" required
                                   th:unless="${article != null}"></textarea>
                     </div>
 
@@ -95,6 +90,7 @@
 
             if (exist_article) {
                 // 수정 모드
+                loadHashtags(article.id);
                 form.onsubmit = function(event) {
                     event.preventDefault();  // 폼 제출 기본 동작을 막고
                     edit_article(article.id);  // 수정 함수 호출

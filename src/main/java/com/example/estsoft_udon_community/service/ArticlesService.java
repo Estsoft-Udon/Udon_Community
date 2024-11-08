@@ -21,8 +21,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +36,7 @@ public class ArticlesService {
     private final CommentsRepository commentsRepository;
     private final ArticlesLikeRepository articlesLikeRepository;
     private final LocationService locationService;
+    private final ArticleHashtagService articleHashtagService;
 
     // 게시글 등록 - api
     public Articles saveArticle(AddArticleRequest request) {
@@ -270,11 +273,31 @@ public class ArticlesService {
         return commentsRepository.countNonDeletedCommentsByArticle(article);
     }
 
-    public Articles updateArticle2(Long id, AddArticleRequest request) {
+    @Transactional
+    public void updateArticle2(Long id, AddArticleRequest request) {
         Articles article = findJustArticle(id);
         article.setUpdatedAt(LocalDateTime.now());
         article.updateArticle2(request);
         article.setLocation(locationService.getLocationById(request.getLocationId()));
-        return articlesRepository.save(article);
+        List<Hashtag> hashtagList = getOrCreateHashtags(request.getHashtagName());
+
+        // 기존 해시태그와 비교해서 없으면 레포에서 삭제!
+        List<Hashtag> originHashtagList = articleHashtagService.getHashtagsByArticleId(id);
+        // Set으로 변환하여 비교 준비
+        Set<Hashtag> originTags = new HashSet<>(originHashtagList);
+        Set<Hashtag> updatedTags = new HashSet<>(hashtagList);
+
+        // 삭제 대상 해시태그 추출
+        originTags.removeAll(updatedTags);
+
+        // 레포지토리에서 삭제
+        originTags.forEach(hashtag -> articleHashtagService.deleteByArticlesAndHashtag(article, hashtag));
+
+        Articles savedArticle = articlesRepository.save(article);
+
+        for (Hashtag hashtag : hashtagList) {
+            articleHashtagJoinRepository.save(new ArticleHashtagJoin(savedArticle, hashtag));
+        }
+        removeUnusedHashtags();
     }
 }
