@@ -42,4 +42,9 @@ public class LocationService {
 
         return location;
     }
+
+    public Location findByNameAndUpperLocation(String name, UpperLocationEnum upperLocation) {
+        return locationRepository.findByNameAndUpperLocation(name, upperLocation)
+                .orElseThrow(() -> new IllegalArgumentException("Location not found"));
+    }
 }

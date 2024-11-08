@@ -34,11 +34,10 @@
                         <label for="locationId" class="dn"> 상세 지역을 선택</label>
                         <select id="locationId" name="locationId" class="input-field" required>
                             <th:block th:each="location : ${locations}">
-                                <option th:value="${location.id}"
-                                        th:text="${location.name}"
-                                        th:selected="${article != null and originLocation != null and originLocation.id == location.id}">
+                                <option th:value="${location.id}" th:text="${location.name}"
+                                        th:selected="${originLocation != null and originLocation.id == location.id}">
+                                </option>
                             </th:block>
-                            </option>
                         </select>
                     </div>
 
