@@ -104,7 +104,22 @@ public class BoardController {
         return "board/board_list";
     }
 
-    public void setArticleModel(Model model, Page<ArticleDetailResponse> articles, int page) {
+    // 한뚝배기
+    @GetMapping("/articles/hotRestaurant")
+    public String getHotRestaurantArticles(@RequestParam(defaultValue = "0") int page,
+                                           @RequestParam(defaultValue = "5") int size,
+                                           @RequestParam(defaultValue = "createdAt") String sortOption,
+                                           Model model) {
+        Page<ArticleDetailResponse> articles = articlesService.findHotRestaurantArticlesForCurrentUser(page, size, sortOption);
+
+        model.addAttribute("currentPageContext", "hotRestaurant");
+
+        setArticleModel(model, articles, page);
+
+        return "board/board_list";
+    }
+
+    private void setArticleModel(Model model, Page<ArticleDetailResponse> articles, int page) {
         model.addAttribute("articles", articles);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", articles.getTotalPages());
@@ -112,35 +127,6 @@ public class BoardController {
 
         List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();
         model.addAttribute("topHashtags", topHashtags);
-    }
-
-    // 한뚝배기
-    @GetMapping("/articles/hotRestaurant")
-    public String getHotRestaurantArticles(@RequestParam(defaultValue = "0") int page,
-                                           @RequestParam(defaultValue = "5") int size,
-                                           @RequestParam(defaultValue = "createdAt") String sortOption,
-                                           Model model) {
-        // 접속 중인 유저 확인
-        Users loggedInUser = getLoggedInUser();
-        if (loggedInUser == null) {
-            throw new IllegalStateException("로그인된 유저가 없습니다.");
-        }
-        Location userLocation = loggedInUser.getLocation();
-
-        // 카테고리와 위치를 기준으로 인기 맛집 게시글 조회
-        Page<ArticleDetailResponse> hotRestaurantArticles = articlesService.findHotRestaurantArticlesForCurrentUser(
-                userLocation, page, size, sortOption);
-
-        // 조회된 게시글 정보를 모델에 추가
-        model.addAttribute("articles", hotRestaurantArticles);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", hotRestaurantArticles.getTotalPages());
-        model.addAttribute("totalItems", hotRestaurantArticles.getTotalElements());
-
-        List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();
-        model.addAttribute("topHashtags", topHashtags);
-
-        return "board/board_list";
     }
 
     // 게시글 생성

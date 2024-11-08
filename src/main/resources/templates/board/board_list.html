@@ -33,8 +33,13 @@
             <div class="r_box">
                 <div class="tit_wr">
                     <div class="tit_box">
-                        <h2 th:text="${location != null ? location.upperLocation : '대한민국'}"></h2>
-                        <span th:text="${location != null ? location.name : '우리동네'}"></span>
+                        <!-- '한뚝배기'로 접근했을 때 -->
+                        <h2 th:if="${currentPageContext == 'hotRestaurant'}">한 뚝배기 하실래요?</h2>
+                        <span th:if="${currentPageContext == 'hotRestaurant'}">우리 동네 맛집 목록</span>
+
+                        <!-- '한뚝배기'가 아닌 다른 경우 (기본 텍스트) -->
+                        <h2 th:if="${currentPageContext != 'hotRestaurant'}" th:text="${location != null ? location.upperLocation : '대한민국'}"></h2>
+                        <span th:if="${currentPageContext != 'hotRestaurant'}" th:text="${location != null ? location.name : '우리동네'}"></span>
                     </div>
                     다양한 사람들을 만나고 우리 동네의 모든 정보를 공유해보아요.
                 </div>
@@ -44,13 +49,13 @@
                     <div class="table_hd">
                         <div class="btn_wr">
                             <!-- 일반 게시글일 때 -->
-                            <div th:if="${hashtagId == null and category == null and searchQuery == null}">
+                            <div th:if="${currentPageContext != 'hotRestaurant' and category == null and hashtagId == null and searchQuery == null}">
                                 <a th:href="@{${location != null ? '/articles?locationId=' + location.id + '&sortOption=likeCount' : '/articles?sortOption=likeCount'}}" class="nav_btn">좋아요 많은 순</a>
                                 /
                                 <a th:href="@{${location != null ? '/articles?locationId=' + location.id + '&sortOption=commentCount' : '/articles?sortOption=commentCount'}}" class="nav_btn">댓글 많은 순</a>
                             </div>
                             <!-- 한 뚝배기일 때 -->
-                            <div th:if="${loggedInUser != null}">
+                            <div th:if="${currentPageContext == 'hotRestaurant'}">
                                 <a th:href="@{/articles/hotRestaurant(sortOption='likeCount', locationId=${location != null ? location.id : ''})}" class="nav_btn">좋아요 많은 순</a>
                                 /
                                 <a th:href="@{/articles/hotRestaurant(sortOption='commentCount', locationId=${location != null ? location.id : ''})}" class="nav_btn">댓글 많은 순</a>
@@ -127,12 +132,12 @@
                             <!-- 페이지 번호 생성 -->
                             <li th:each="page : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${page == currentPage ? 'on' : ''}">
                                 <!-- 기본 -->
-                                <a th:if="${category == null and hashtagId == null and searchQuery == null}"
+                                <a th:if="${currentPageContext != 'hotRestaurant' and category == null and hashtagId == null and searchQuery == null}"
                                    th:href="@{/articles(locationId=${location != null ? location.id : ''}, page=${page}, size=${5})}"
                                    th:text="${page + 1}"></a>
 
                                 <!-- 한 뚝배기-->
-                                <a th:if="${loggedInUser != null}"
+                                <a th:if="${currentPageContext == 'hotRestaurant'}"
                                    th:href="@{/articles/hotRestaurant(page=${page}, size=${5})}"
                                    th:text="${page + 1}"></a>
 
