@@ -31,12 +31,6 @@ public class UsersController {
         return ResponseEntity.ok(new UsersResponse(usersService.registerUser(user)));
     }
 
-    // 로그인
-    @PostMapping("/login")
-    public ResponseEntity<UsersResponse> loginUser(String loginId, String password) {
-        return ResponseEntity.ok(new UsersResponse(usersService.loginUser(loginId, password)));
-    }
-
     @GetMapping("/users")
     public ResponseEntity<List<UsersResponse>> getAllUsers() {
         return ResponseEntity.ok(usersService.getAllUsers().stream().map(UsersResponse::new).toList());

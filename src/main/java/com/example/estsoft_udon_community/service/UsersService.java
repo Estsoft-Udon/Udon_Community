@@ -50,26 +50,6 @@ public class UsersService {
         return usersRepository.findAll();
     }
 
-    // 로그인
-    public Users loginUser(String loginId, String password) {
-        Users users = usersRepository.findByLoginId(loginId);
-        String encodedPassword = users.getPassword();
-
-        // 암호화
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        boolean isMatch = passwordEncoder.matches(password, encodedPassword);
-
-        if (!isMatch) {
-            throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
-        }
-
-        // 로그인 시간 추가
-        users.updateLastLoginAt();
-        usersRepository.save(users);
-
-        return users;
-    }
-
     // 유저 정보 조회
     public Users findUserById(Long id) {
         Users users = usersRepository.findById(id).orElseThrow();
