@@ -13,7 +13,7 @@ public class SecurityUtil {
 
         if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-            return userDetails.getUser(); // CustomUserDetails 에서 사용자 ID를 반환
+            return userDetails.getUser();
         }
         return null;
     }

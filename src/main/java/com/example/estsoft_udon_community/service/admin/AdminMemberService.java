@@ -23,4 +23,10 @@ public class AdminMemberService {
     public Users getUserById(Long id) {
         return repository.findById(id).orElseThrow();
     }
+
+    // 회원 이름으로 검색 (동명이인 가능), 이름에 포함된 글자도 출력가능
+    public Page<Users> getUsersSearchName(String search, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return repository.findByNameContaining(search, pageable);
+    }
 }
