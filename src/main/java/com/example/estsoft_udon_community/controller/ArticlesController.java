@@ -110,21 +110,13 @@ public class ArticlesController {
         return ResponseEntity.ok(articles);
     }
 
-    // 접속중인 유저의 지역과 카테고리가 RESTAURANT인 게시글 조회 (좋아요순, 페이지네이션)
+    // 한뚝배기
     @GetMapping("/articles/hotRestaurant")
     public ResponseEntity<Page<ArticleDetailResponse>> getHotRestaurantArticles(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "likeCount") String sortOption) {
-
-        Users loggedInUser = getLoggedInUser();
-        if (loggedInUser == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(null);
-        }
-        Location userLocation = loggedInUser.getLocation();
-
-        Page<ArticleDetailResponse> hotRestaurantArticles = articlesService.findHotRestaurantArticlesForCurrentUser(userLocation, page, size, sortOption);
+        Page<ArticleDetailResponse> hotRestaurantArticles = articlesService.findHotRestaurantArticlesForCurrentUser(page, size, sortOption);
         return ResponseEntity.ok(hotRestaurantArticles);
     }
 }
