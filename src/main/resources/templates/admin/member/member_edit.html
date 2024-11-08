@@ -15,7 +15,6 @@
                 <button type="submit" class="default_btn">저장하기</button>
             </form>
         </div>
-        <!-- 회원 목록에 맞추어 수정하셔도 괜찮습니다. -->
         <div class="info">
             <div class="info_item">
                 <p class="info_label">회원 ID</p>
@@ -31,7 +30,7 @@
             </div>
             <div class="info_item">
                 <p class="info_label">최종 접속 시간</p>
-                <span th:text="${user.lastLoginAt}">최종 접속 시간</span>
+                <span th:text="${user.updatedAt}">최종 접속 시간</span>
             </div>
             <!--            <div class="info_item">-->
             <!--                <p class="info_label">접속 횟수</p>-->
@@ -45,25 +44,23 @@
             </div>
             <div class="info_item">
                 <p class="info_label">등급</p>
-                <span th:text="${user.grade}"></span>
+                <span th:text="${user.displayName}"></span>
             </div>
 
-            <!--    일단 전부 true-->
             <div class="info_item">
                 <p class="info_label">등업 신청 여부</p>
                 <span>True</span>
             </div>
-            <!--            -->
+
             <div class="info_item">
                 <p class="info_label">등급 관리</p>
                 <label>
-<!--                    th:field 속성 사용하셔서 충돌난겁니다~!-->
                     <select name="grade"
                             onchange="document.querySelector('#updateGrade').value = this.value;">
                         <option value="" disabled selected> 선택하세요</option>
                         <option th:each="grade : ${grades}"
                                 th:value="${grade}"
-                                th:text="${grade}"
+                                th:text="${grade.displayName}"
                                 th:selected="${user.grade.toString() == grade.toString()}"></option>
                     </select>
                 </label>
@@ -71,10 +68,5 @@
         </div>
     </section>
 </th:block>
-<script>
-    function updateValue(value) {
-        document.querySelector("#updateGrade").value = value;
-    }
-</script>
 </body>
 </html>

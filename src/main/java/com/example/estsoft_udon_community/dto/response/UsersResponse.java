@@ -22,6 +22,8 @@ public class UsersResponse {
 
     private String grade;
 
+    private String displayName;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
@@ -37,6 +39,7 @@ public class UsersResponse {
         this.email = user.getEmail();
         this.nickname = user.getNickname();
         this.grade = user.getGrade().name();
+        this.displayName = user.getGrade().getDisplayName();
         this.createdAt = user.getCreatedAt();
         this.updatedAt = user.getUpdatedAt();
         this.lastLoginAt = user.getLastLoginAt();

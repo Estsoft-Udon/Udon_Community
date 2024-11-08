@@ -8,14 +8,13 @@
         <h1>회원 목록</h1>
         <div class="top">
             <div class="search">
-                <form action="" method="get">
-                    <input type="text" name="keyword" placeholder="검색어를 입력하세요" class="search-input"/>
-                    <button type="submit" class="search-button">검색</button>
+                <form id="search-form">
+                    <input type="text" id="search-input" placeholder="검색어를 입력하세요" class="search-input"/>
+                    <button id="search-button" class="search-button">검색</button>
                 </form>
             </div>
             <div class="filter">
                 <form action="" method="get">
-                    <!-- 필터 옵션 내용은 작업자 분 편하신 대로 바꾸시면 됩니다. -->
                     <select>
                         <option value="">전체 목록</option>
                         <option value="">최신가입순</option>
@@ -39,7 +38,7 @@
                 <th> 등급</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody id="user-table-body">
             <tr th:each="user : ${allUser}">
                 <td>
                     <a th:href="@{/admin/member/member_edit/{id}(id = ${user.id})}"
@@ -51,12 +50,12 @@
                 <td th:text="${user.location.name}"></td>
                 <td th:text="${user.updatedAt}"></td>
                 <td th:text="${user.createdAt}"></td>
-                <td th:text="${user.grade}"></td>
+                <td th:text="${user.displayName}"></td>
             </tr>
             </tbody>
         </table>
         <div class="pagination">
-            <ul>
+            <ul id="pagination-links">
                 <li th:if="${allUser.hasPrevious()}" class="page-item">
                     <a th:href="@{/admin/member/member_list(page=${allUser.number - 1}, size=${allUser.size})}"
                        class="page-link">이전</a>
@@ -73,6 +72,7 @@
             </ul>
         </div>
     </section>
+    <script src="/js/admin_member.js"></script>
 </th:block>
 </body>
 </html>
