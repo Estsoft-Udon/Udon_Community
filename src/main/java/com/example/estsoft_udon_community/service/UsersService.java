@@ -26,6 +26,8 @@ public class UsersService {
     private final BCryptPasswordEncoder passwordEncoder; // BCryptPasswordEncoder 주입
     private final ArticlesLikeRepository articlesLikeRepository;
     private final CommentsLikeRepository commentsLikeRepository;
+    private final CommentsLikeService commentsLikeService;
+    private final ArticlesLikeService articlesLikeService;
 
     // 회원가입
     public Users registerUser(UsersRequest request) {
@@ -112,7 +114,7 @@ public class UsersService {
     public Users findByLoginId(String loginId) {
         Users users = usersRepository.findByLoginId(loginId);
 
-        if(users == null) {
+        if (users == null) {
             System.out.println("findByLoginId: users is null");
             return null;
         }
@@ -142,35 +144,27 @@ public class UsersService {
         return true;
 
     public Map<Users, Long> getTopUsersByLikes(int limit) {
-        List<Map<String, Object>> articleLikeUsers = articlesLikeRepository.findTopUsersByArticleLikes();
-        List<Map<String, Object>> commentLikeUsers = commentsLikeRepository.findTopUsersByCommentLikes();
+        Map<Users, Long> topUsersMaps = new LinkedHashMap<>();
 
-        Map<Long, Long> userLikeCounts = new HashMap<>();
+        Map<Long, Long> commentsLikeMap = commentsLikeService.countCommentsLikeGroupByUser();
+        Map<Long, Long> articlesLikeMap = articlesLikeService.countArticlesLikeGroupByUser();
 
-        articleLikeUsers.forEach(record -> {
-            Long userId = (Long) record.get("userId");
-            Long likeCount = (Long) record.get("likeCount");
-            userLikeCounts.merge(userId, likeCount, Long::sum);
-        });
+        Map<Long, Long> sumMap = new HashMap<>();
+        commentsLikeMap.forEach((userId, likeCount) -> sumMap.merge(userId, likeCount, Long::sum));
+        articlesLikeMap.forEach((userId, likeCount) -> sumMap.merge(userId, likeCount, Long::sum));
 
-        commentLikeUsers.forEach(record -> {
-            Long userId = (Long) record.get("userId");
-            Long likeCount = (Long) record.get("likeCount");
-            userLikeCounts.merge(userId, likeCount, Long::sum);
-        });
-
-        Map<Users, Long> topUsersMap = new LinkedHashMap<>(); // 순서를 보장하는 LinkedHashMap 사용
-
-        userLikeCounts.entrySet().stream()
-                .sorted((entry1, entry2) -> Long.compare(entry2.getValue(), entry1.getValue())) // likeCount 기준 내림차순 정렬
-                .limit(5) // 상위 5개만 가져오기
+        // sumMap을 값 기준으로 내림차순 정렬하여 상위 5개의 userId를 찾고, 이를 Users 객체와 매핑하여 topUsersMaps에 저장
+        sumMap.entrySet().stream()
+                .sorted((entry1, entry2) -> Long.compare(entry2.getValue(), entry1.getValue())) // 좋아요 수 기준 내림차순 정렬
+                .limit(5) // 상위 5개만
                 .forEach(entry -> {
-                    Long userId = entry.getKey(); // userId
-                    Long likeCount = entry.getValue(); // likeCount
+                    Long userId = entry.getKey();
+                    Long likeCount = entry.getValue();
                     Users user = findUserById(userId); // userId로 Users 객체 조회
-                    topUsersMap.put(user, likeCount); // Map에 저장
+                    topUsersMaps.put(user, likeCount); // 결과 Map에 Users 객체와 좋아요 수 추가
                 });
 
-        return topUsersMap;
+        return topUsersMaps;
     }
+
 }

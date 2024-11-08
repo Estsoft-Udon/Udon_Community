@@ -20,9 +20,10 @@ public interface ArticlesLikeRepository extends JpaRepository<ArticlesLike, Long
     Long countArticlesLikeByArticles(Articles article);
     Long countLikesByArticles(Articles article);
 
-    // 유저별 articleLike 조회
-    @Query("SELECT al.users.id AS userId, COUNT(al) AS likeCount " +
+    @Query("SELECT a.userId.id AS userId, COUNT(al) AS likeCount " +
             "FROM ArticlesLike al " +
-            "GROUP BY al.users.id")
-    List<Map<String, Object>> findTopUsersByArticleLikes();
+            "JOIN al.articles a " +  // ArticlesLike와 Article을 조인
+            "GROUP BY a.userId.id")  // 작성자 ID로 그룹화
+    List<Map<Long, Long>> findTopUsersByArticleLikes();
+
 }

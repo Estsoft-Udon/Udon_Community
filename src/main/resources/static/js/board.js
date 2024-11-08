@@ -111,3 +111,44 @@ function article_press_like(articleId) {
             alert('좋아요 중 오류가 발생했습니다.'); // 오류 메시지
         });
 }
+
+function post_article() {
+    // Set을 배열로 변환 후 JSON 문자열로 변환
+    const selectedCategory = document.getElementById("category").value;
+    const title = document.getElementById("title").value;
+    const tagsArray = Array.from(existingTags);
+    const content = document.getElementById("content").value;
+    const selectedLocationId = document.getElementById("locationId").value;
+
+    // 서버로 전송 (예시: AJAX 사용)
+    fetch('/articles/new', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'  // JSON 데이터 전송
+        },
+        body: JSON.stringify({
+            category: selectedCategory,
+            title: title,
+            hashtagName: tagsArray,
+            content: content,
+            locationId: selectedLocationId
+        })
+    })
+        .then(data => {
+            alert('글 작성이 완료되었습니다.');
+            window.location.href = '/articles';  // 원하는 URL로 리디렉션
+        })
+        .catch((error) => {
+            alert('글 작성이 실패했습니다. :' + error);
+        });
+}
+
+function edit_article(article_id) {
+    // 서버로 전송 (예시: AJAX 사용)
+    fetch(`/articles/edit/${article_id}`, {
+        method: 'POST',
+    })
+        .then(response => response.json())
+        .then(data => console.log('글 수정이 완료되었습니다.:', data))
+        .catch((error) => console.error('Error:', error));
+}

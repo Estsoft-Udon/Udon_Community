@@ -38,7 +38,7 @@
                                 <div class="l_box">
                                     <div class="ranking" th:text="${iterStat.index + 1} + '.'"></div>
                                     <div class="id" th:text="${user.key.nickname}">아이디</div>
-                                    <div class="grade" th:text="'(' + ${user.key.grade} + ')'">(등급)</div>
+                                    <div class="grade" th:text="'(' + ${user.key.grade.getDisplayName()} + ')'">(등급)</div>
                                 </div>
                                 <div class="post_stats">
                                     <div class="icon thumb_icon on"></div>

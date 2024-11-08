@@ -54,12 +54,6 @@
                                th:value="${article != null ? article.title : ''}" >
                     </div>
 
-                    <!-- 해시 태그 작성 이전 코드 -->
-                    <!--                    <div class="form_cont">-->
-                    <!--                        <label for="hashtag">해시 태그 작성</label>-->
-                    <!--                        <input type="text" id="hashtag" th:field="${addArticleRequest.hashtagName}" class="input-field" placeholder="해시태그 입력">-->
-                    <!--                    </div>-->
-
                     <!-- 해시 태그 작성 -->
                     <div class="form_cont">
                         <span>해시 태그 작성</span>
@@ -75,7 +69,7 @@
                         <span>글 입력</span>
                         <textarea name="content" class="input-field" placeholder="내용을 입력하세요" required
                                   th:if="${article != null}" th:text="${article.content}" ></textarea>
-                        <textarea name="content" class="input-field" placeholder="내용을 입력하세요" required
+                        <textarea name="content" id="content" class="input-field" placeholder="내용을 입력하세요" required
                                   th:unless="${article != null}"></textarea>
                     </div>
 
@@ -100,16 +94,18 @@
             const article = [[${article}]];
 
             if (exist_article) {
-                console.log("수정");
-                // 수정 모드일 때
-                form.action = `/articles/edit/${article.id}`;
-                form.method = "post"; // HTML 폼에서 PUT은 지원되지 않으므로 POST로 사용
+                // 수정 모드
+                form.onsubmit = function(event) {
+                    event.preventDefault();  // 폼 제출 기본 동작을 막고
+                    edit_article(article.id);  // 수정 함수 호출
+                };
                 submitText.innerText = "수정하기";
             } else {
-                console.log("작성");
-                // 새글 작성일 때
-                form.action = "/articles/new";
-                form.method = "post";
+                // 작성 모드
+                form.onsubmit = function(event) {
+                    event.preventDefault();  // 폼 제출 기본 동작을 막고
+                    post_article();  // 게시글 작성 함수 호출
+                };
                 submitText.innerText = "작성하기";
             }
         };
