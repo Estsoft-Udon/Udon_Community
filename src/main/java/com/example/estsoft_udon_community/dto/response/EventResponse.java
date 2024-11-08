@@ -26,6 +26,10 @@ public class EventResponse {
 
     private Long usersId; // 작성한 사용자의 ID
 
+    private String userLoginId;
+
+    private String userName;
+
     public EventResponse(Event event) {
         this.id = event.getId();
         this.dateTime = event.getDateTime();
@@ -34,5 +38,7 @@ public class EventResponse {
         this.eventType = event.getEventType();
         this.isAccepted = (event.getIsAccepted() != null) ? event.getIsAccepted() : false; // 기본값 false 설정
         this.usersId = event.getUsers().getId();
+        this.userLoginId = event.getUsers().getLoginId();
+        this.userName = event.getUsers().getName();
     }
 }

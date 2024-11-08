@@ -18,6 +18,8 @@
             <thead>
             <tr>
                 <th>No.</th>
+                <th>신청자 ID</th>
+                <th>신청자 이름</th>
                 <th>제목</th>
                 <th>내용</th>
                 <th>이벤트 날짜</th>
@@ -28,6 +30,8 @@
             <tbody>
             <tr th:each="event, iterStat : ${events}">
                 <td th:text="${iterStat.index + 1}"></td>
+                <td th:text="${event.userLoginId}"></td>
+                <td th:text="${event.userName}"></td>
                 <td>
                     <a th:href="@{/admin/event/event_edit/{id}(id=${event.id})}" th:text="${event.title}"></a>
                 </td>
