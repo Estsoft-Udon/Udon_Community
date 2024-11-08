@@ -1,5 +1,5 @@
 function validatePassword() {
-    const currentPassword = document.getElementById('currentPassword').value.trim();
+    const currentPassword = document.getElementById('currentPassword')?.value.trim() ?? null;
     const newPassword = document.getElementById('newPassword').value.trim();
     const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
     const passwordMessage = document.getElementById('passwordMessage');
@@ -9,7 +9,7 @@ function validatePassword() {
         passwordMessage.textContent = '최소 8자 이상, 영문자, 숫자, 특수문자가 포함되어야 합니다.';
         passwordMessage.style.color = 'red';
         return false;
-    } else if (currentPassword === newPassword) {
+    } else if (currentPassword != null && currentPassword === newPassword) {
         passwordMessage.textContent = '새로운 비밀번호는 현재 비밀번호와 달라야 합니다.';
         passwordMessage.style.color = 'red';
         return false;

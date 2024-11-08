@@ -8,7 +8,7 @@
             <section>
                 <form id="changePasswordForm" method="POST" action="/change_pw">
                     <label for="currentPassword"></label>
-                    <input type="password" id="currentPassword" name="currentPassword" required placeholder="현재 비밀번호">
+                    <input type="password" id="currentPassword" name="currentPassword" th:if="${user != null}" required placeholder="현재 비밀번호">
 
                     <div id="passwordMessage"></div>
                     <label for="newPassword"></label>

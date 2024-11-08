@@ -10,10 +10,10 @@ import com.example.estsoft_udon_community.enums.PasswordHint;
 import com.example.estsoft_udon_community.service.LocationService;
 import com.example.estsoft_udon_community.service.UsersService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.example.estsoft_udon_community.util.ModelUtil;
+import com.example.estsoft_udon_community.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -68,7 +68,7 @@ public class ViewController {
         Users users = usersService.searchPassword(loginId, passwordHint, passwordAnswer);
         // 비밀번호 찾기 성공
         if (users != null) {
-            return changePw();
+            return changePw(model);
         }
         // 비밀번호 찾기 실패
         model.addAttribute("errorMessage", "일치하는 정보가 없습니다.");
@@ -76,7 +76,10 @@ public class ViewController {
     }
 
     @GetMapping("/change_pw")
-    public String changePw() {
+    public String changePw(Model model) {
+        Users user = SecurityUtil.getLoggedInUser();
+        model.addAttribute("user", user);
+
         return "member/change_pw";
     }
 
