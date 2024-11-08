@@ -323,7 +323,7 @@ th, td {
 
 .modal-content p.txt_box span{
     display: block;
-    border: 1px solid rgba(0, 133, 249, 1);
+    border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 1rem;
     padding: 2rem;
 }

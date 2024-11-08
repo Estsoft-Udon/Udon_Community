@@ -223,7 +223,7 @@ function showEventDetails(event) {
     eventTitle.textContent = event.title;
     eventType.textContent = getEventTypeText(event.eventType);
     eventDateTime.textContent = `${new Date(event.dateTime).toLocaleString()}`;
-    eventUser.textContent = event.usersId || '정보 없음';
+    eventUser.textContent = event.userLoginId || '정보 없음';
     eventDescription.textContent = event.content || '상세 설명이 없습니다.';
 
     // 모달 표시
