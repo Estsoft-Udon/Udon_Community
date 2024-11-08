@@ -104,16 +104,6 @@ public class BoardController {
         return "board/board_list";
     }
 
-    public void setArticleModel(Model model, Page<ArticleDetailResponse> articles, int page) {
-        model.addAttribute("articles", articles);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", articles.getTotalPages());
-        model.addAttribute("totalItems", articles.getTotalElements());
-
-        List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();
-        model.addAttribute("topHashtags", topHashtags);
-    }
-
     // 한뚝배기
     @GetMapping("/articles/hotRestaurant")
     public String getHotRestaurantArticles(@RequestParam(defaultValue = "0") int page,
@@ -132,15 +122,19 @@ public class BoardController {
                 userLocation, page, size, sortOption);
 
         // 조회된 게시글 정보를 모델에 추가
-        model.addAttribute("articles", hotRestaurantArticles);
+        setArticleModel(model, hotRestaurantArticles, page);
+
+        return "board/board_list";
+    }
+
+    public void setArticleModel(Model model, Page<ArticleDetailResponse> articles, int page) {
+        model.addAttribute("articles", articles);
         model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", hotRestaurantArticles.getTotalPages());
-        model.addAttribute("totalItems", hotRestaurantArticles.getTotalElements());
+        model.addAttribute("totalPages", articles.getTotalPages());
+        model.addAttribute("totalItems", articles.getTotalElements());
 
         List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();
         model.addAttribute("topHashtags", topHashtags);
-
-        return "board/board_list";
     }
 
     // 게시글 생성
