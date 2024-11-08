@@ -14,13 +14,14 @@ import java.util.List;
 
 import com.example.estsoft_udon_community.util.ModelUtil;
 import com.example.estsoft_udon_community.util.SecurityUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -136,6 +137,16 @@ public class ViewController {
     @GetMapping("/withdrawal")
     public String withdrawal() {
         return "member/withdrawal";
+    }
+
+    @PostMapping("/withdrawal")
+    public String doWithdrawal(HttpServletRequest request, HttpServletResponse response) {
+        Users user = SecurityUtil.getLoggedInUser();
+        usersService.softDelete(user);
+        // 로그아웃
+        new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
+
+        return "index";
     }
 
     @GetMapping("/mypage")

@@ -9,6 +9,7 @@ import com.example.estsoft_udon_community.repository.CommentsLikeRepository;
 import com.example.estsoft_udon_community.repository.LocationRepository;
 import com.example.estsoft_udon_community.repository.UsersRepository;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -147,5 +148,11 @@ public class UsersService {
                 });
 
         return topUsersMaps;
+    }
+
+    // softDelete
+    public void softDelete(Users user) {
+        user.setIsDeleted(true);
+        user.setDeletedAt(LocalDateTime.now());
     }
 }
