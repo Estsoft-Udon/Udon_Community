@@ -110,24 +110,18 @@ public class BoardController {
                                            @RequestParam(defaultValue = "5") int size,
                                            @RequestParam(defaultValue = "createdAt") String sortOption,
                                            Model model) {
-        // 접속 중인 유저 확인
-        Users loggedInUser = getLoggedInUser();
-        if (loggedInUser == null) {
-            throw new IllegalStateException("로그인된 유저가 없습니다.");
-        }
-        Location userLocation = loggedInUser.getLocation();
+        Page<ArticleDetailResponse> articles = articlesService.findHotRestaurantArticlesForCurrentUser(page, size, sortOption);
 
-        // 카테고리와 위치를 기준으로 인기 맛집 게시글 조회
-        Page<ArticleDetailResponse> hotRestaurantArticles = articlesService.findHotRestaurantArticlesForCurrentUser(
-                userLocation, page, size, sortOption);
+        model.addAttribute("currentPageContext", "hotRestaurant");
 
         // 조회된 게시글 정보를 모델에 추가
         setArticleModel(model, hotRestaurantArticles, page);
+        setArticleModel(model, articles, page);
 
         return "board/board_list";
     }
 
-    public void setArticleModel(Model model, Page<ArticleDetailResponse> articles, int page) {
+    private void setArticleModel(Model model, Page<ArticleDetailResponse> articles, int page) {
         model.addAttribute("articles", articles);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", articles.getTotalPages());

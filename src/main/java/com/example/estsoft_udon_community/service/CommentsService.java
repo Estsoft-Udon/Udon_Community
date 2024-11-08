@@ -6,6 +6,7 @@ import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Comments;
 import com.example.estsoft_udon_community.dto.request.CommentsRequest;
 import com.example.estsoft_udon_community.entity.Users;
+import com.example.estsoft_udon_community.enums.Grade;
 import com.example.estsoft_udon_community.repository.ArticlesRepository;
 import com.example.estsoft_udon_community.repository.CommentsRepository;
 import com.example.estsoft_udon_community.repository.UsersRepository;
@@ -36,7 +37,15 @@ public class CommentsService {
         Articles articles = articlesRepository.findById(articleId)
                 .orElseThrow(() -> new IllegalArgumentException("not found article id : " + articleId));
 
-        return commentsRepository.save(new Comments(articles, users, request.getContent()));
+        Comments saveComment = commentsRepository.save(new Comments(articles, users, request.getContent()));
+
+        // 자동 등업 - 댓글 한개 추가시 등업
+        if (users.getGrade() == Grade.UDON) {
+            users.setGrade(Grade.UDON_FRIEND);
+            usersRepository.save(users);
+        }
+
+        return saveComment;
     }
 
 
@@ -56,8 +65,8 @@ public class CommentsService {
 
     // 댓글 수정
     public Comments update(Long commentId, CommentsRequest request) {
-        if(isDeleted(commentId)) {
-            throw(new EntityNotFoundException("삭제된 댓글입니다. ID: " + commentId));
+        if (isDeleted(commentId)) {
+            throw (new EntityNotFoundException("삭제된 댓글입니다. ID: " + commentId));
         }
         Comments comments = findComment(commentId);
         comments.updateCommentsContent(request.getContent());
@@ -74,8 +83,8 @@ public class CommentsService {
 
     // 댓글 soft delete
     public Comments softDelete(Long commentId) {
-        if(isDeleted(commentId)) {
-            throw(new EntityNotFoundException("삭제된 댓글입니다. ID: " + commentId));
+        if (isDeleted(commentId)) {
+            throw (new EntityNotFoundException("삭제된 댓글입니다. ID: " + commentId));
         }
         Comments comments = findComment(commentId);
         comments.setIsDeleted(true);
@@ -91,7 +100,7 @@ public class CommentsService {
                 () -> new EntityNotFoundException("댓글을 찾을 수 없습니다. ID: " + commentId)
         );
 
-        if(comments.getIsDeleted()) {
+        if (comments.getIsDeleted()) {
             return true;
         }
         return false;

@@ -10,6 +10,8 @@ import com.example.estsoft_udon_community.enums.PasswordHint;
 import com.example.estsoft_udon_community.service.LocationService;
 import com.example.estsoft_udon_community.service.UsersService;
 
+import com.example.estsoft_udon_community.util.SecurityUtil;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.example.estsoft_udon_community.util.ModelUtil;
@@ -80,8 +82,6 @@ public class ViewController {
     public String changePw(Model model) {
         Users user = SecurityUtil.getLoggedInUser();
         model.addAttribute("user", user);
-
-        return "member/change_pw";
     }
 
     // 비밀번호 변경 처리 (POST)
@@ -154,6 +154,13 @@ public class ViewController {
         Users userById = usersService.findUserById(getLoggedInUser().getId());
         model.addAttribute("user", userById);
         return "member/mypage";
+    }
+
+    @PostMapping("/request-promotion")
+    public String requestPromotion(Long userId, Model model) {
+         usersService.requestPromotion(userId);
+
+         return "redirect:/mypage";
     }
 
     @GetMapping("/edit_profile")

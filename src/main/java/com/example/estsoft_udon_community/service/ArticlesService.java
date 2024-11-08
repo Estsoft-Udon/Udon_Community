@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.example.estsoft_udon_community.util.SecurityUtil.getLoggedInUser;
+
 @Service
 @RequiredArgsConstructor
 public class ArticlesService {
@@ -211,7 +213,14 @@ public class ArticlesService {
     }
 
     // 접속중인 지역 맛집 (좋아요 많은 순) 게시글 리스트 조회 (페이지네이션 추가)
-    public Page<ArticleDetailResponse> findHotRestaurantArticlesForCurrentUser(Location userLocation, int page, int size, String sortOption) {
+    public Page<ArticleDetailResponse> findHotRestaurantArticlesForCurrentUser(int page, int size, String sortOption) {
+        // 접속 중인 유저 확인
+        Users loggedInUser = getLoggedInUser();
+        if (loggedInUser == null) {
+            throw new IllegalStateException("로그인된 유저가 없습니다.");
+        }
+        Location userLocation = loggedInUser.getLocation();
+
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
 
         Page<Articles> articlesPage = switch (sortOption) {
