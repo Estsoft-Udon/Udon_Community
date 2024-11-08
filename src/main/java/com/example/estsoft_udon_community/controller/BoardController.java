@@ -131,6 +131,7 @@ public class BoardController {
         Page<ArticleDetailResponse> hotRestaurantArticles = articlesService.findHotRestaurantArticlesForCurrentUser(
                 userLocation, page, size, sortOption);
 
+        model.addAttribute("currentPageContext", "hotRestaurant");
         // 조회된 게시글 정보를 모델에 추가
         model.addAttribute("articles", hotRestaurantArticles);
         model.addAttribute("currentPage", page);

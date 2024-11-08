@@ -33,8 +33,13 @@
             <div class="r_box">
                 <div class="tit_wr">
                     <div class="tit_box">
-                        <h2 th:text="${location != null ? location.upperLocation : '대한민국'}"></h2>
-                        <span th:text="${location != null ? location.name : '우리동네'}"></span>
+                        <!-- '한뚝배기'로 접근했을 때 -->
+                        <h2 th:if="${currentPageContext == 'hotRestaurant'}">한 뚝배기 하실래요?</h2>
+                        <span th:if="${currentPageContext == 'hotRestaurant'}">우리 동네 맛집 목록</span>
+
+                        <!-- '한뚝배기'가 아닌 다른 경우 (기본 텍스트) -->
+                        <h2 th:if="${currentPageContext != 'hotRestaurant'}" th:text="${location != null ? location.upperLocation : '대한민국'}"></h2>
+                        <span th:if="${currentPageContext != 'hotRestaurant'}" th:text="${location != null ? location.name : '우리동네'}"></span>
                     </div>
                     다양한 사람들을 만나고 우리 동네의 모든 정보를 공유해보아요.
                 </div>
