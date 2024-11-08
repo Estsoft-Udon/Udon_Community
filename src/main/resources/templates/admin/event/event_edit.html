@@ -24,8 +24,12 @@
         </div>
         <div class="info">
             <div class="info_item">
-                <p class="info_label">작성자 ID</p>
-                <span th:text="${event.usersId}"></span>
+                <p class="info_label">신청자 ID</p>
+                <span th:text="${event.userLoginId}"></span>
+            </div>
+            <div class="info_item">
+                <p class="info_label">신청자 이름</p>
+                <span th:text="${event.userName}"></span>
             </div>
             <div class="info_item">
                 <p class="info_label">제목</p>
