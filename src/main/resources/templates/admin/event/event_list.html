@@ -37,7 +37,7 @@
                 </td>
                 <td th:text="${event.content}"></td>
                 <td th:text="${event.dateTime}"></td>
-                <td th:text="${event.eventType}"></td>
+                <td th:text="${event.eventType.displayName}"></td>
                 <td th:text="${event.isAccepted ? '승인' : '미승인'}"></td>
             </tr>
             </tbody>
