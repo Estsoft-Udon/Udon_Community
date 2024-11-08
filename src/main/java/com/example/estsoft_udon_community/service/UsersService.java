@@ -142,6 +142,7 @@ public class UsersService {
 
         usersRepository.save(user);
         return true;
+    }
 
     public Map<Users, Long> getTopUsersByLikes(int limit) {
         Map<Users, Long> topUsersMaps = new LinkedHashMap<>();

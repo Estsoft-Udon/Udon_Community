@@ -193,6 +193,20 @@ public class ArticlesService {
         ));
     }
 
+    // 접속중인 지역 맛집 (좋아요많은순) 조회
+    public List<ArticleDetailResponse> findByHotArticles(String locationName) {
+        List<Articles> hotArticles = articlesRepository.findTop5ByCategoryAndLocationOrderByLikeCountDesc(
+                ArticleCategory.RESTAURANT, locationName);
+
+        return hotArticles.stream()
+                .map(article -> new ArticleDetailResponse(
+                        article,
+                        fetchLikeCount(article),
+                        fetchCommentCount(article)
+                ))
+                .toList();
+    }
+
     // 새로운 해시태그를 생성하거나 기존 해시태그를 가져오는 메서드
     private List<Hashtag> getOrCreateHashtags(List<String> hashtagNames) {
         // hashtagNames가 null이면 빈 리스트로 초기화
