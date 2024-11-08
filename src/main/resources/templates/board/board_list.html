@@ -130,7 +130,7 @@
                             </li>
 
                             <!-- 페이지 번호 생성 -->
-                            <li th:each="page : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${page == currentPage ? 'on' : ''}">
+                            <li th:if="${totalPages > 0}" th:each="page : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${page == currentPage ? 'on' : ''}">
                                 <!-- 기본 -->
                                 <a th:if="${currentPageContext != 'hotRestaurant' and category == null and hashtagId == null and searchQuery == null}"
                                    th:href="@{/articles(locationId=${location != null ? location.id : ''}, page=${page}, size=${5})}"

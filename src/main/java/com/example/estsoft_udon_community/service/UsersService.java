@@ -9,6 +9,7 @@ import com.example.estsoft_udon_community.repository.CommentsLikeRepository;
 import com.example.estsoft_udon_community.repository.LocationRepository;
 import com.example.estsoft_udon_community.repository.UsersRepository;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -149,6 +150,12 @@ public class UsersService {
         return topUsersMaps;
     }
 
+    // softDelete
+    public void softDelete(Users user) {
+        user.setIsDeleted(true);
+        user.setDeletedAt(LocalDateTime.now());
+    }
+  
     // 등업 요청 버튼을 누르면 등업 isPromotionRequested 값이 true 로 바뀜
     public Boolean requestPromotion(Long userId) {
         Users user = usersRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
