@@ -17,4 +17,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     List<Event> findByIsAcceptedTrue();
 
     List<Event> findByIsAcceptedFalse();
+
+    // 모든 이벤트를 requestedAt 기준으로 내림차순 정렬
+    Page<Event> findAllByOrderByRequestedAtDesc(Pageable pageable);
 }

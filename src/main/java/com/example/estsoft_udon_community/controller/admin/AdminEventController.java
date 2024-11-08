@@ -41,13 +41,6 @@ public class AdminEventController {
         return "redirect:/admin/event/event_list";  // 목록 페이지로 리다이렉트
     }
 
-    // 이벤트 삭제
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteEvent(@PathVariable Long id) {
-        adminEventService.deleteEvent(id);
-        return ResponseEntity.ok("이벤트가 삭제되었습니다.");
-    }
-
     // 특정 이벤트 조회
     @GetMapping("/{id}")
     public ResponseEntity<EventResponse> getEventById(@PathVariable Long id) {

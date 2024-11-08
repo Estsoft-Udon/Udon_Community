@@ -187,20 +187,6 @@ function changeMonth(direction) {
     updateCalendar(); // 달력을 업데이트
 }
 
-// 이벤트 상세 정보를 캘린더 아래에 표시하는 함수
-function showEventDetails(event) {
-    const eventDetails = document.getElementById('eventDetails');
-    const eventTitle = document.getElementById('eventDetailsTitle');
-    const eventDateTime = document.getElementById('eventDetailsDateTime');
-    const eventDescription = document.getElementById('eventDetailsDescription');
-
-    eventTitle.textContent = event.title;
-    eventDateTime.textContent = `${new Date(event.dateTime).toLocaleString()}`;
-    eventDescription.textContent = event.content || '상세 설명이 없습니다.';
-
-    eventDetails.style.display = 'block'; // 상세 정보를 표시
-}
-
 // 페이지가 로드되면 캘린더를 렌더링하고 이벤트를 가져옵니다.
 window.onload = () => {
     fetchEvents(); // 이벤트 데이터를 가져옵니다
@@ -223,7 +209,7 @@ function showEventDetails(event) {
     eventTitle.textContent = event.title;
     eventType.textContent = getEventTypeText(event.eventType);
     eventDateTime.textContent = `${new Date(event.dateTime).toLocaleString()}`;
-    eventUser.textContent = event.usersId || '정보 없음';
+    eventUser.textContent = event.userLoginId || '정보 없음';
     eventDescription.textContent = event.content || '상세 설명이 없습니다.';
 
     // 모달 표시
@@ -277,3 +263,8 @@ function redirectToLocationBoard() {
 }
 
 document.getElementById('locationId').disabled = true;
+
+function alertAndRedirect() {
+    alert("회원만 작성 가능합니다.");
+    window.location.href = '/login';
+}
