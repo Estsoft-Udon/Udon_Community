@@ -64,4 +64,11 @@ public class AdminEventViewController {
         return "redirect:/admin/event/event_edit/{id}";
     }
 
+    // 이벤트 삭제
+    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+    public String deleteEvent(@PathVariable Long id) {
+        adminEventService.deleteEvent(id);  // 서비스에서 삭제 처리
+        return "redirect:/admin/event/event_list";  // 삭제 후 목록 페이지로 리다이렉트
+    }
+
 }
