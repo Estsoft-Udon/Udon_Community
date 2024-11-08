@@ -29,7 +29,7 @@
             </thead>
             <tbody>
             <tr th:each="event, iterStat : ${events}">
-                <td th:text="${iterStat.index + 1}"></td>
+                <td th:text="${startIndex + iterStat.index}"></td>
                 <td th:text="${event.userLoginId}"></td>
                 <td th:text="${event.userName}"></td>
                 <td>

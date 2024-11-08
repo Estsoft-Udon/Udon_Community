@@ -36,8 +36,11 @@ public class AdminEventViewController {
             events = adminEventService.getUnapprovedEvents(page, size);
         }
 
+        int startIndex = page * size + 1;
         model.addAttribute("events", events);
         model.addAttribute("approved", approved);
+        model.addAttribute("startIndex", startIndex);
+
         return "admin/event/event_list";
     }
 
