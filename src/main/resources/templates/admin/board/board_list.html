@@ -36,7 +36,7 @@
             </thead>
             <tbody>
                 <tr th:if="${articles.empty}">
-                    <td colspan="5" style="text-align: center;">검색된 결과가 없습니다</td>
+                    <td colspan="6" style="text-align: center;">검색된 결과가 없습니다</td>
                 </tr>
                 <tr th:each="article, iterStat : ${articles.content}" th:if="${not articles.empty}">
                     <td th:text="${(page != null ? page : 0) * (size != null ? size : 10) + iterStat.index + 1}"></td>
