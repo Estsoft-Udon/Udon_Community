@@ -40,9 +40,9 @@ function updateTable(users) {
             <td>${user.email}</td>
             <td>${user.nickname}</td>
             <td>${user.location.name}</td>
-            <td>${user.updatedAt}</td>
             <td>${user.createdAt}</td>
             <td>${user.displayName}</td>
+            <td>${user.isPromotionRequested? 'O' : 'X'}</td>
         `;
         tbody.appendChild(row);
     });

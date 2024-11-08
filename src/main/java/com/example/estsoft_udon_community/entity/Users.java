@@ -91,6 +91,9 @@ public class Users {
     @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted = Boolean.FALSE;
 
+    @Column(name = "is_promotion_requested", nullable = false)
+    private Boolean isPromotionRequested = Boolean.FALSE;
+
     @Column(name = "last_login")
     private LocalDateTime lastLoginAt;
 

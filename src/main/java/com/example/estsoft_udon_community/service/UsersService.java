@@ -148,4 +148,15 @@ public class UsersService {
 
         return topUsersMaps;
     }
+
+    // 등업 요청 버튼을 누르면 등업 isPromotionRequested 값이 true 로 바뀜
+    public Boolean requestPromotion(Long userId) {
+        Users user = usersRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        if (user.getIsPromotionRequested()) {
+            return false;
+        }
+        user.setIsPromotionRequested(true);
+        usersRepository.save(user);
+        return true;
+    }
 }

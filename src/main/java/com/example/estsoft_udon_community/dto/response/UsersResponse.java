@@ -32,6 +32,8 @@ public class UsersResponse {
 
     private LocationDTO location;
 
+    private Boolean isPromotionRequested;
+
     public UsersResponse(Users user) {
         this.id = user.getId();
         this.name = user.getName();
@@ -44,5 +46,6 @@ public class UsersResponse {
         this.updatedAt = user.getUpdatedAt();
         this.lastLoginAt = user.getLastLoginAt();
         this.location = new LocationDTO(user.getLocation());
+        this.isPromotionRequested = user.getIsPromotionRequested();
     }
 }
