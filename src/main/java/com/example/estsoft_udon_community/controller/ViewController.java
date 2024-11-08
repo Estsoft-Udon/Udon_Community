@@ -10,6 +10,7 @@ import com.example.estsoft_udon_community.enums.PasswordHint;
 import com.example.estsoft_udon_community.service.LocationService;
 import com.example.estsoft_udon_community.service.UsersService;
 
+import com.example.estsoft_udon_community.util.SecurityUtil;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,6 +78,7 @@ public class ViewController {
 
     @GetMapping("/change_pw")
     public String changePw() {
+
         return "member/change_pw";
     }
 
@@ -140,6 +142,13 @@ public class ViewController {
         Users userById = usersService.findUserById(getLoggedInUser().getId());
         model.addAttribute("user", userById);
         return "member/mypage";
+    }
+
+    @PostMapping("/request-promotion")
+    public String requestPromotion(Long userId, Model model) {
+         usersService.requestPromotion(userId);
+
+         return "redirect:/mypage";
     }
 
     @GetMapping("/edit_profile")
