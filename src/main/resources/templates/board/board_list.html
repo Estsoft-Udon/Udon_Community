@@ -49,13 +49,13 @@
                     <div class="table_hd">
                         <div class="btn_wr">
                             <!-- 일반 게시글일 때 -->
-                            <div th:if="${hashtagId == null and category == null and searchQuery == null}">
+                            <div th:if="${currentPageContext != 'hotRestaurant' and category == null and hashtagId == null and searchQuery == null}">
                                 <a th:href="@{${location != null ? '/articles?locationId=' + location.id + '&sortOption=likeCount' : '/articles?sortOption=likeCount'}}" class="nav_btn">좋아요 많은 순</a>
                                 /
                                 <a th:href="@{${location != null ? '/articles?locationId=' + location.id + '&sortOption=commentCount' : '/articles?sortOption=commentCount'}}" class="nav_btn">댓글 많은 순</a>
                             </div>
                             <!-- 한 뚝배기일 때 -->
-                            <div th:if="${loggedInUser != null}">
+                            <div th:if="${currentPageContext == 'hotRestaurant'}">
                                 <a th:href="@{/articles/hotRestaurant(sortOption='likeCount', locationId=${location != null ? location.id : ''})}" class="nav_btn">좋아요 많은 순</a>
                                 /
                                 <a th:href="@{/articles/hotRestaurant(sortOption='commentCount', locationId=${location != null ? location.id : ''})}" class="nav_btn">댓글 많은 순</a>
