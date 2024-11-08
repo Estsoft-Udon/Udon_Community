@@ -39,9 +39,9 @@
                     <td th:text="${(page != null ? page : 0) * (size != null ? size : 10) + iterStat.index + 1}"></td>
                     <!-- 인덱스 출력 -->
                     <td>
-                        <a href="/admin/board/board_edit/{id}" th:text="${article.title}">제목</a>
+                        <a th:href="@{/admin/board/board_edit/{id}(id = ${article.id})}" th:text="${article.title}">제목</a>
                     </td>
-                    <td th:text="${article.location}">지역</td>
+                    <td th:text="${article.getFullLocation()}">지역</td>
                     <td th:text="${article.nickname}">회원ID</td>
                     <td th:if="${not article.isBlind()}">공개</td> <!-- 공개 상태일 때 -->
                     <td th:if="${article.isBlind()}">비공개</td> <!-- 비공개 상태일 때 -->
