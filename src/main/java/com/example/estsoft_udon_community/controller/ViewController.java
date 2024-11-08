@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
@@ -72,6 +73,22 @@ public class ViewController {
     @GetMapping("/change_pw")
     public String changePw() {
         return "member/change_pw";
+    }
+
+    // 비밀번호 변경 처리 (POST)
+    @PostMapping("/change_pw")
+    public String changePassword(@RequestParam String currentPassword,
+                                 @RequestParam String newPassword,
+                                 Model model) {
+        boolean isUpdated = usersService.changePassword(getLoggedInUser().getId(), currentPassword, newPassword);
+
+        if (isUpdated) {
+            model.addAttribute("successMessage", "비밀번호가 성공적으로 변경되었습니다.");
+            return "member/change_pw";
+        } else {
+            model.addAttribute("errorMessage", "현재 비밀번호가 일치하지 않습니다.");
+            return "member/change_pw";
+        }
     }
 
     // 회원가입 
