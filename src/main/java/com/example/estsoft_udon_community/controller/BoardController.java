@@ -4,7 +4,6 @@ import com.example.estsoft_udon_community.dto.request.AddArticleRequest;
 import com.example.estsoft_udon_community.dto.response.ArticleDetailResponse;
 import com.example.estsoft_udon_community.dto.response.ArticleResponse;
 import com.example.estsoft_udon_community.entity.Hashtag;
-import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.enums.ArticleCategory;
 import com.example.estsoft_udon_community.service.ArticleHashtagService;
 import com.example.estsoft_udon_community.service.ArticlesService;
@@ -20,10 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static com.example.estsoft_udon_community.util.SecurityUtil.getLoggedInUser;
 
 @Controller
 @RequiredArgsConstructor
@@ -51,7 +47,7 @@ public class BoardController {
             model.addAttribute("location", null);
         }
 
-        setArticleModel(model, articles, page);
+        setArticleModel(model, articles, page, sortOption);
 
         return "board/board_list";
     }
@@ -69,7 +65,7 @@ public class BoardController {
 
         model.addAttribute("searchQuery", title);
 
-        setArticleModel(model, articles, page);
+        setArticleModel(model, articles, page, sortOption);
 
         return "board/board_list";
     }
@@ -84,7 +80,7 @@ public class BoardController {
 
         Page<ArticleDetailResponse> articles = articlesService.findByHashtag(hashtagId, page, size, sortOption);
 
-        setArticleModel(model, articles, page);
+        setArticleModel(model, articles, page, sortOption);
 
         return "board/board_list";
     }
@@ -99,7 +95,7 @@ public class BoardController {
 
         Page<ArticleDetailResponse> articles = articlesService.findByCategory(category, page, size, sortOption);
 
-        setArticleModel(model, articles, page);
+        setArticleModel(model, articles, page, sortOption);
 
         return "board/board_list";
     }
@@ -115,17 +111,17 @@ public class BoardController {
         model.addAttribute("currentPageContext", "hotRestaurant");
 
         // 조회된 게시글 정보를 모델에 추가
-        setArticleModel(model, hotRestaurantArticles, page);
-        setArticleModel(model, articles, page);
+        setArticleModel(model, articles, page, sortOption);
 
         return "board/board_list";
     }
 
-    private void setArticleModel(Model model, Page<ArticleDetailResponse> articles, int page) {
+    private void setArticleModel(Model model, Page<ArticleDetailResponse> articles, int page, String sortOption) {
         model.addAttribute("articles", articles);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", articles.getTotalPages());
         model.addAttribute("totalItems", articles.getTotalElements());
+        model.addAttribute("sortOption", sortOption);
 
         List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();
         model.addAttribute("topHashtags", topHashtags);
