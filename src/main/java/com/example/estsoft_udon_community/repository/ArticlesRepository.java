@@ -128,4 +128,6 @@ public interface ArticlesRepository extends JpaRepository<Articles, Long> {
     Page<Articles> findByCategoryAndLocationOrderByCommentCountDesc(@Param("category") ArticleCategory category,
                                                                     @Param("location") Location location,
                                                                     Pageable pageable);
+
+    Page<Articles> findByTitleContaining(String keyword, Pageable pageable);
 }

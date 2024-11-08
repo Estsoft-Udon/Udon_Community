@@ -9,6 +9,7 @@ import com.example.estsoft_udon_community.repository.ArticlesRepository;
 import com.example.estsoft_udon_community.repository.UsersRepository;
 import com.example.estsoft_udon_community.service.ArticlesService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -47,6 +48,19 @@ public class AdminArticleService {
     @Transactional
     public Articles updateArticle(Long articleId, UpdateArticleRequest request) {
         return articlesService.updateArticle(articleId, request);
+    }
+
+    @Autowired
+    private ArticlesRepository articleRepository;
+
+    public Page<ArticleResponse> findByTitleContaining(String keyword, Pageable pageable) {
+        return articleRepository.findByTitleContaining(keyword, pageable)
+                .map(article -> new ArticleResponse(article)); // 변환 로직 필요
+    }
+
+    public Page<ArticleResponse> getAdminArticles(Pageable pageable) {
+        return articleRepository.findAll(pageable)
+                .map(article -> new ArticleResponse(article)); // 변환 로직 필요
     }
 
 }
