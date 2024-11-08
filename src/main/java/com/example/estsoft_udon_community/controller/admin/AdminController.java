@@ -7,8 +7,10 @@ import com.example.estsoft_udon_community.dto.response.UsersResponse;
 import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.enums.Grade;
+import com.example.estsoft_udon_community.service.admin.AdminMemberService;
 import com.example.estsoft_udon_community.service.admin.AdminService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +22,9 @@ import java.util.Optional;
 @RequestMapping("/api/admin")
 @RequiredArgsConstructor
 public class AdminController {
+
     private final AdminService adminService;
+    private final AdminMemberService adminMemberService;
 
     // 관리자 로그인
     @PostMapping("/login")
@@ -43,12 +47,25 @@ public class AdminController {
         return ResponseEntity.ok(new UsersResponse(updateUser));
     }
 
-    // 관리자 게시글 조회
-//    @GetMapping("/articles")
-//    public ResponseEntity<List<ArticleResponse>> getAdminArticles() {
-//        List<ArticleResponse> adminArticles = adminService.getAdminArticles();
-//        return ResponseEntity.ok(adminArticles);
-//    }
+    // 회원의 이름으로 검색하기
+    @GetMapping("/member_list")
+    public ResponseEntity<Page<UsersResponse>> searchUsersByName(
+            @RequestParam String keyword,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        // 실제 서비스 호출 및 필터링된 결과 반환
+        Page<UsersResponse> usersResponsePage = adminMemberService.getUsersSearchName(keyword, page, size)
+                .map(UsersResponse::new);
+
+        // 필터링된 데이터가 있는지 확인
+        if (usersResponsePage.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(usersResponsePage); // 데이터 없음
+        }
+
+
+        return ResponseEntity.ok(usersResponsePage); // 필터링된 데이터 반환
+    }
 
     // 관리자 특정 게시글 조회
     @GetMapping("/articles/{articleId}")

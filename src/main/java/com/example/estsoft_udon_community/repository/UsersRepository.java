@@ -2,6 +2,8 @@ package com.example.estsoft_udon_community.repository;
 
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.enums.PasswordHint;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,4 +19,7 @@ public interface UsersRepository extends JpaRepository<Users, Long> {
     Users findByLoginId(String loginId);
 
     boolean existsByLoginIdIgnoreCase(String loginId);
+
+    // 이름에 포함된 문자열로 검색
+    Page<Users> findByNameContaining(String search, Pageable pageable);
 }

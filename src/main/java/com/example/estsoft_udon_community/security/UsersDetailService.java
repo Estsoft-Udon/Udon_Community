@@ -17,9 +17,13 @@ public class UsersDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Users user = usersRepository.findByLoginId(username);
 
-        if(user == null || user.getIsDeleted()) {
+        if (user == null || user.getIsDeleted()) {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
+
+        // 로그인 성공 시 lastLoginAt update
+        user.updateLastLoginAt();
+        usersRepository.save(user);
 
         return new CustomUserDetails(user);
     }

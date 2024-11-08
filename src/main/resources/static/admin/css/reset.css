@@ -450,3 +450,7 @@ td a:hover {
     display: flex;
     gap: 1rem;
 }
+
+.delete_btn{
+    background-color: #ff006a;
+}

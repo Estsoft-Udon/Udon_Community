@@ -4,6 +4,7 @@ import com.example.estsoft_udon_community.dto.request.AddArticleRequest;
 import com.example.estsoft_udon_community.dto.response.ArticleDetailResponse;
 import com.example.estsoft_udon_community.dto.response.ArticleResponse;
 import com.example.estsoft_udon_community.entity.Hashtag;
+import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.enums.ArticleCategory;
 import com.example.estsoft_udon_community.service.ArticleHashtagService;
 import com.example.estsoft_udon_community.service.ArticlesService;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.estsoft_udon_community.util.SecurityUtil.getLoggedInUser;
 
 @Controller
 @RequiredArgsConstructor
@@ -109,6 +112,35 @@ public class BoardController {
 
         List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();
         model.addAttribute("topHashtags", topHashtags);
+    }
+
+    // 한뚝배기
+    @GetMapping("/articles/hotRestaurant")
+    public String getHotRestaurantArticles(@RequestParam(defaultValue = "0") int page,
+                                           @RequestParam(defaultValue = "5") int size,
+                                           @RequestParam(defaultValue = "createdAt") String sortOption,
+                                           Model model) {
+        // 접속 중인 유저 확인
+        Users loggedInUser = getLoggedInUser();
+        if (loggedInUser == null) {
+            throw new IllegalStateException("로그인된 유저가 없습니다.");
+        }
+        Location userLocation = loggedInUser.getLocation();
+
+        // 카테고리와 위치를 기준으로 인기 맛집 게시글 조회
+        Page<ArticleDetailResponse> hotRestaurantArticles = articlesService.findHotRestaurantArticlesForCurrentUser(
+                userLocation, page, size, sortOption);
+
+        // 조회된 게시글 정보를 모델에 추가
+        model.addAttribute("articles", hotRestaurantArticles);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", hotRestaurantArticles.getTotalPages());
+        model.addAttribute("totalItems", hotRestaurantArticles.getTotalElements());
+
+        List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();
+        model.addAttribute("topHashtags", topHashtags);
+
+        return "board/board_list";
     }
 
     // 게시글 생성

@@ -47,6 +47,9 @@ public class ArticleResponse {
                 .map(Hashtag::getName)
                 .toList();
     }
+    public String getFullLocation(){
+        return location.getUpperLocation() + " " + location.getName();
+    }
 
 //    public Articles convertToArticles(Users users) {
 //        return new Articles(users, title, content, category, location);

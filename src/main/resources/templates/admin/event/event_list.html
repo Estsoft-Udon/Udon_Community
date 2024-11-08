@@ -17,7 +17,9 @@
         <table>
             <thead>
             <tr>
-                <th>ID</th>
+                <th>No.</th>
+                <th>신청자 ID</th>
+                <th>신청자 이름</th>
                 <th>제목</th>
                 <th>내용</th>
                 <th>이벤트 날짜</th>
@@ -26,14 +28,16 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="event : ${events}">
-                <td th:text="${event.id}">1</td>
+            <tr th:each="event, iterStat : ${events}">
+                <td th:text="${startIndex + iterStat.index}"></td>
+                <td th:text="${event.userLoginId}"></td>
+                <td th:text="${event.userName}"></td>
                 <td>
                     <a th:href="@{/admin/event/event_edit/{id}(id=${event.id})}" th:text="${event.title}"></a>
                 </td>
                 <td th:text="${event.content}"></td>
                 <td th:text="${event.dateTime}"></td>
-                <td th:text="${event.eventType}"></td>
+                <td th:text="${event.eventType.displayName}"></td>
                 <td th:text="${event.isAccepted ? '승인' : '미승인'}"></td>
             </tr>
             </tbody>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/layout">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.w3.org/1999/xhtml" layout:decorate="layout/layout">
 <head>
     <link rel="stylesheet" href="/css/index.css">
 </head>
@@ -74,20 +75,20 @@
                             </article>
                             <article class="hotplace">
                                 <h2>
-                                    <a href="/">🍚 한 뚝배기 하실래요?</a>
+                                    <a href="/articles/hotRestaurant">🍚 한 뚝배기 하실래요?</a>
                                 </h2>
                                 <ul class="post_list">
-                                    <li class="post_item">
+                                    <li th:each="article : ${hotArticles}" class="post_item">
                                         <div class="l_box">
                                             <div class="top">
-                                                <span class="w_id">아이디</span>
-                                                <span class="w_pw">작성 시간</span>
+                                                <span class="w_id" th:text="${article.nickname}">아이디</span>
+                                                <span class="w_pw" th:text="|Posted on ${#temporals.format(article.createdAt, 'yyyy-MM-dd HH:mm')}|">작성 시간</span>
                                             </div>
                                             <div class="bot">
-                                                <a href="/" class="title">글 제목</a>
+                                                <a th:href="@{/articles/{id}(id=${article.id})}" th:text="${article.title}" class="title">글 제목</a>
                                                 <div class="post_stats">
                                                     <div class="icon thumb_icon"></div>
-                                                    <div class="likes">좋아요 수</div>
+                                                    <div class="likes" th:text="${article.likeCount}">좋아요 수</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -101,11 +102,22 @@
                     <article class="event calendar">
                         <h2>
                             <a href="/">👟 동네 한바퀴</a>
-                            <!-- 비회원 : 클릭 시 로그인 화면으로 이동 -->
-                            <!-- 회원 : 3등급 이상만 신청 가능 -->
                         </h2>
                         <div class="btn_sec">
-                            <button type="button" class="reversal_btn event_apply_btn" onclick="openModal()">일정 등록 신청하기</button>
+                            <!-- 비회원 상태 -->
+                            <div th:if="${user == null}">
+                                <button type="button" class="reversal_btn event_apply_btn" onclick="alertAndRedirect()">일정 등록 신청하기</button>
+                            </div>
+
+                            <!-- 로그인 상태이며 등급이 UDON 또는 UDON_FRIEND일 때 -->
+                            <div th:if="${user != null and (user.grade.name() == 'UDON' or user.grade.name() == 'UDON_FRIEND')}">
+                                <button type="button" class="reversal_btn event_apply_btn" onclick="alert('일정 추가 요청의 경우,우동 보안관 등급 이상부터 신청 가능합니다.');">일정 등록 신청하기</button>
+                            </div>
+
+                            <!-- 로그인 상태이며 등급이 UDON 또는 UDON_FRIEND가 아닐 때 -->
+                            <div th:if="${user != null and (user.grade.name() != 'UDON' and user.grade.name() != 'UDON_FRIEND')}">
+                                <button type="button" class="reversal_btn event_apply_btn" onclick="openModal()">일정 등록 신청하기</button>
+                            </div>
                         </div>
                         <div id="calendar"></div>
                     </article>
@@ -141,12 +153,15 @@
                 <div class="modal-header">
                     <h2>일정 추가 요청</h2>
                     <p>
-                        일정 추가 요청의 경우,우동 보안관 등급 이상부터 신청 가능합니다. <br>
-                        관리자 승인 후 노출 됩니다.
+                        관리자 승인 후 캘린더 노출 됩니다.
                     </p>
                     <button type="button" class="close-btn" onclick="closeModal()">&times;</button>
                 </div>
                 <form id="eventForm" th:action="@{/api/event}" method="post" onsubmit="return handleSubmit(event)">
+                    <div th:if="${user != null}" class="user_info">
+                        <p class="tit">신청자 <span>*변경 불가</span></p>
+                        <p id="loginId" th:text="${user.loginId}"></p>
+                    </div>
                     <label for="title">제목</label>
                     <input type="text" id="title" name="title" required>
 
@@ -161,18 +176,6 @@
 
                     <label for="content">내용</label>
                     <textarea id="content" name="content" rows="4" required></textarea>
-
-                    <!-- (임시) 수정 필요 -->
-                    <div th:if="${user != null}">
-                        <input type="hidden" name="loginId" th:text="${user.loginId}">
-                        <input type="hidden" name="locationId" value="01">
-
-                        <label for="location">거주하는 지역</label>
-                        <span id="locationUpper" th:text="${user.location.getUpperLocation()}"></span>
-
-                        <label for="location">상세 지역</label>
-                        <span id="location" th:text="${user.location.getName()}"></span>
-                    </div>
 
                     <div class="btn_sec">
                         <button type="submit" class="submit-btn default_btn">신청하기</button>

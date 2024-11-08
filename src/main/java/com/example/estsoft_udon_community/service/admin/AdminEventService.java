@@ -23,7 +23,7 @@ public class AdminEventService {
     // 모든 이벤트 조회 (승인 여부 상관없이)
     public Page<EventResponse> getAllEvents(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Event> allEvent = eventRepository.findAll(pageable);
+        Page<Event> allEvent = eventRepository.findAllByOrderByRequestedAtDesc(pageable);
         return allEvent.map(EventResponse::new);
     }
 

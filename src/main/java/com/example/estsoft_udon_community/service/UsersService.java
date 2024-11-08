@@ -50,26 +50,6 @@ public class UsersService {
         return usersRepository.findAll();
     }
 
-    // 로그인
-    public Users loginUser(String loginId, String password) {
-        Users users = usersRepository.findByLoginId(loginId);
-        String encodedPassword = users.getPassword();
-
-        // 암호화
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        boolean isMatch = passwordEncoder.matches(password, encodedPassword);
-
-        if (!isMatch) {
-            throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
-        }
-
-        // 로그인 시간 추가
-        users.updateLastLoginAt();
-        usersRepository.save(users);
-
-        return users;
-    }
-
     // 유저 정보 조회
     public Users findUserById(Long id) {
         Users users = usersRepository.findById(id).orElseThrow();
@@ -132,7 +112,8 @@ public class UsersService {
 
     // 비밀번호 변경
     public boolean changePassword(Long userId, String currentPassword, String newPassword) {
-        Users user = usersRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        Users user = usersRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
         // 현재 비밀번호 확인
         if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
             return false;
@@ -167,5 +148,4 @@ public class UsersService {
 
         return topUsersMaps;
     }
-
 }
