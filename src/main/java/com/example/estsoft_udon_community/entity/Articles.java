@@ -81,9 +81,6 @@ public class Articles {
         this.title = request.getTitle();
         this.content = request.getContent();
         this.category = request.getCategory();
-        if(request.getHashtagName() != null) {
-            this.hashtags = request.getHashtagName().stream().map(Hashtag::new).toList();
-        }
     }
 
     // 뷰카운트 증가

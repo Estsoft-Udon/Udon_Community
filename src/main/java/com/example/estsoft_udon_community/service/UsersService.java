@@ -142,6 +142,7 @@ public class UsersService {
 
         usersRepository.save(user);
         return true;
+    }
 
     public Map<Users, Long> getTopUsersByLikes(int limit) {
         Map<Users, Long> topUsersMaps = new LinkedHashMap<>();
@@ -156,7 +157,7 @@ public class UsersService {
         // sumMap을 값 기준으로 내림차순 정렬하여 상위 5개의 userId를 찾고, 이를 Users 객체와 매핑하여 topUsersMaps에 저장
         sumMap.entrySet().stream()
                 .sorted((entry1, entry2) -> Long.compare(entry2.getValue(), entry1.getValue())) // 좋아요 수 기준 내림차순 정렬
-                .limit(5) // 상위 5개만
+                .limit(limit) // 상위 5개만
                 .forEach(entry -> {
                     Long userId = entry.getKey();
                     Long likeCount = entry.getValue();

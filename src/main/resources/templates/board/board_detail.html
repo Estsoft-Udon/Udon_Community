@@ -52,7 +52,7 @@
                 <!-- Hashtags and Interaction Buttons -->
                 <div class="flex_box">
                     <div class="hash_box">
-                        <span th:each="hashtag : ${article.hashtags}" th:text="'#' + ${hashtag}">#해시태그</span>
+                        <span th:each="hashtag : ${article.hashtags}" th:text="${hashtag}">#해시태그</span>
                     </div>
                     <div class="btn_box">
                         <button type="button" th:onclick="'article_press_like(' + ${article.id} + ')'" class="thumb_icon"></button>
