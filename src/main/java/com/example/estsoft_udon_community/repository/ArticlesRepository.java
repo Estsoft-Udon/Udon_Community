@@ -1,6 +1,7 @@
 package com.example.estsoft_udon_community.repository;
 
 import com.example.estsoft_udon_community.entity.Articles;
+import com.example.estsoft_udon_community.entity.Location;
 import com.example.estsoft_udon_community.enums.ArticleCategory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -93,4 +95,37 @@ public interface ArticlesRepository extends JpaRepository<Articles, Long> {
             "GROUP BY a.id " +
             "ORDER BY COUNT(c.id) DESC")
     Page<Articles> findByTitleContainingIgnoreCaseOrderByCommentCount(@Param("title") String title, Pageable pageable);
+
+    // 접속지역 맛집 좋아요순 5개 정렬
+    @Query("SELECT a FROM Articles a " +
+            "JOIN a.location l " +
+            "WHERE a.category = :category " +
+            "AND l.name = :locationName " +
+            "AND a.isDeleted = false " +
+            "ORDER BY (SELECT COUNT(al) FROM ArticlesLike al WHERE al.articles = a) DESC")
+    List<Articles> findTop5ByCategoryAndLocationOrderByLikeCountDesc(@Param("category") ArticleCategory category, @Param("locationName") String locationName);
+
+    // 한뚝배기 - 좋아요 수 기준으로 정렬된 게시글 조회
+    @Query("SELECT a FROM Articles a " +
+            "JOIN a.location l " +
+            "WHERE a.category = :category " +
+            "AND l = :location " +
+            "AND a.isDeleted = false " +
+            "ORDER BY (SELECT COUNT(al) FROM ArticlesLike al WHERE al.articles = a) DESC")
+    Page<Articles> findByCategoryAndLocationOrderByLikeCountDesc(@Param("category") ArticleCategory category,
+                                                                 @Param("location") Location location,
+                                                                 Pageable pageable);
+
+    // 한뚝배기 - 댓글 수 기준으로 정렬된 게시글 조회
+    @Query("SELECT a FROM Articles a " +
+            "JOIN a.location l " +
+            "LEFT JOIN Comments c ON a.id = c.articles.id " +
+            "WHERE a.category = :category " +
+            "AND l = :location " +
+            "AND a.isDeleted = false " +
+            "GROUP BY a.id " +
+            "ORDER BY COUNT(c.id) DESC")
+    Page<Articles> findByCategoryAndLocationOrderByCommentCountDesc(@Param("category") ArticleCategory category,
+                                                                    @Param("location") Location location,
+                                                                    Pageable pageable);
 }

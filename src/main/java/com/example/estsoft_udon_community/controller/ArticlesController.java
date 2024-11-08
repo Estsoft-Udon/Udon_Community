@@ -5,6 +5,8 @@ import com.example.estsoft_udon_community.dto.response.ArticleDetailResponse;
 import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.dto.response.ArticleResponse;
 import com.example.estsoft_udon_community.dto.request.UpdateArticleRequest;
+import com.example.estsoft_udon_community.entity.Location;
+import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.service.ArticlesService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -13,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+
+import static com.example.estsoft_udon_community.util.SecurityUtil.getLoggedInUser;
 
 @RestController
 @AllArgsConstructor
@@ -104,5 +108,23 @@ public class ArticlesController {
         }
         Page<ArticleDetailResponse> articles = articlesService.searchByTitle(title, page, size, sortOption);
         return ResponseEntity.ok(articles);
+    }
+
+    // 접속중인 유저의 지역과 카테고리가 RESTAURANT인 게시글 조회 (좋아요순, 페이지네이션)
+    @GetMapping("/articles/hotRestaurant")
+    public ResponseEntity<Page<ArticleDetailResponse>> getHotRestaurantArticles(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "likeCount") String sortOption) {
+
+        Users loggedInUser = getLoggedInUser();
+        if (loggedInUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(null);
+        }
+        Location userLocation = loggedInUser.getLocation();
+
+        Page<ArticleDetailResponse> hotRestaurantArticles = articlesService.findHotRestaurantArticlesForCurrentUser(userLocation, page, size, sortOption);
+        return ResponseEntity.ok(hotRestaurantArticles);
     }
 }

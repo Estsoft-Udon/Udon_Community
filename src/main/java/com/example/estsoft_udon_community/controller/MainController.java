@@ -56,6 +56,14 @@ public class MainController {
 
         model.addAttribute("articles", newestPosts); // 모델에 게시글 리스트 추가
 
+        // 한뚝배기 게시글 5개 가져오기
+        String userLocationName = getLoggedInUser() != null ? usersService.findUserById(getLoggedInUser().getId()).getLocation().getName() : "기본 지역 이름";
+        List<ArticleDetailResponse> hotArticles = articlesService.findByHotArticles(userLocationName)
+                .stream()
+                .limit(5)
+                .collect(Collectors.toList());
+        model.addAttribute("hotArticles", hotArticles);
+
         // 로그인 사용자의 정보
         if(getLoggedInUser() != null) {
             Users users = usersService.findUserById(getLoggedInUser().getId());
