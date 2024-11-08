@@ -151,7 +151,7 @@ public class BoardController {
                 .orElseThrow(() -> new IllegalArgumentException("article이 존재하지 않습니다."));
         model.addAttribute("article", article);
 
-        Location location = locationService.findByName(article.getLocation());
+        Location location = locationService.findByName(article.getLocation().getName());
         model.addAttribute("originLocation", location);
 
         return "board/board_edit";

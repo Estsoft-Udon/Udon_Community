@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="admin/layout/layout">
 <body>
 <th:block layout:fragment="content">
+    <link rel="stylesheet" href="/admin/css/calender.css">
     <section>
         <h1>게시글 목록</h1>
         <div class="top">
@@ -34,18 +35,35 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="article, iterStat : ${articles}">
-                <td th:text="${iterStat.index + 1}"></td> <!-- 인덱스 출력 -->
-                <td>
-                    <a href="/admin/board/board_edit/{id}" th:text="${article.title}">제목</a>
-                </td>
-                <td th:text="${article.location}">지역</td>
-                <td th:text="${article.nickname}">회원ID</td>
-                <td th:if="${not article.isBlind()}">공개</td> <!-- 공개 상태일 때 -->
-                <td th:if="${article.isBlind()}">비공개</td> <!-- 비공개 상태일 때 -->
-            </tr>
+                <tr th:each="article, iterStat : ${articles.content}">
+                    <td th:text="${(page != null ? page : 0) * (size != null ? size : 10) + iterStat.index + 1}"></td>
+                    <!-- 인덱스 출력 -->
+                    <td>
+                        <a th:href="@{/admin/board/board_edit/{id}(id = ${article.id})}" th:text="${article.title}">제목</a>
+                    </td>
+                    <td th:text="${article.getFullLocation()}">지역</td>
+                    <td th:text="${article.nickname}">회원ID</td>
+                    <td th:if="${not article.isBlind()}">공개</td> <!-- 공개 상태일 때 -->
+                    <td th:if="${article.isBlind()}">비공개</td> <!-- 비공개 상태일 때 -->
+                </tr>
             </tbody>
+
         </table>
+        <div class="pagination">
+            <ul>
+                <li th:if="${articles.hasPrevious()}">
+                    <a th:href="@{/admin/board/board_list(page=${articles.number - 1}, size=${articles.size})}">이전</a>
+                </li>
+                <li th:each="pageNumber : ${#numbers.sequence(0, articles.totalPages - 1)}"
+                    th:classappend="${pageNumber == articles.number} ? 'active'">
+                    <a th:href="@{/admin/board/board_list(page=${pageNumber}, size=${articles.size})}"
+                       th:text="${pageNumber + 1}">1</a>
+                </li>
+                <li th:if="${articles.hasNext()}">
+                    <a th:href="@{/admin/board/board_list(page=${articles.number + 1}, size=${articles.size})}">다음</a>
+                </li>
+            </ul>
+        </div>
     </section>
 </th:block>
 </body>
