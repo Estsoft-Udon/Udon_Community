@@ -128,4 +128,11 @@ public interface ArticlesRepository extends JpaRepository<Articles, Long> {
     Page<Articles> findByCategoryAndLocationOrderByCommentCountDesc(@Param("category") ArticleCategory category,
                                                                     @Param("location") Location location,
                                                                     Pageable pageable);
+
+    // 관리자 게시글 검색기능
+    Page<Articles> findByTitleContaining(String keyword, Pageable pageable);
+
+    // 제목에 키워드가 포함되고, 삭제되지 않은 게시글을 찾는 메서드
+    Page<Articles> findByTitleContainingAndIsDeletedFalse(String title, Pageable pageable);
+
 }
