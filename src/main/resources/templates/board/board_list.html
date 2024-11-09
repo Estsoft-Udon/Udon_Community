@@ -65,30 +65,30 @@
                         <div class="btn_wr">
                             <!-- 일반 게시글일 때 -->
                             <div th:if="${currentPageContext != 'hotRestaurant' and category == null and hashtagId == null and searchQuery == null}">
-                                <a th:href="@{${location != null ? '/articles?locationId=' + location.id + '&sortOption=likeCount&page=' + currentPage + '&size=5' : '/articles?sortOption=likeCount&page=' + currentPage + '&size=5'}}" class="nav_btn">좋아요 많은 순</a>
+                                <a th:href="@{${location != null ? '/articles?locationId=' + location.id + '&sortOption=likeCount&page=' + currentPage + '&size=5&title=' + (title != null ? title : '') : '/articles?sortOption=likeCount&page=' + currentPage + '&size=5&title=' + (title != null ? title : '')}}" class="nav_btn">좋아요 많은 순</a>
                                 /
-                                <a th:href="@{${location != null ? '/articles?locationId=' + location.id + '&sortOption=commentCount&page=' + currentPage + '&size=5' : '/articles?sortOption=commentCount&page=' + currentPage + '&size=5'}}" class="nav_btn">댓글 많은 순</a>
+                                <a th:href="@{${location != null ? '/articles?locationId=' + location.id + '&sortOption=commentCount&page=' + currentPage + '&size=5&title=' + (title != null ? title : '') : '/articles?sortOption=commentCount&page=' + currentPage + '&size=5&title=' + (title != null ? title : '')}}" class="nav_btn">댓글 많은 순</a>
                             </div>
 
                             <!-- 한 뚝배기일 때 -->
                             <div th:if="${currentPageContext == 'hotRestaurant'}">
-                                <a th:href="@{/articles/hotRestaurant(sortOption='likeCount', page=${currentPage}, size=5)}" class="nav_btn">좋아요 많은 순</a>
+                                <a th:href="@{/articles/hotRestaurant(sortOption='likeCount', page=${currentPage}, size=5, title=${title != null ? title : ''})}" class="nav_btn">좋아요 많은 순</a>
                                 /
-                                <a th:href="@{/articles/hotRestaurant(sortOption='commentCount', page=${currentPage}, size=5)}" class="nav_btn">댓글 많은 순</a>
+                                <a th:href="@{/articles/hotRestaurant(sortOption='commentCount', page=${currentPage}, size=5, title=${title != null ? title : ''})}" class="nav_btn">댓글 많은 순</a>
                             </div>
 
                             <!-- 해시태그 게시글일 때 -->
                             <div th:if="${hashtagId != null}">
-                                <a th:href="@{/articles/hashtag/{hashtagId}(hashtagId=${hashtagId}, sortOption='likeCount', page=${currentPage}, size=5)}" class="nav_btn">좋아요 많은 순</a>
+                                <a th:href="@{/articles/hashtag/{hashtagId}(hashtagId=${hashtagId}, sortOption='likeCount', page=${currentPage}, size=5, title=${title != null ? title : ''})}" class="nav_btn">좋아요 많은 순</a>
                                 /
-                                <a th:href="@{/articles/hashtag/{hashtagId}(hashtagId=${hashtagId}, sortOption='commentCount', page=${currentPage}, size=5)}" class="nav_btn">댓글 많은 순</a>
+                                <a th:href="@{/articles/hashtag/{hashtagId}(hashtagId=${hashtagId}, sortOption='commentCount', page=${currentPage}, size=5, title=${title != null ? title : ''})}" class="nav_btn">댓글 많은 순</a>
                             </div>
 
                             <!-- 카테고리 게시글일 때 -->
                             <div th:if="${category != null}">
-                                <a th:href="@{/articles/category/{category}(category=${category}, sortOption='likeCount', page=${currentPage}, size=5)}" class="nav_btn">좋아요 많은 순</a>
+                                <a th:href="@{/articles/category/{category}(category=${category}, sortOption='likeCount', page=${currentPage}, size=5, title=${title != null ? title : ''})}" class="nav_btn">좋아요 많은 순</a>
                                 /
-                                <a th:href="@{/articles/category/{category}(category=${category}, sortOption='commentCount', page=${currentPage}, size=5)}" class="nav_btn">댓글 많은 순</a>
+                                <a th:href="@{/articles/category/{category}(category=${category}, sortOption='commentCount', page=${currentPage}, size=5, title=${title != null ? title : ''})}" class="nav_btn">댓글 많은 순</a>
                             </div>
                         </div>
 
