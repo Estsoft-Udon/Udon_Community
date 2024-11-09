@@ -46,7 +46,9 @@ public class UsersResponse {
         this.displayName = user.getGrade().getDisplayName();
         this.createdAt = user.getCreatedAt().format(DateFormatUtil.formatter);
         this.updatedAt = user.getUpdatedAt().format(DateFormatUtil.formatter);
-        this.lastLoginAt = user.getLastLoginAt().format(DateFormatUtil.formatter);
+        if(user.getLastLoginAt() != null) {
+            this.lastLoginAt = user.getLastLoginAt().format(DateFormatUtil.formatter);
+        }
         this.location = new LocationDTO(user.getLocation());
         this.isPromotionRequested = user.getIsPromotionRequested();
     }
