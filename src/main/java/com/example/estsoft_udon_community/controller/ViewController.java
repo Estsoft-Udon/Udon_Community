@@ -71,18 +71,18 @@ public class ViewController {
         Users users = usersService.searchPassword(loginId, passwordHint, passwordAnswer);
         // 비밀번호 찾기 성공
         if (users != null) {
-            return changePw(model);
+//            return changePw(model);
         }
         // 비밀번호 찾기 실패
         model.addAttribute("errorMessage", "일치하는 정보가 없습니다.");
         return "member/find_pw";
     }
 
-    @GetMapping("/change_pw")
-    public String changePw(Model model) {
-        Users user = SecurityUtil.getLoggedInUser();
-        model.addAttribute("user", user);
-    }
+//    @GetMapping("/change_pw")
+//    public String changePw(Model model) {
+//        Users user = SecurityUtil.getLoggedInUser();
+//        model.addAttribute("user", user);
+//    }
 
     // 비밀번호 변경 처리 (POST)
     @PostMapping("/change_pw")
@@ -185,5 +185,11 @@ public class ViewController {
 
         usersService.updateUser(getLoggedInUser().getId(), request);
         return "redirect:/mypage";
+    }
+
+    // 접근 제한
+    @GetMapping("/access-denied")
+    public String accessDenied() {
+        return "access-denied";
     }
 }

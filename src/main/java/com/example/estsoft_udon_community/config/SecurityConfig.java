@@ -28,10 +28,16 @@ public class SecurityConfig {
         return http.authorizeHttpRequests(
                         custom -> custom.requestMatchers("/api/**").permitAll()
                                 .requestMatchers("/", "/login", "/signup", "/find_id", "/find_pw","/getLowerLocations", "/success").permitAll()
+                                .requestMatchers("/admin/**").hasAuthority("ROLE_UDON_ADMIN")
                                 .anyRequest().hasAnyRole("UDON", "UDON_FRIEND", "UDON_SHERIFF", "UDON_MASTER", "UDON_ADMIN")
                 )
                 .formLogin(custom -> {
                     custom.loginPage("/login");
+                })
+
+                // 권한이 없는 사용자 접근 시 에러 페이지 설정
+                .exceptionHandling(custom -> {
+                    custom.accessDeniedPage("/access-denied"); // 권한 없는 사용자가 접근할 경우 리다이렉트할 페이지
                 })
 
                 // 로그아웃 추가
