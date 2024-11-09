@@ -11,6 +11,8 @@ import com.example.estsoft_udon_community.service.HashtagService;
 import com.example.estsoft_udon_community.util.ModelUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.example.estsoft_udon_community.entity.Location;
@@ -19,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -35,37 +38,20 @@ public class BoardController {
                                @RequestParam(defaultValue = "0") int page,
                                @RequestParam(defaultValue = "5") int size,
                                @RequestParam(defaultValue = "createdAt") String sortOption,
+                               @RequestParam(required = false) String title,
                                Model model) {
 
         Page<ArticleDetailResponse> articles;
         if (locationId != null) {
             Location locationById = locationService.getLocationById(locationId);
-            articles = articlesService.findByLocationId(locationId, page, size, sortOption);
+            articles = articlesService.findByLocationId(locationId, page, size, sortOption, title);
             model.addAttribute("location", locationById);
         } else {
-            articles = articlesService.findAll(page, size, sortOption);
+            articles = articlesService.findAll(page, size, sortOption, title);
             model.addAttribute("location", null);
         }
 
-        setArticleModel(model, articles, page, sortOption);
-
-        return "board/board_list";
-    }
-
-    // 게시글 검색
-    @GetMapping("/articles/search")
-    public String searchArticles(
-            @RequestParam String title,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "createdAt") String sortOption,
-            Model model) {
-
-        Page<ArticleDetailResponse> articles = articlesService.searchByTitle(title, page, size, sortOption);
-
-        model.addAttribute("searchQuery", title);
-
-        setArticleModel(model, articles, page, sortOption);
+        setArticleModel(model, articles, page, sortOption, title);
 
         return "board/board_list";
     }
@@ -76,11 +62,12 @@ public class BoardController {
                                        @RequestParam(defaultValue = "0") int page,
                                        @RequestParam(defaultValue = "5") int size,
                                        @RequestParam(defaultValue = "createdAt") String sortOption,
+                                       @RequestParam(required = false) String title,
                                        Model model) {
 
-        Page<ArticleDetailResponse> articles = articlesService.findByHashtag(hashtagId, page, size, sortOption);
+        Page<ArticleDetailResponse> articles = articlesService.findByHashtag(hashtagId, page, size, sortOption, title);
 
-        setArticleModel(model, articles, page, sortOption);
+        setArticleModel(model, articles, page, sortOption, title);
 
         return "board/board_list";
     }
@@ -91,37 +78,41 @@ public class BoardController {
                                         @RequestParam(defaultValue = "0") int page,
                                         @RequestParam(defaultValue = "5") int size,
                                         @RequestParam(defaultValue = "createdAt") String sortOption,
+                                        @RequestParam(required = false) String title,
                                         Model model) {
 
-        Page<ArticleDetailResponse> articles = articlesService.findByCategory(category, page, size, sortOption);
+        Page<ArticleDetailResponse> articles = articlesService.findByCategory(category, page, size, sortOption, title);
 
-        setArticleModel(model, articles, page, sortOption);
+        setArticleModel(model, articles, page, sortOption, title);
 
         return "board/board_list";
     }
 
-    // 한뚝배기
+    // 한 뚝빼기 게시글 조회
     @GetMapping("/articles/hotRestaurant")
     public String getHotRestaurantArticles(@RequestParam(defaultValue = "0") int page,
                                            @RequestParam(defaultValue = "5") int size,
                                            @RequestParam(defaultValue = "createdAt") String sortOption,
+                                           @RequestParam(required = false) String title,
                                            Model model) {
-        Page<ArticleDetailResponse> articles = articlesService.findHotRestaurantArticlesForCurrentUser(page, size, sortOption);
 
         model.addAttribute("currentPageContext", "hotRestaurant");
 
-        // 조회된 게시글 정보를 모델에 추가
-        setArticleModel(model, articles, page, sortOption);
+        Page<ArticleDetailResponse> articles = articlesService.findHotRestaurantArticlesForCurrentUser(page, size, sortOption, title);
+
+        setArticleModel(model, articles, page, sortOption, title);
 
         return "board/board_list";
     }
 
-    private void setArticleModel(Model model, Page<ArticleDetailResponse> articles, int page, String sortOption) {
+    // model 관련 처리
+    private void setArticleModel(Model model, Page<ArticleDetailResponse> articles, int page, String sortOption, String title) {
         model.addAttribute("articles", articles);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", articles.getTotalPages());
         model.addAttribute("totalItems", articles.getTotalElements());
         model.addAttribute("sortOption", sortOption);
+        model.addAttribute("title", title);
 
         List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();
         model.addAttribute("topHashtags", topHashtags);
