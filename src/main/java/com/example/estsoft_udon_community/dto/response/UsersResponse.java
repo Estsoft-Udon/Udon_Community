@@ -4,6 +4,8 @@ import com.example.estsoft_udon_community.dto.LocationDTO;
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.enums.Grade;
 import java.time.LocalDateTime;
+
+import com.example.estsoft_udon_community.util.DateFormatUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,11 +26,11 @@ public class UsersResponse {
 
     private String displayName;
 
-    private LocalDateTime createdAt;
+    private String createdAt;
 
-    private LocalDateTime updatedAt;
+    private String updatedAt;
 
-    private LocalDateTime lastLoginAt;
+    private String lastLoginAt;
 
     private LocationDTO location;
 
@@ -42,9 +44,9 @@ public class UsersResponse {
         this.nickname = user.getNickname();
         this.grade = user.getGrade().name();
         this.displayName = user.getGrade().getDisplayName();
-        this.createdAt = user.getCreatedAt();
-        this.updatedAt = user.getUpdatedAt();
-        this.lastLoginAt = user.getLastLoginAt();
+        this.createdAt = user.getCreatedAt().format(DateFormatUtil.formatter);
+        this.updatedAt = user.getUpdatedAt().format(DateFormatUtil.formatter);
+        this.lastLoginAt = user.getLastLoginAt().format(DateFormatUtil.formatter);
         this.location = new LocationDTO(user.getLocation());
         this.isPromotionRequested = user.getIsPromotionRequested();
     }

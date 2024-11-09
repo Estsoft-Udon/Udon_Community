@@ -31,7 +31,7 @@
                         </div>
                     </div>
                     <div class="b_box">
-                        <p class="wt_time" th:text="|Posted on ${#temporals.format(article.createdAt, 'yyyy-MM-dd HH:mm')}|">2024.11.04</p>
+                        <p class="wt_time" th:text="|Posted on ${article.createdAt}|">2024.11.04</p>
                         <div class="post_stats">
                             <div class="views">
                                 <span class="view_icon icon_box"></span>
@@ -69,7 +69,7 @@
                             <div class="l_box">
                                 <div class="user_box">
                                     <p class="comment_user_id" th:text="${comment.nickName}">작성자</p>
-                                    <p class="comment_date" th:text="|Posted on ${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}|">2024.11.05</p>
+                                    <p class="comment_date" th:text="|Posted on ${comment.createdAt}|">2024.11.05</p>
                                 </div>
                                 <div class="com_txt_box">
                                     <pre th:id="'origin_comment_' + ${comment.id}" th:text="${comment.content}">댓글 내용</pre>
