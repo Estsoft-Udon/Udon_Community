@@ -82,6 +82,7 @@ public class MainController {
         return "index";
     }
 
+    // HOT한 우동
     public void getTopUsers(Model model) {
         Map<Users, Long> topUserMap = usersService.getTopUsersByLikes(5);
 
