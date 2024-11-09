@@ -67,6 +67,9 @@ public class BoardController {
 
         Page<ArticleDetailResponse> articles = articlesService.findByHashtag(hashtagId, page, size, sortOption, title);
 
+        String hashtag = hashtagService.getHashtagName(hashtagId);
+        model.addAttribute("hashtag", hashtag);
+
         setArticleModel(model, articles, page, sortOption, title);
 
         return "board/board_list";

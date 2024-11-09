@@ -37,9 +37,24 @@
                         <h2 th:if="${currentPageContext == 'hotRestaurant'}">한 뚝배기 하실래요?</h2>
                         <span th:if="${currentPageContext == 'hotRestaurant'}">우리 동네 맛집 목록</span>
 
-                        <!-- '한뚝배기'가 아닌 다른 경우 (기본 텍스트) -->
-                        <h2 th:if="${currentPageContext != 'hotRestaurant'}" th:text="${location != null ? location.upperLocation : '대한민국'}"></h2>
-                        <span th:if="${currentPageContext != 'hotRestaurant'}" th:text="${location != null ? location.name : '우리동네'}"></span>
+                        <!-- 기본 텍스트 -->
+                        <h2 th:if="${currentPageContext != 'hotRestaurant' and category == null and hashtagId == null}">
+                            <span th:text="${location != null ? location.upperLocation : '대한민국'}"></span>
+                            <span th:text="${location != null ? location.name : '우리동네'}"></span>
+                        </h2>
+
+                        <!-- 카테고리로 조회한 경우 -->
+                        <h2 th:if="${category != null}" th:switch="${category}">
+                            <span th:case="'GATHERING'">소모임</span>
+                            <span th:case="'FESTIVITIES'">축제</span>
+                            <span th:case="'TRAVEL_DESTINATION'">여행</span>
+                            <span th:case="'RESTAURANT'">맛집</span>
+                            <span th:case="'WALKING_COURSE'">산책</span>
+                            <span th:case="*">카테고리</span>
+                        </h2>
+
+                        <!-- 해시태그로 조회한 경우 -->
+                        <h2 th:if="${hashtagId != null}" th:text="'#' + ${hashtag}"></h2>
                     </div>
                     다양한 사람들을 만나고 우리 동네의 모든 정보를 공유해보아요.
                 </div>
