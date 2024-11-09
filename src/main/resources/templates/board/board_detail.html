@@ -14,7 +14,7 @@
                     <li class="brec n1 home">
                         <a href="/">home</a> >
                     </li>
-                    <li class="brec n2"><a href="/articles">게시판</a> > </li>
+                    <li class="brec n2"><a href="/articles">게시판</a> ></li>
                     <li class="brec n3">게시판 상세</li>
                 </ul>
             </nav>
@@ -26,8 +26,11 @@
                         <p class="user_id" th:text="${article.nickname}">작성자 닉네임</p>
                         <div class="btn_wr">
                             <button class="edit_btn" th:if="${article.userId == loggedInUserId}"
-                                    th:onclick="|location.href='/articles/edit/' + ${article.id}|">수정</button>
-                            <button class="del_btn" th:if="${article.userId == loggedInUserId}" th:onclick="'delete_article(' + ${article.id} + ')'">삭제</button>
+                                    th:onclick="|location.href='/articles/edit/' + ${article.id}|">수정
+                            </button>
+                            <button class="del_btn" th:if="${article.userId == loggedInUserId}"
+                                    th:onclick="'delete_article(' + ${article.id} + ')'">삭제
+                            </button>
                         </div>
                     </div>
                     <div class="b_box">
@@ -55,67 +58,105 @@
                         <span th:each="hashtag : ${article.hashtags}" th:text="${hashtag}">#해시태그</span>
                     </div>
                     <div class="btn_box">
-                        <button type="button" th:onclick="'article_press_like(' + ${article.id} + ')'" class="thumb_icon"></button>
-                        <span class="article-like-count" th:id="'article_like_count_' + ${article.id}" th:text="${articleLikeCount}">0</span>
+                        <button type="button" th:onclick="'article_press_like(' + ${article.id} + ')'"
+                                class="thumb_icon"></button>
+                        <span class="article-like-count" th:id="'article_like_count_' + ${article.id}"
+                              th:text="${articleLikeCount}">0</span>
                     </div>
                 </div>
 
                 <!-- Comments Section -->
-                <div class="comment_box">
-                    <h3>댓글</h3>
-                    <div th:if="${commentsPage != null}">
-                    <div th:each="comment : ${commentsPage.content}">
-                        <div class="cont">
-                            <div class="l_box">
-                                <div class="user_box">
-                                    <p class="comment_user_id" th:text="${comment.nickName}">작성자</p>
-                                    <p class="comment_date" th:text="|Posted on ${comment.createdAt}|">2024.11.05</p>
+                <div class="comment_box" name="best_comment_box">
+                    <div th:if="${bestCommentsPage != null}">
+                        <h3>베스트 댓글</h3>
+                        <div th:each="best_comment : ${bestCommentsPage}">
+                            <div class="cont">
+                                <div class="l_box">
+                                    <div class="user_box">
+                                        <p class="comment_user_id" th:text="${best_comment.nickName}">작성자</p>
+                                        <p class="comment_date" th:text="|Posted on ${best_comment.createdAt}|">
+                                            2024.11.05</p>
+                                    </div>
+                                    <div class="com_txt_box">
+                                        <pre th:id="'origin_comment_' + ${best_comment.id}" th:text="${best_comment.content}">댓글 내용</pre>
+                                        <input th:id="'edit_comment_' + ${best_comment.id}" type="text"
+                                               th:value="${best_comment.content}" class="comment-edit-input"
+                                               style="display:none;">
+                                    </div>
                                 </div>
-                                <div class="com_txt_box">
-                                    <pre th:id="'origin_comment_' + ${comment.id}" th:text="${comment.content}">댓글 내용</pre>
-                                    <input th:id="'edit_comment_' + ${comment.id}" type="text" th:value="${comment.content}" class="comment-edit-input" style="display:none;">
-                                </div>
-                                <div class="btn_wr" th:if="${comment.user.id == loggedInUserId}">
-                                    <button class="edit_btn" th:id="'comment_edit_btn_' + ${comment.id}" th:onclick="'press_edit(' + ${comment.id} + ')'">수정</button>
-                                    <button class="del_btn" th:onclick="'delete_comment(' + ${comment.id} + ')'">삭제</button>
+                                <div class="r_box">
+                                    <button type="button" th:onclick="'comment_press_like('+ ${best_comment.id} + ')'"
+                                            class="thumb_icon"></button>
+                                    <span class="comment-like-count" th:id="'comment_like_count_' + ${best_comment.id}"
+                                          th:text="${best_comment.likeCount}">0</span>
                                 </div>
                             </div>
-                            <div class="r_box">
-                                <button type="button" th:onclick="'comment_press_like('+ ${comment.id} + ')'" class="thumb_icon"></button>
-                                <span class="comment-like-count" th:id="'comment_like_count_' + ${comment.id}" th:text="${comment.likeCount}">0</span>
+                        </div>
+                    </div>
+                    <div class="comment_box">
+                        <h3>댓글</h3>
+                        <div th:if="${commentsPage != null}">
+                            <div th:each="comment : ${commentsPage}">
+                                <div class="cont">
+                                    <div class="l_box">
+                                        <div class="user_box">
+                                            <p class="comment_user_id" th:text="${comment.nickName}">작성자</p>
+                                            <p class="comment_date" th:text="|Posted on ${comment.createdAt}|">
+                                                2024.11.05</p>
+                                        </div>
+                                        <div class="com_txt_box">
+                                            <pre th:id="'origin_comment_' + ${comment.id}" th:text="${comment.content}">댓글 내용</pre>
+                                            <input th:id="'edit_comment_' + ${comment.id}" type="text"
+                                                   th:value="${comment.content}" class="comment-edit-input"
+                                                   style="display:none;">
+                                        </div>
+                                        <div class="btn_wr" th:if="${comment.user.id == loggedInUserId}">
+                                            <button class="edit_btn" th:id="'comment_edit_btn_' + ${comment.id}"
+                                                    th:onclick="'press_edit(' + ${comment.id} + ')'">수정
+                                            </button>
+                                            <button class="del_btn"
+                                                    th:onclick="'delete_comment(' + ${comment.id} + ')'">삭제
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="r_box">
+                                        <button type="button" th:onclick="'comment_press_like('+ ${comment.id} + ')'"
+                                                class="thumb_icon"></button>
+                                        <span class="comment-like-count" th:id="'comment_like_count_' + ${comment.id}"
+                                              th:text="${comment.likeCount}">0</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Pagination -->
+                            <div class="pagination_wr">
+                                <ul class="pagination">
+                                    <li th:classappend="${commentsPage.hasPrevious()} ? '' : 'disabled'">
+                                        <a th:href="@{|/articles/${article.id}?page=${commentsPage.number - 1}|}">
+                                            <button type="button">이전</button>
+                                        </a>
+                                    </li>
+                                    <li th:each="i : ${#numbers.sequence(0, commentsPage.totalPages - 1)}"
+                                        th:class="${i == commentsPage.number} ? 'on'">
+                                        <a th:href="@{|/articles/${article.id}?page=${i}|}">
+                                            <button type="button" th:text="${i + 1}">1</button>
+                                        </a>
+                                    </li>
+                                    <li th:classappend="${commentsPage.hasNext()} ? '' : 'disabled'">
+                                        <a th:href="@{|/articles/${article.id}?page=${commentsPage.number + 1}|}">
+                                            <button type="button">다음</button>
+                                        </a>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
 
-                    </div>
-
-                    <!-- Pagination -->
-                    <div class="pagination_wr" >
-                        <ul class="pagination">
-                            <li th:classappend="${commentsPage.hasPrevious()} ? '' : 'disabled'">
-                                <a th:href="@{|/articles/${article.id}?page=${commentsPage.number - 1}|}">
-                                    <button type="button">이전</button>
-                                </a>
-                            </li>
-                            <li th:each="i : ${#numbers.sequence(0, commentsPage.totalPages - 1)}" th:class="${i == commentsPage.number} ? 'on'">
-                                <a th:href="@{|/articles/${article.id}?page=${i}|}">
-                                    <button type="button" th:text="${i + 1}">1</button>
-                                </a>
-                            </li>
-                            <li th:classappend="${commentsPage.hasNext()} ? '' : 'disabled'">
-                                <a th:href="@{|/articles/${article.id}?page=${commentsPage.number + 1}|}">
-                                    <button type="button">다음</button>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                        <!-- Comment Writing Section -->
+                        <div class="cont wt_cont">
+                            <textarea id="comment_content" placeholder="댓글을 작성해주세요." required></textarea>
+                            <button type="button" onclick="submit_comment()">댓글 쓰기</button>
                         </div>
-
-                    <!-- Comment Writing Section -->
-                    <div class="cont wt_cont">
-                        <textarea id="comment_content" placeholder="댓글을 작성해주세요." required></textarea>
-                        <button type="button" onclick="submit_comment()">댓글 쓰기</button>
                     </div>
-                </div>
                 </div>
             </div>
         </div>

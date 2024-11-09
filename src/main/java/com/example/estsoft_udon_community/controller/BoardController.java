@@ -184,6 +184,7 @@ public class BoardController {
         return "board/board_edit";
     }
 
+    // 기존 해시태그 불러오기
     @GetMapping("/article/{articleId}/hashtags")
     @ResponseBody
     public List<String> getHashtagsByArticleId(@PathVariable Long articleId) {
