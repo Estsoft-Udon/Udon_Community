@@ -94,13 +94,18 @@
 
 
                         <form th:action="@{${(currentPageContext == 'hotRestaurant')
-                        ? '/articles/hotRestaurant?title=' + (title != null ? title : '')
-                        : (category != null ? '/articles/category/' + category + '?title=' + (title != null ? title : '')
-                        : (hashtagId != null ? '/articles/hashtag/' + hashtagId + '?title=' + (title != null ? title : '')
-                        : '/articles?title=' + (title != null ? title : '')))}}"
+                        ? '/articles/hotRestaurant' + (location != null && location.id != null ? '?locationId=' + location.id : '')
+                        : (category != null
+                            ? '/articles/category/' + category + (location != null && location.id != null ? '?locationId=' + location.id : '')
+                            : (hashtagId != null
+                                ? '/articles/hashtag/' + hashtagId + (location != null && location.id != null ? '?locationId=' + location.id : '')
+                                : (location != null && location.id != null
+                                    ? '/articles?locationId=' + location.id
+                                    : '/articles')))}}"
                               method="get">
                             <div class="search_box">
                                 <input type="text" name="title" placeholder="검색어를 입력하세요." class="search-bar" th:value="${title}">
+                                <input type="hidden" name="locationId" th:value="${location != null ? location.id : ''}">
                                 <button type="submit">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                          stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon"
