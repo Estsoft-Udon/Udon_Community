@@ -96,13 +96,13 @@ public class ArticlesService {
             articlesPage = switch (sortOption) {
                 case "likeCount" -> articlesRepository.findAllOrderByLikeCount(pageable);
                 case "commentCount" -> articlesRepository.findAllOrderByCommentCount(pageable);
-                default -> articlesRepository.findByIsDeletedFalse(pageable);
+                default -> articlesRepository.findByIsDeletedFalseAndIsBlindFalse(pageable);
             };
         } else {
             articlesPage = switch (sortOption) {
                 case "likeCount" -> articlesRepository.findByTitleContainingOrderByLikeCount(pageable, title);
                 case "commentCount" -> articlesRepository.findByTitleContainingOrderByCommentCount(pageable, title);
-                default -> articlesRepository.findByIsDeletedFalseAndTitleContaining(title, pageable);
+                default -> articlesRepository.findByIsDeletedFalseAndIsBlindFalseAndTitleContaining(title, pageable);
             };
         }
 
@@ -121,13 +121,13 @@ public class ArticlesService {
             articlesPage = switch (sortOption) {
                 case "likeCount" -> articlesRepository.findByLocationIdOrderByLikeCount(locationId, pageable);
                 case "commentCount" -> articlesRepository.findByLocationIdOrderByCommentCount(locationId, pageable);
-                default -> articlesRepository.findByLocationIdAndIsDeletedFalse(locationId, pageable);
+                default -> articlesRepository.findByLocationIdAndIsDeletedFalseAndIsBlindFalse(locationId, pageable);
             };
         } else {
             articlesPage = switch (sortOption) {
                 case "likeCount" -> articlesRepository.findByLocationIdAndTitleContainingOrderByLikeCount(locationId, title, pageable);
                 case "commentCount" -> articlesRepository.findByLocationIdAndTitleContainingOrderByCommentCount(locationId, title, pageable);
-                default -> articlesRepository.findByLocationIdAndIsDeletedFalseAndTitleContaining(locationId, title, pageable);
+                default -> articlesRepository.findByLocationIdAndIsDeletedFalseAndIsBlindFalseAndTitleContaining(locationId, title, pageable);
             };
         }
 
@@ -229,7 +229,7 @@ public class ArticlesService {
         Page<Articles> articlesPage = switch (sortOption) {
             case "likeCount" -> articlesRepository.findAllOrderByLikeCount(pageable);
             case "commentCount" -> articlesRepository.findAllOrderByCommentCount(pageable);
-            default -> articlesRepository.findByIsDeletedFalse(pageable);
+            default -> articlesRepository.findByIsDeletedFalseAndIsBlindFalse(pageable);
         };
 
         return articlesPage.map(article -> new ArticleDetailResponse(
@@ -350,5 +350,14 @@ public class ArticlesService {
             articleHashtagJoinRepository.save(new ArticleHashtagJoin(savedArticle, hashtag));
         }
         removeUnusedHashtags();
+    }
+
+    // 관리자 게시글 목록 > 상세
+    public Articles findById(Long id) {
+        return articlesRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Article not found with ID: " + id));
+    }
+    public Articles save(Articles article) {
+        return articlesRepository.save(article);
     }
 }

@@ -71,7 +71,7 @@ public class AdminBoardViewController {
     // 게시글 공개/비공개 상태 변경
     @PostMapping("/toggle-visibility")
     public String toggleVisibility(@ModelAttribute ToggleVisibilityRequest request, @RequestParam Long articleId) {
-        Articles article = adminArticleService.findById(articleId); // 서비스 호출
+        Articles article = articlesService.findById(articleId); // 서비스 호출
         System.out.println("articleId: " + articleId); // articleId 확인
 
         if (article != null) {
@@ -81,8 +81,7 @@ public class AdminBoardViewController {
 
             // 새로운 상태 출력
             System.out.println("Updated isBlind value: " + article.isBlind()); // isBlind 값 확인
-
-            adminArticleService.save(article); // 저장 메서드 호출
+            articlesService.save(article); // 저장 메서드 호출
         }
 
         return "redirect:/admin/board/board_list"; // 리다이렉트
