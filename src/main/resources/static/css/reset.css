@@ -263,3 +263,17 @@ input:last-child{
 input:focus{
     border: 1px solid rgba(0,133,249,1);
 }
+
+.logo{
+    display: flex;
+    align-items: flex-end;
+}
+
+.logo span{
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.logo img{
+    width: 4rem;
+}
