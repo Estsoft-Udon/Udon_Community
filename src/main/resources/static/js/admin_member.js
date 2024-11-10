@@ -42,7 +42,7 @@ function updateTable(users) {
             <td>${user.location.name}</td>
             <td>${user.createdAt}</td>
             <td>${user.displayName}</td>
-            <td>${user.isPromotionRequested? 'O' : 'X'}</td>
+            <td>${user.isPromotionRequested ? 'O' : 'X'}</td>
         `;
         tbody.appendChild(row);
     });
