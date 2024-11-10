@@ -154,6 +154,8 @@ public class UsersService {
     public void softDelete(Users user) {
         user.setIsDeleted(true);
         user.setDeletedAt(LocalDateTime.now());
+
+        user.setGrade(null);
     }
   
     // 등업 요청 버튼을 누르면 등업 isPromotionRequested 값이 true 로 바뀜
