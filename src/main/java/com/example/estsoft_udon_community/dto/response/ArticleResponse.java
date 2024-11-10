@@ -46,6 +46,7 @@ public class ArticleResponse {
         this.hashtags = article.getHashtags().stream()
                 .map(Hashtag::getName)
                 .toList();
+        this.isBlind = article.isBlind();
     }
     public String getFullLocation(){
         return location.getUpperLocation() + " " + location.getName();

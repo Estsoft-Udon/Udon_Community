@@ -17,11 +17,13 @@
                     <div class="radio_box">
                         <div class="radio">
                             <label for="public">공개</label>
-                            <input type="radio" id="public" name="visibility" value="public" required>
+                            <input type="radio" id="public" name="visibility" value="public" required
+                                   th:checked="${!article.isBlind}">
                         </div>
                         <div class="radio">
                             <label for="private">비공개</label>
-                            <input type="radio" id="private" name="visibility" value="private">
+                            <input type="radio" id="private" name="visibility" value="private"
+                                   th:checked="${article.isBlind}">
                         </div>
                     </div>
                 </div>
