@@ -466,3 +466,7 @@
     color: #444;
     line-height: 1.6;
 }
+
+#best_comment_box_cont {
+    background-color: thistle;
+}

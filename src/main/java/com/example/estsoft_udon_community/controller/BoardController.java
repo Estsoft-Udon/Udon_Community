@@ -57,24 +57,6 @@ public class BoardController {
         return "board/board_list";
     }
 
-    // 게시글 검색
-    @GetMapping("/articles/search")
-    public String searchArticles(
-            @RequestParam String title,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "createdAt") String sortOption,
-            Model model) {
-
-        Page<ArticleDetailResponse> articles = articlesService.searchByTitle(title, page, size, sortOption);
-
-        model.addAttribute("searchQuery", title);
-
-        setArticleModel(model, articles, page);
-
-        return "board/board_list";
-    }
-
     // 해시태그로 게시글 조회
     @GetMapping("/articles/hashtag/{hashtagId}")
     public String getArticlesByHashtag(@PathVariable Long hashtagId,
