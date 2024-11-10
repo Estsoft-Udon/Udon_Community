@@ -9,6 +9,7 @@ import com.example.estsoft_udon_community.repository.EventRepository;
 import com.example.estsoft_udon_community.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,63 +29,70 @@ public class EventService {
     }
 
     // 캘린더 추가
+    @Transactional
     public void addEvent(EventRequest eventRequest) {
         // 작성자 ID가 null이면 예외 발생
         if (eventRequest.getUsersId() == null) {
-            throw new IllegalArgumentException("User ID must not be null");
+            throw new IllegalArgumentException("사용자 ID는 필수입니다.");
         }
 
         // 작성자 찾기
         Users users = usersRepository.findById(eventRequest.getUsersId())
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
 
         // Location 정보를 넣어야 함
-        Event event = eventRequest.toEvent(users.getLocation());
+        Location location = users.getLocation();
+        if (location == null) {
+            throw new IllegalArgumentException("이 사용자의 위치 정보가 없습니다.");
+        }
+
+        Event event = eventRequest.toEvent(location);
         event.setUsers(users);
 
         eventRepository.save(event);
     }
 
     // 캘린더 수정
+    @Transactional
     public EventResponse updateEvent(Long eventId, EventRequest eventRequest) {
-        // eventId가 null이면 예외 발생
         if (eventId == null) {
-            throw new IllegalArgumentException("Event ID must not be null");
+            throw new IllegalArgumentException("이벤트 ID는 필수입니다.");
         }
 
         Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new IllegalArgumentException("Event not found"));
+                .orElseThrow(() -> new IllegalArgumentException("해당 이벤트를 찾을 수 없습니다."));
 
+        // 이벤트 정보 업데이트
         eventRequest.updateEvent(event);
-
-        Event updateEvent = eventRepository.save(event);
-        return new EventResponse(updateEvent);
+        Event updatedEvent = eventRepository.save(event);
+        return new EventResponse(updatedEvent);
     }
 
     // 캘린더 삭제
+    @Transactional
     public void deleteEvent(Long eventId) {
-        // eventId가 null이면 예외 발생
         if (eventId == null) {
-            throw new IllegalArgumentException("Event ID must not be null");
+            throw new IllegalArgumentException("이벤트 ID는 필수입니다.");
         }
 
         Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new IllegalArgumentException("Event not found"));
+                .orElseThrow(() -> new IllegalArgumentException("해당 이벤트를 찾을 수 없습니다."));
+
         eventRepository.delete(event);
     }
 
     // 승인된 이벤트만 조회
     public List<EventResponse> getAcceptedEvents() {
-        List<Event> acceptedEvents = eventRepository.findByIsAcceptedTrue();  // 승인된 이벤트 조회
+        List<Event> acceptedEvents = eventRepository.findByIsAcceptedTrue();
         return acceptedEvents.stream()
-                .map(event -> new EventResponse(event))  // EventResponse로 변환
+                .map(EventResponse::new)
                 .collect(Collectors.toList());
     }
 
     // 승인되지 않은 이벤트만 조회
     public List<EventResponse> getPendingEvents() {
         return eventRepository.findByIsAcceptedFalse().stream()
-                .map(event -> new EventResponse(event)) // EventResponse로 변환
+                .map(EventResponse::new)
                 .collect(Collectors.toList());
     }
 }

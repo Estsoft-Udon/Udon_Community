@@ -111,7 +111,7 @@
 
                             <!-- 로그인 상태이며 등급이 UDON 또는 UDON_FRIEND일 때 -->
                             <div th:if="${user != null and (user.grade.name() == 'UDON' or user.grade.name() == 'UDON_FRIEND')}">
-                                <button type="button" class="reversal_btn event_apply_btn" onclick="alert('일정 추가 요청의 경우,우동 보안관 등급 이상부터 신청 가능합니다.');">일정 등록 신청하기</button>
+                                <button type="button" class="reversal_btn event_apply_btn" onclick="alert('우동 보안관 등급 이상부터 신청 가능합니다.');">일정 등록 신청하기</button>
                             </div>
 
                             <!-- 로그인 상태이며 등급이 UDON 또는 UDON_FRIEND가 아닐 때 -->
