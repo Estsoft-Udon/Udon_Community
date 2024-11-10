@@ -76,4 +76,30 @@ public class AdminArticleService {
         return findByIsDeleted(pageable); // is_deleted = false인 게시글만 가져오기
     }
 
+    @Transactional
+    public Articles toggleArticleVisibility(Long articleId, String visibility) {
+        // 게시물을 찾음
+        Articles article = articlesRepository.findById(articleId)
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+
+        // "private"이면 비공개 상태(true), 아니면 공개 상태(false)로 설정
+        boolean isBlind = "private".equals(visibility);  // "private"이면 비공개 상태로 처리
+
+        // isBlind가 true이면 비공개, false이면 공개 상태로 설정
+        article.setBlind(isBlind);  // boolean 값으로 설정
+
+        // 상태 변경 후 저장
+        return articlesRepository.save(article);  // 변경된 엔티티를 저장
+    }
+
+    public Articles findById(Long id) {
+        return articlesRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Article not found with ID: " + id));
+    }
+
+    public Articles save(Articles article) {
+        return articlesRepository.save(article);
+    }
+    
+
 }

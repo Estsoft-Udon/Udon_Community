@@ -135,4 +135,7 @@ public interface ArticlesRepository extends JpaRepository<Articles, Long> {
     // 제목에 키워드가 포함되고, 삭제되지 않은 게시글을 찾는 메서드
     Page<Articles> findByTitleContainingAndIsDeletedFalse(String title, Pageable pageable);
 
+    // 공개 상태인 게시글만 반환
+    List<Articles> findByIsBlind(boolean isBlind);
+
 }
