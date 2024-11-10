@@ -22,7 +22,8 @@
                 </form>
             </div>
         </div>
-        <!-- 항목은 작업자 분 편하신 대로 바꾸시면 됩니다. -->
+
+        <!-- 게시글 목록 테이블 -->
         <table>
             <thead>
             <tr>
@@ -35,38 +36,45 @@
             </tr>
             </thead>
             <tbody>
-                <tr th:if="${articles.empty}">
-                    <td colspan="6" style="text-align: center;">검색된 결과가 없습니다</td>
-                </tr>
-                <tr th:each="article, iterStat : ${articles.content}" th:if="${not articles.empty}">
-                    <td th:text="${(page != null ? page : 0) * (size != null ? size : 10) + iterStat.index + 1}"></td>
-                    <td>
-                        <a th:href="@{/admin/board/board_edit/{id}(id=${article.id})}" th:text="${article.title}">제목</a>
-                    </td>
-                    <td th:text="${article.getFullLocation()}">지역</td>
-                    <td th:text="${article.nickname}">회원ID</td>
-                    <td th:text="${article.createdAt}">작성일</td>
-                    <td th:if="${not article.isBlind()}">공개</td>
-                    <td th:if="${article.isBlind()}">비공개</td>
-                </tr>
+            <tr th:if="${articles.empty}">
+                <td colspan="6" style="text-align: center;">검색된 결과가 없습니다</td>
+            </tr>
+            <tr th:each="article, iterStat : ${articles.content}" th:if="${not articles.empty}">
+                <td th:text="${(page != null ? page : 0) * (size != null ? size : 10) + iterStat.index + 1}"></td>
+                <td>
+                    <a th:href="@{/admin/board/board_edit/{id}(id=${article.id})}" th:text="${article.title}">제목</a>
+                </td>
+                <td th:text="${article.getFullLocation()}">지역</td>
+                <td th:text="${article.nickname}">회원ID</td>
+                <td th:text="${article.createdAt}">작성일</td>
+                <td class="visibility-text">
+                    <span th:text="${article.isBlind() ? '비공개' : '공개'}"></span>
+                </td>
+            </tr>
             </tbody>
-
         </table>
+
         <div th:if="${not articles.empty}" class="pagination">
             <ul>
+                <!-- 이전 페이지 -->
                 <li th:if="${articles.hasPrevious()}">
                     <a th:href="@{/admin/board/board_list(page=${articles.number - 1}, size=${articles.size}, keyword=${keyword}, sort=${sort})}">이전</a>
                 </li>
+
+                <!-- 페이지 번호 출력 -->
                 <li th:each="pageNumber : ${#numbers.sequence(0, articles.totalPages - 1)}"
                     th:classappend="${pageNumber == articles.number} ? 'active'">
                     <a th:href="@{/admin/board/board_list(page=${pageNumber}, size=${articles.size}, keyword=${keyword}, sort=${sort})}"
-                       th:text="${pageNumber + 1}">1</a>
+                       th:text="${pageNumber + 1}"></a>
                 </li>
+
+                <!-- 다음 페이지 -->
                 <li th:if="${articles.hasNext()}">
                     <a th:href="@{/admin/board/board_list(page=${articles.number + 1}, size=${articles.size}, keyword=${keyword}, sort=${sort})}">다음</a>
                 </li>
             </ul>
         </div>
+
     </section>
 </th:block>
 </body>

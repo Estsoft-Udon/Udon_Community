@@ -1,5 +1,6 @@
 package com.example.estsoft_udon_community.controller.admin;
 
+import com.example.estsoft_udon_community.dto.ToggleVisibilityRequest;
 import com.example.estsoft_udon_community.dto.response.ArticleResponse;
 import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.service.ArticlesService;
@@ -65,5 +66,31 @@ public class AdminBoardViewController {
         ArticleResponse article = adminArticleService.getArticleById(id);
         model.addAttribute("article", article);
         return "admin/board/board_edit";
+    }
+
+    // 게시글 공개/비공개 상태 변경
+    @PostMapping("/toggle-visibility")
+    public String toggleVisibility(@ModelAttribute ToggleVisibilityRequest request, @RequestParam Long articleId) {
+        Articles article = articlesService.findById(articleId); // 서비스 호출
+        System.out.println("articleId: " + articleId); // articleId 확인
+
+        if (article != null) {
+            // 공개 여부 설정
+            boolean newVisibility = "private".equals(request.getVisibility());
+            article.setBlind(newVisibility);
+
+            // 새로운 상태 출력
+            System.out.println("Updated isBlind value: " + article.isBlind()); // isBlind 값 확인
+            articlesService.save(article); // 저장 메서드 호출
+        }
+
+        return "redirect:/admin/board/board_list"; // 리다이렉트
+    }
+
+    // 게시판 목록을 반환하는 GET 메서드
+    @GetMapping("/board")
+    public String viewBoard() {
+        // 게시판 목록을 반환하는 메서드
+        return "board_list";  // 실제 JSP 또는 HTML 페이지로 반환
     }
 }
