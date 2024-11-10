@@ -1,6 +1,8 @@
 package com.example.estsoft_udon_community.controller.admin;
 
+import com.example.estsoft_udon_community.dto.ToggleVisibilityRequest;
 import com.example.estsoft_udon_community.dto.response.ArticleResponse;
+import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.repository.ArticlesRepository;
 import com.example.estsoft_udon_community.service.admin.AdminArticleService;
 import lombok.RequiredArgsConstructor;
@@ -32,9 +34,13 @@ public class AdminBoardController {
     }
 
 //    // 관리자 게시글 수정
-//    @PutMapping("/{articleId}")
-//    public ResponseEntity<ArticleResponse> updateAdminArticle(@PathVariable Long articleId, @RequestBody UpdateArticleRequest request) {
-//        Articles updatedArticle = adminService.updateArticle(articleId, request);
-//        return ResponseEntity.ok(new ArticleResponse(updatedArticle));
-//    }
+    @PutMapping("/{id}/toggle-visibility")
+    public ResponseEntity<ArticleResponse> toggleArticleVisibility(@PathVariable Long id, @RequestBody ToggleVisibilityRequest request) {
+        // 가시성 토글
+        Articles updatedArticle = adminArticleService.toggleArticleVisibility(id, request.getVisibility());
+
+        // 응답으로 변경된 게시글 정보 반환
+        return ResponseEntity.ok(new ArticleResponse(updatedArticle));
+    }
+
 }

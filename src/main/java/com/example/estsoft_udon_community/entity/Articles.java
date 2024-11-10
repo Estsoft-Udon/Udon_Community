@@ -87,4 +87,9 @@ public class Articles {
     public void incrementViewCount() {
         this.viewCount += 1;
     }
+
+    // 새로 추가된 메서드
+    public void setBlind(boolean isBlind) {
+        this.isBlind = isBlind;
+    }
 }

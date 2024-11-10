@@ -78,14 +78,158 @@ public class ArticlesService {
         }
     }
 
+    // 특정 게시글 조회
+    public Optional<ArticleResponse> findByArticleId(Long id) {
+        return articlesRepository.findByIdAndIsDeletedFalse(id)
+                .map(articles -> {
+                    articles.incrementViewCount();
+                    articlesRepository.save(articles);
+                    return new ArticleResponse(articles);
+                });
+    }
+
     // 전체 게시글 조회
-    public Page<ArticleDetailResponse> findAll(int page, int size, String sortOption) {
+    public Page<ArticleDetailResponse> findAll(int page, int size, String sortOption, String title) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
+        Page<Articles> articlesPage;
+        if (title == null || title.isEmpty()) {
+            articlesPage = switch (sortOption) {
+                case "likeCount" -> articlesRepository.findAllOrderByLikeCount(pageable);
+                case "commentCount" -> articlesRepository.findAllOrderByCommentCount(pageable);
+                default -> articlesRepository.findByIsDeletedFalseAndIsBlindFalse(pageable);
+            };
+        } else {
+            articlesPage = switch (sortOption) {
+                case "likeCount" -> articlesRepository.findByTitleContainingOrderByLikeCount(pageable, title);
+                case "commentCount" -> articlesRepository.findByTitleContainingOrderByCommentCount(pageable, title);
+                default -> articlesRepository.findByIsDeletedFalseAndIsBlindFalseAndTitleContaining(title, pageable);
+            };
+        }
+
+        return articlesPage.map(article -> new ArticleDetailResponse(
+                article,
+                fetchLikeCount(article),
+                fetchCommentCount(article)
+        ));
+    }
+
+    // 특정 지역 게시글 조회
+    public Page<ArticleDetailResponse> findByLocationId(Long locationId, int page, int size, String sortOption, String title) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
+        Page<Articles> articlesPage;
+        if (title == null || title.isEmpty()) {
+            articlesPage = switch (sortOption) {
+                case "likeCount" -> articlesRepository.findByLocationIdOrderByLikeCount(locationId, pageable);
+                case "commentCount" -> articlesRepository.findByLocationIdOrderByCommentCount(locationId, pageable);
+                default -> articlesRepository.findByLocationIdAndIsDeletedFalseAndIsBlindFalse(locationId, pageable);
+            };
+        } else {
+            articlesPage = switch (sortOption) {
+                case "likeCount" -> articlesRepository.findByLocationIdAndTitleContainingOrderByLikeCount(locationId, title, pageable);
+                case "commentCount" -> articlesRepository.findByLocationIdAndTitleContainingOrderByCommentCount(locationId, title, pageable);
+                default -> articlesRepository.findByLocationIdAndIsDeletedFalseAndIsBlindFalseAndTitleContaining(locationId, title, pageable);
+            };
+        }
+
+        return articlesPage.map(article -> new ArticleDetailResponse(
+                article,
+                fetchLikeCount(article),
+                fetchCommentCount(article)
+        ));
+    }
+
+    // 해시태그로 게시글 조회
+    public Page<ArticleDetailResponse> findByHashtag(Long hashtagId, int page, int size, String sortOption, String title) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
+        Page<Articles> articlesPage;
+        if (title != null && !title.isEmpty()) {
+            articlesPage = switch (sortOption) {
+                case "likeCount" -> hashtagRepository.findArticlesByHashtagIdOrderByLikeCountAndTitleContaining(hashtagId, title, pageable);
+                case "commentCount" -> hashtagRepository.findArticlesByHashtagIdOrderByCommentCountAndTitleContaining(hashtagId, title, pageable);
+                default -> hashtagRepository.findArticlesByHashtagIdAndTitleContaining(hashtagId, title, pageable);
+            };
+        } else {
+            articlesPage = switch (sortOption) {
+                case "likeCount" -> hashtagRepository.findArticlesByHashtagIdOrderByLikeCount(hashtagId, pageable);
+                case "commentCount" -> hashtagRepository.findArticlesByHashtagIdOrderByCommentCount(hashtagId, pageable);
+                default -> hashtagRepository.findArticlesByHashtagIdAndIsDeletedFalse(hashtagId, pageable);
+            };
+        }
+
+        return articlesPage.map(article -> new ArticleDetailResponse(
+                article,
+                fetchLikeCount(article),
+                fetchCommentCount(article)
+        ));
+    }
+
+    // 카테고리로 게시글 조회
+    public Page<ArticleDetailResponse> findByCategory(String category, int page, int size, String sortOption, String title) {
+        ArticleCategory articleCategory = ArticleCategory.valueOf(category.toUpperCase());
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
+
+        Page<Articles> articlesPage;
+        if (title == null || title.isEmpty()) {
+            articlesPage = switch (sortOption) {
+                case "likeCount" -> articlesRepository.findByCategoryOrderByLikeCount(articleCategory, pageable);
+                case "commentCount" -> articlesRepository.findByCategoryOrderByCommentCount(articleCategory, pageable);
+                default -> articlesRepository.findByCategory(articleCategory, pageable);
+            };
+        } else {
+            articlesPage = switch (sortOption) {
+                case "likeCount" -> articlesRepository.findByCategoryAndTitleContainingOrderByLikeCount(articleCategory, title, pageable);
+                case "commentCount" -> articlesRepository.findByCategoryAndTitleContainingOrderByCommentCount(articleCategory, title, pageable);
+                default -> articlesRepository.findByCategoryAndTitleContaining(articleCategory, title, pageable);
+            };
+        }
+
+        return articlesPage.map(article -> new ArticleDetailResponse(
+                article,
+                fetchLikeCount(article),
+                fetchCommentCount(article)
+        ));
+    }
+
+    // 한 뚝빼기 게시글 조회
+    public Page<ArticleDetailResponse> findHotRestaurantArticlesForCurrentUser(int page, int size, String sortOption, String title) {
+        // 접속 중인 유저 확인
+        Users loggedInUser = getLoggedInUser();
+        if (loggedInUser == null) {
+            throw new IllegalStateException("로그인된 유저가 없습니다.");
+        }
+        Location userLocation = loggedInUser.getLocation();
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
+
+        Page<Articles> articlesPage;
+        if (title == null || title.isEmpty()) {
+            articlesPage = switch (sortOption) {
+                case "commentCount" -> articlesRepository.findByCategoryAndLocationOrderByCommentCountDesc(ArticleCategory.RESTAURANT, userLocation, pageable);
+                default -> articlesRepository.findByCategoryAndLocationOrderByLikeCountDesc(ArticleCategory.RESTAURANT, userLocation, pageable);
+            };
+        } else {
+            articlesPage = switch (sortOption) {
+                case "commentCount" -> articlesRepository.findByCategoryAndLocationAndTitleContainingOrderByCommentCountDesc(ArticleCategory.RESTAURANT, userLocation, title, pageable);
+                default -> articlesRepository.findByCategoryAndLocationAndTitleContainingOrderByLikeCountDesc(ArticleCategory.RESTAURANT, userLocation, title, pageable);
+            };
+        }
+
+        return articlesPage.map(article -> new ArticleDetailResponse(
+                article,
+                fetchLikeCount(article),
+                fetchCommentCount(article)
+        ));
+    }
+
+    // main페이지 top 5
+    public Page<ArticleDetailResponse> findTop5(int page, int size, String sortOption) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
 
         Page<Articles> articlesPage = switch (sortOption) {
             case "likeCount" -> articlesRepository.findAllOrderByLikeCount(pageable);
             case "commentCount" -> articlesRepository.findAllOrderByCommentCount(pageable);
-            default -> articlesRepository.findByIsDeletedFalse(pageable);
+            default -> articlesRepository.findByIsDeletedFalseAndIsBlindFalse(pageable);
         };
 
         return articlesPage.map(article -> new ArticleDetailResponse(
@@ -95,14 +239,18 @@ public class ArticlesService {
         ));
     }
 
-    // 특정 게시글 조회
-    public Optional<ArticleResponse> findByArticleId(Long id) {
-        return articlesRepository.findByIdAndIsDeletedFalse(id)
-                .map(articles -> {
-                    articles.incrementViewCount();
-                    articlesRepository.save(articles);
-                    return new ArticleResponse(articles);
-                });
+    // main페이지 한뚝배기 조회
+    public List<ArticleDetailResponse> findByHotArticles(String locationName) {
+        List<Articles> hotArticles = articlesRepository.findTop5ByCategoryAndLocationOrderByLikeCountDesc(
+                ArticleCategory.RESTAURANT, locationName);
+
+        return hotArticles.stream()
+                .map(article -> new ArticleDetailResponse(
+                        article,
+                        fetchLikeCount(article),
+                        fetchCommentCount(article)
+                ))
+                .toList();
     }
 
     // 특정 게시글 수정
@@ -127,112 +275,6 @@ public class ArticlesService {
                 .orElseThrow(() -> new IllegalArgumentException("없는 게시글"));
         article.setDeleted(true);
         article.setDeletedAt(LocalDateTime.now());
-    }
-
-    // 특정 지역 게시글 조회
-    public Page<ArticleDetailResponse> findByLocationId(Long locationId, int page, int size, String sortOption) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
-
-        Page<Articles> articlesPage = switch (sortOption) {
-            case "likeCount" -> articlesRepository.findByLocationIdOrderByLikeCount(locationId, pageable);
-            case "commentCount" -> articlesRepository.findByLocationIdOrderByCommentCount(locationId, pageable);
-            default -> articlesRepository.findByLocationIdAndIsDeletedFalse(locationId, pageable);
-        };
-
-        return articlesPage.map(article -> new ArticleDetailResponse(
-                article,
-                fetchLikeCount(article),
-                fetchCommentCount(article)
-        ));
-    }
-
-    // 해시태그로 게시글 조회
-    public Page<ArticleDetailResponse> findByHashtag(Long hashtagId, int page, int size, String sortOption) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
-
-        Page<Articles> articlesPage = switch (sortOption) {
-            case "likeCount" -> hashtagRepository.findArticlesByHashtagIdOrderByLikeCount(hashtagId, pageable);
-            case "commentCount" -> hashtagRepository.findArticlesByHashtagIdOrderByCommentCount(hashtagId, pageable);
-            default -> hashtagRepository.findArticlesByHashtagIdAndIsDeletedFalse(hashtagId, pageable);
-        };
-
-        return articlesPage.map(article -> new ArticleDetailResponse(
-                article,
-                fetchLikeCount(article),
-                fetchCommentCount(article)
-        ));
-    }
-
-    // 카테고리로 게시글 조회
-    public Page<ArticleDetailResponse> findByCategory(String category, int page, int size, String sortOption) {
-        ArticleCategory articleCategory = ArticleCategory.valueOf(category.toUpperCase());
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
-
-        Page<Articles> articlesPage = switch (sortOption) {
-            case "likeCount" -> articlesRepository.findByCategoryOrderByLikeCount(articleCategory, pageable);
-            case "commentCount" -> articlesRepository.findByCategoryOrderByCommentCount(articleCategory, pageable);
-            default -> articlesRepository.findByCategory(articleCategory, pageable);
-        };
-
-        return articlesPage.map(article -> new ArticleDetailResponse(
-                article,
-                fetchLikeCount(article),
-                fetchCommentCount(article)
-        ));
-    }
-
-    // 제목 검색 조회
-    public Page<ArticleDetailResponse> searchByTitle(String title, int page, int size, String sortOption) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
-
-        Page<Articles> articlesPage = switch (sortOption) {
-            case "likeCount" -> articlesRepository.findByTitleContainingIgnoreCaseOrderByLikeCount(title, pageable);
-            case "commentCount" -> articlesRepository.findByTitleContainingIgnoreCaseOrderByCommentCount(title, pageable);
-            default -> articlesRepository.findByTitleContainingIgnoreCase(title, pageable);
-        };
-
-        return articlesPage.map(article -> new ArticleDetailResponse(
-                article,
-                fetchLikeCount(article),
-                fetchCommentCount(article)
-        ));
-    }
-
-    // 접속중인 지역 맛집 (좋아요많은순) 조회
-    public List<ArticleDetailResponse> findByHotArticles(String locationName) {
-        List<Articles> hotArticles = articlesRepository.findTop5ByCategoryAndLocationOrderByLikeCountDesc(
-                ArticleCategory.RESTAURANT, locationName);
-
-        return hotArticles.stream()
-                .map(article -> new ArticleDetailResponse(
-                        article,
-                        fetchLikeCount(article),
-                        fetchCommentCount(article)
-                ))
-                .toList();
-    }
-
-    // 접속중인 지역 맛집 (좋아요 많은 순) 게시글 리스트 조회 (페이지네이션 추가)
-    public Page<ArticleDetailResponse> findHotRestaurantArticlesForCurrentUser(int page, int size, String sortOption) {
-        // 접속 중인 유저 확인
-        Users loggedInUser = getLoggedInUser();
-        if (loggedInUser == null) {
-            throw new IllegalStateException("로그인된 유저가 없습니다.");
-        }
-        Location userLocation = loggedInUser.getLocation();
-
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
-
-        Page<Articles> articlesPage = switch (sortOption) {
-            case "commentCount" -> articlesRepository.findByCategoryAndLocationOrderByCommentCountDesc(ArticleCategory.RESTAURANT, userLocation, pageable);
-            default -> articlesRepository.findByCategoryAndLocationOrderByLikeCountDesc(ArticleCategory.RESTAURANT, userLocation, pageable);
-        };
-
-        return articlesPage.map(article -> new ArticleDetailResponse(
-                article,
-                fetchLikeCount(article),
-                fetchCommentCount(article)
-        ));
     }
 
     // 새로운 해시태그를 생성하거나 기존 해시태그를 가져오는 메서드
@@ -308,5 +350,14 @@ public class ArticlesService {
             articleHashtagJoinRepository.save(new ArticleHashtagJoin(savedArticle, hashtag));
         }
         removeUnusedHashtags();
+    }
+
+    // 관리자 게시글 목록 > 상세
+    public Articles findById(Long id) {
+        return articlesRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Article not found with ID: " + id));
+    }
+    public Articles save(Articles article) {
+        return articlesRepository.save(article);
     }
 }
