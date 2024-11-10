@@ -7,11 +7,19 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class HashtagService {
     private final HashtagRepository hashtagRepository;
+
+    // 해시태그 이름 가져오기
+    public String getHashtagName(Long hashtagId) {
+        Optional<Hashtag> hashtag = hashtagRepository.findById(hashtagId);
+        return hashtag.map(Hashtag::getName)
+                .orElse("해시태그");
+    }
 
     // 상위 5개의 해시태그만 가져오기
     public List<PopularHashtag> getTopUsedHashtags() {

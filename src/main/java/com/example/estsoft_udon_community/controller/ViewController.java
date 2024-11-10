@@ -82,6 +82,7 @@ public class ViewController {
     public String changePw(Model model) {
         Users user = SecurityUtil.getLoggedInUser();
         model.addAttribute("user", user);
+        return "member/change_pw";
     }
 
     // 비밀번호 변경 처리 (POST)
