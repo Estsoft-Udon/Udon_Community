@@ -28,6 +28,25 @@
                             <a th:href="@{/articles/category/{category}(category='WALKING_COURSE')}">산책</a>
                         </div>
                     </div>
+                    <div class="grade_info" onclick="toggleGradeInfo()">
+                        <h3>등업 조건 <span class="toggle-icon">▼</span></h3>
+                        <div class="grade_content">
+                            <ul>
+                                <li>
+                                    <p>우동</p>
+                                    <span>가입 시 자동 등급 <br> 댓글 작성만 가능</span>
+                                </li>
+                                <li>
+                                    <p>우동 친구</p>
+                                    <span>댓글 1개 작성 시 자동 등업 <br>게시글 작성 가능</span>
+                                </li>
+                                <li>
+                                    <p>우동 보안관</p>
+                                    <span>등업 요청 신청 필요 관리자 승인 후 등업 <br> 캘린더 일정 승인 요청 가능</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="r_box">
