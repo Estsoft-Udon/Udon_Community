@@ -5,8 +5,6 @@ import com.example.estsoft_udon_community.dto.response.ArticleDetailResponse;
 import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.dto.response.ArticleResponse;
 import com.example.estsoft_udon_community.dto.request.UpdateArticleRequest;
-import com.example.estsoft_udon_community.entity.Location;
-import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.service.ArticlesService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,8 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
-
-import static com.example.estsoft_udon_community.util.SecurityUtil.getLoggedInUser;
 
 @RestController
 @AllArgsConstructor
@@ -36,8 +32,9 @@ public class ArticlesController {
     public ResponseEntity<Page<ArticleDetailResponse>> findAll(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "createdAt") String sortOption) {
-        Page<ArticleDetailResponse> articles = articlesService.findAll(page, size, sortOption);
+            @RequestParam(defaultValue = "createdAt") String sortOption,
+            @RequestParam(required = false) String title) {
+        Page<ArticleDetailResponse> articles = articlesService.findAll(page, size, sortOption, title);
         return ResponseEntity.ok(articles);
     }
 
@@ -64,24 +61,15 @@ public class ArticlesController {
         return ResponseEntity.ok().build();
     }
 
-//    // 특정 지역 게시글 조회하기
-//    @GetMapping("/locations/{locationId}/articles")
-//    public ResponseEntity<Page<ArticleResponse>> findByLocationId(
-//            @PathVariable Long locationId,
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "10") int size) {
-//        Page<ArticleResponse> locationByIdArticle = articlesService.findByLocationId(locationId, page, size);
-//        return ResponseEntity.ok(locationByIdArticle);
-//    }
-
     // 해시태그로 게시글 조회
     @GetMapping("/articles/hashtag/{hashtagId}")
     public ResponseEntity<Page<ArticleDetailResponse>> findByHashtag(
             @PathVariable Long hashtagId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "createdAt") String sortOption) {
-        Page<ArticleDetailResponse> hashtagByArticle = articlesService.findByHashtag(hashtagId, page, size, sortOption);
+            @RequestParam(defaultValue = "createdAt") String sortOption,
+            @RequestParam(required = false) String title) {
+        Page<ArticleDetailResponse> hashtagByArticle = articlesService.findByHashtag(hashtagId, page, size, sortOption, title);
         return ResponseEntity.ok(hashtagByArticle);
     }
 
@@ -91,32 +79,20 @@ public class ArticlesController {
             @PathVariable String category,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "createdAt") String sortOption) {
-        Page<ArticleDetailResponse> articles = articlesService.findByCategory(category, page, size, sortOption);
+            @RequestParam(defaultValue = "createdAt") String sortOption,
+            @RequestParam(required = false) String title) {
+        Page<ArticleDetailResponse> articles = articlesService.findByCategory(category, page, size, sortOption, title);
         return ResponseEntity.ok(articles);
     }
 
-    // 제목 검색 기능
-    @GetMapping("/articles/search")
-    public ResponseEntity<Page<ArticleDetailResponse>> searchArticlesByTitle(
-            @RequestParam String title,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "createdAt") String sortOption) {
-        if (title == null || title.trim().isEmpty()) {
-            return ResponseEntity.badRequest().body(Page.empty());
-        }
-        Page<ArticleDetailResponse> articles = articlesService.searchByTitle(title, page, size, sortOption);
-        return ResponseEntity.ok(articles);
-    }
-
-    // 한뚝배기
+    // 한 뚝빼기 게시글 조회
     @GetMapping("/articles/hotRestaurant")
     public ResponseEntity<Page<ArticleDetailResponse>> getHotRestaurantArticles(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "likeCount") String sortOption) {
-        Page<ArticleDetailResponse> hotRestaurantArticles = articlesService.findHotRestaurantArticlesForCurrentUser(page, size, sortOption);
+            @RequestParam(defaultValue = "likeCount") String sortOption,
+            @RequestParam(required = false) String title) {
+        Page<ArticleDetailResponse> hotRestaurantArticles = articlesService.findHotRestaurantArticlesForCurrentUser(page, size, sortOption, title);
         return ResponseEntity.ok(hotRestaurantArticles);
     }
 }
