@@ -63,7 +63,8 @@ public interface ArticlesRepository extends JpaRepository<Articles, Long> {
     Page<Articles> findByLocationIdAndIsDeletedFalseAndIsBlindFalse(Long locationId, Pageable pageable);
 
     // 특정 지역에 대한 게시글 조회 (제목 포함, 페이지네이션 추가)
-    Page<Articles> findByLocationIdAndIsDeletedFalseAndIsBlindFalseAndTitleContaining(Long locationId, String title, Pageable pageable);
+    Page<Articles> findByLocationIdAndIsDeletedFalseAndIsBlindFalseAndTitleContaining(Long locationId, String title,
+                                                                                      Pageable pageable);
 
     // 특정 지역의 게시글을 좋아요 수 기준으로 정렬하여 조회
     @Query("SELECT a FROM Articles a " +
@@ -81,7 +82,8 @@ public interface ArticlesRepository extends JpaRepository<Articles, Long> {
             "AND a.isBlind = false " +
             "GROUP BY a.id " +
             "ORDER BY COUNT(al.id) DESC")
-    Page<Articles> findByLocationIdAndTitleContainingOrderByLikeCount(@Param("locationId") Long locationId, @Param("title") String title, Pageable pageable);
+    Page<Articles> findByLocationIdAndTitleContainingOrderByLikeCount(@Param("locationId") Long locationId,
+                                                                      @Param("title") String title, Pageable pageable);
 
     // 특정 지역의 게시글을 댓글 수 기준으로 정렬하여 조회
     @Query("SELECT a FROM Articles a " +
@@ -99,7 +101,9 @@ public interface ArticlesRepository extends JpaRepository<Articles, Long> {
             "AND a.isBlind = false " +
             "GROUP BY a.id " +
             "ORDER BY COUNT(c.id) DESC")
-    Page<Articles> findByLocationIdAndTitleContainingOrderByCommentCount(@Param("locationId") Long locationId, @Param("title") String title, Pageable pageable);
+    Page<Articles> findByLocationIdAndTitleContainingOrderByCommentCount(@Param("locationId") Long locationId,
+                                                                         @Param("title") String title,
+                                                                         Pageable pageable);
 
     // 카테고리별 게시글 조회 (페이지네이션 추가)
     @Query("SELECT a FROM Articles a WHERE a.category = :category AND a.isDeleted = false AND a.isBlind = false")
@@ -107,7 +111,8 @@ public interface ArticlesRepository extends JpaRepository<Articles, Long> {
 
     // 카테고리별 제목 검색을 포함한 게시글 조회
     @Query("SELECT a FROM Articles a WHERE a.category = :category AND a.isDeleted = false AND a.title LIKE %:title% AND a.isBlind = false ")
-    Page<Articles> findByCategoryAndTitleContaining(@Param("category") ArticleCategory category, @Param("title") String title, Pageable pageable);
+    Page<Articles> findByCategoryAndTitleContaining(@Param("category") ArticleCategory category,
+                                                    @Param("title") String title, Pageable pageable);
 
     // 카테고리별 좋아요 수 기준으로 게시글 조회
     @Query("SELECT a FROM Articles a " +
@@ -123,7 +128,8 @@ public interface ArticlesRepository extends JpaRepository<Articles, Long> {
             "WHERE a.category = :category AND a.isDeleted = false AND a.title LIKE %:title% AND a.isBlind = false " +
             "GROUP BY a.id " +
             "ORDER BY COUNT(al.id) DESC")
-    Page<Articles> findByCategoryAndTitleContainingOrderByLikeCount(@Param("category") ArticleCategory category, @Param("title") String title, Pageable pageable);
+    Page<Articles> findByCategoryAndTitleContainingOrderByLikeCount(@Param("category") ArticleCategory category,
+                                                                    @Param("title") String title, Pageable pageable);
 
     // 카테고리별 댓글 수 기준으로 게시글 조회
     @Query("SELECT a FROM Articles a " +
@@ -139,7 +145,8 @@ public interface ArticlesRepository extends JpaRepository<Articles, Long> {
             "WHERE a.category = :category AND a.isDeleted = false AND a.title LIKE %:title% AND a.isBlind = false " +
             "GROUP BY a.id " +
             "ORDER BY COUNT(c.id) DESC")
-    Page<Articles> findByCategoryAndTitleContainingOrderByCommentCount(@Param("category") ArticleCategory category, @Param("title") String title, Pageable pageable);
+    Page<Articles> findByCategoryAndTitleContainingOrderByCommentCount(@Param("category") ArticleCategory category,
+                                                                       @Param("title") String title, Pageable pageable);
 
     // 접속지역 맛집 좋아요순 5개 정렬
     @Query("SELECT a FROM Articles a " +
@@ -149,7 +156,8 @@ public interface ArticlesRepository extends JpaRepository<Articles, Long> {
             "AND a.isDeleted = false " +
             "AND a.isBlind = false " +
             "ORDER BY (SELECT COUNT(al) FROM ArticlesLike al WHERE al.articles = a) DESC")
-    List<Articles> findTop5ByCategoryAndLocationOrderByLikeCountDesc(@Param("category") ArticleCategory category, @Param("locationName") String locationName);
+    List<Articles> findTop5ByCategoryAndLocationOrderByLikeCountDesc(@Param("category") ArticleCategory category,
+                                                                     @Param("locationName") String locationName);
 
     // 한뚝배기 - 좋아요 수 기준으로 정렬된 게시글 조회
     @Query("SELECT a FROM Articles a " +
@@ -172,10 +180,11 @@ public interface ArticlesRepository extends JpaRepository<Articles, Long> {
             "AND a.isBlind = false " +
             "AND a.title LIKE %:title% " +  // 제목 검색어 추가
             "ORDER BY (SELECT COUNT(al) FROM ArticlesLike al WHERE al.articles = a) DESC")
-    Page<Articles> findByCategoryAndLocationAndTitleContainingOrderByLikeCountDesc(@Param("category") ArticleCategory category,
-                                                                                   @Param("location") Location location,
-                                                                                   @Param("title") String title,
-                                                                                   Pageable pageable);
+    Page<Articles> findByCategoryAndLocationAndTitleContainingOrderByLikeCountDesc(
+            @Param("category") ArticleCategory category,
+            @Param("location") Location location,
+            @Param("title") String title,
+            Pageable pageable);
 
     // 한뚝배기 - 댓글 수 기준으로 정렬된 게시글 조회
     @Query("SELECT a FROM Articles a " +
@@ -202,10 +211,10 @@ public interface ArticlesRepository extends JpaRepository<Articles, Long> {
             "AND a.title LIKE %:title% " +  // 제목 검색어 추가
             "GROUP BY a.id " +
             "ORDER BY COUNT(c.id) DESC")
-    Page<Articles> findByCategoryAndLocationAndTitleContainingOrderByCommentCountDesc(@Param("category") ArticleCategory category,
-                                                                                      @Param("location") Location location,
-                                                                                      @Param("title") String title,
-                                                                                      Pageable pageable);
-
+    Page<Articles> findByCategoryAndLocationAndTitleContainingOrderByCommentCountDesc(
+            @Param("category") ArticleCategory category,
+            @Param("location") Location location,
+            @Param("title") String title,
+            Pageable pageable);
 
 }

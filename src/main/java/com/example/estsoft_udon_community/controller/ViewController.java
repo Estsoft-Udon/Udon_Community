@@ -11,6 +11,7 @@ import com.example.estsoft_udon_community.service.LocationService;
 import com.example.estsoft_udon_community.service.UsersService;
 
 import com.example.estsoft_udon_community.util.SecurityUtil;
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +33,18 @@ public class ViewController {
     private final LocationService locationService;
 
     @GetMapping("/login")
-    public String login() {
+    public String login(@RequestParam(value = "error", required = false) String error,
+                        HttpSession session,
+                        Model model) {
+        // 세션에서 에러 메시지 가져오기
+        if (error != null) {
+            String errorMessage = (String) session.getAttribute("error");
+            model.addAttribute("error", errorMessage);
+
+            // 에러 메시지를 세션에서 제거하여 새 로그인 시 이전 에러가 남지 않도록 함
+            session.removeAttribute("error");
+        }
+
         return "member/login";
     }
 
@@ -101,7 +113,7 @@ public class ViewController {
         }
     }
 
-    // 회원가입 
+    // 회원가입
     @GetMapping("/signup")
     public String signup(Model model) {
         List<String> upperLocations = locationService.getDistinctUpperLocations();
@@ -150,9 +162,9 @@ public class ViewController {
 
     @PostMapping("/request-promotion")
     public String requestPromotion(Long userId, Model model) {
-         usersService.requestPromotion(userId);
+        usersService.requestPromotion(userId);
 
-         return "redirect:/mypage";
+        return "redirect:/mypage";
     }
 
     @GetMapping("/edit_profile")
