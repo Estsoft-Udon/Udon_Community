@@ -39,6 +39,16 @@ public class ViewCommentController {
                               Model model) {
         Optional<ArticleResponse> article = articlesService.findByArticleId(id);
         Long articleLikeCount = articlesLikeService.getLikeCountForArticle(id);
+
+        List<CommentsResponse> allComments = commentsService.findCommentsByArticleId(id).stream().map(CommentsResponse::new).toList();
+
+        List<CommentsResponse> bestComments = allComments.stream()
+                .peek(comment -> comment.setLikeCount(commentsLikeService.countCommentsLike(comment.getId())))
+                .filter(comment -> comment.getLikeCount() > 0)
+                .sorted((c1, c2) -> Long.compare(c2.getLikeCount(), c1.getLikeCount())) // 좋아요 수 기준 내림차순 정렬
+                .limit(3) // 상위 3개만 추출
+                .toList(); // List로 변환
+
         Pageable pageable = PageRequest.of(page, size);
         Page<CommentsResponse> commentsPage = commentsService.findCommentsByArticleId(id, pageable);
 
@@ -46,13 +56,6 @@ public class ViewCommentController {
             comment.setLikeCount(commentsLikeService.countCommentsLike(comment.getId()));
             return comment;
         });
-
-        // BEST 댓글
-        List<CommentsResponse> bestComments = commentsPage.stream()
-                .filter(comment -> comment.getLikeCount() > 0)
-                .sorted((c1, c2) -> Long.compare(c2.getLikeCount(), c1.getLikeCount())) // 좋아요 수 기준 내림차순 정렬
-                .limit(3) // 상위 3개만 추출
-                .toList(); // List로 변환
 
         if (!bestComments.isEmpty()) {
             model.addAttribute("bestCommentsPage", bestComments);
