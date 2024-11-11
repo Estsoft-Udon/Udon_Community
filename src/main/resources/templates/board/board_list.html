@@ -139,6 +139,9 @@
                     </div>
 
                     <ul class="post_list">
+                        <li th:if="${articles.empty}" style="text-align: center; color: #888; padding: 20px;">
+                            검색된 결과가 없습니다.
+                        </li>
                         <li th:each="article, iterStat : ${articles}" class="post_item">
                             <div class="l_box">
                                 <div class="t_box">
