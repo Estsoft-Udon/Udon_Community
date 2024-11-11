@@ -39,6 +39,7 @@ public class ArticlesService {
     private final ArticlesLikeRepository articlesLikeRepository;
     private final LocationService locationService;
     private final ArticleHashtagService articleHashtagService;
+    private final UsersService usersService;
 
     // 게시글 등록 - api
     public Articles saveArticle(AddArticleRequest request) {
@@ -212,7 +213,7 @@ public class ArticlesService {
     public Page<ArticleDetailResponse> findHotRestaurantArticlesForCurrentUser(int page, int size, String sortOption,
                                                                                String title) {
         // 접속 중인 유저 확인
-        Users loggedInUser = getLoggedInUser();
+        Users loggedInUser = usersService.findUserById(getLoggedInUser().getId());
         if (loggedInUser == null) {
             throw new IllegalStateException("로그인된 유저가 없습니다.");
         }
