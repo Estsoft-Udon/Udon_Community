@@ -24,14 +24,18 @@ public class AdminMemberController {
     // 회원 목록
     @GetMapping("/member_list")
     public String boardListForAdmin(@RequestParam(defaultValue = "0") int page,
-                                    @RequestParam(defaultValue = "10") int size, Model model) {
-        Page<UsersResponse> allUser = adminMemberService.getAllUser(page, size)
+                                    @RequestParam(defaultValue = "10") int size,
+                                    @RequestParam(defaultValue = "all") String sortOption,
+                                    @RequestParam(required = false) String keyword,
+                                    Model model) {
+        Page<UsersResponse> allUser = adminMemberService.getFilteredUsers(page, size, sortOption, keyword)
                 .map(UsersResponse::new);
         model.addAttribute("allUser", allUser);
+        model.addAttribute("sortOption", sortOption);
+        model.addAttribute("keyword", keyword);
 
         return "admin/member/member_list";
     }
-
     // 회원 정보 수정(등급 수정)
     @GetMapping("/member_edit/{id}")
     public String boardEditForAdmin(Model model, @PathVariable Long id) {

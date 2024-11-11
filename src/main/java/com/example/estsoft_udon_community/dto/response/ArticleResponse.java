@@ -4,6 +4,7 @@ import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Hashtag;
 import com.example.estsoft_udon_community.entity.Location;
 import com.example.estsoft_udon_community.enums.ArticleCategory;
+import com.example.estsoft_udon_community.util.DateFormatUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,8 +26,8 @@ public class ArticleResponse {
     private ArticleCategory category;
     private List<String> hashtags;
     private Long viewCount;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private String createdAt;
+    private String updatedAt;
     private Location location;
     private boolean isBlind;
 
@@ -39,13 +40,14 @@ public class ArticleResponse {
         this.content = article.getContent();
         this.category = article.getCategory();
         this.viewCount = article.getViewCount();
-        this.createdAt = article.getCreatedAt();
-        this.updatedAt = article.getUpdatedAt();
+        this.createdAt = article.getCreatedAt().format(DateFormatUtil.formatter);
+        this.updatedAt = article.getUpdatedAt().format(DateFormatUtil.formatter);
         this.location = article.getLocation();
         // Hashtags 변환
         this.hashtags = article.getHashtags().stream()
                 .map(Hashtag::getName)
                 .toList();
+        this.isBlind = article.isBlind();
     }
     public String getFullLocation(){
         return location.getUpperLocation() + " " + location.getName();

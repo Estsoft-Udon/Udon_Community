@@ -8,19 +8,22 @@
         <h1>회원 목록</h1>
         <div class="top">
             <div class="search">
-                <form id="search-form">
-                    <input type="text" id="search-input" placeholder="검색어를 입력하세요" class="search-input"/>
+                <form id="search-form" method="get" action="/admin/member/member_list">
+                    <input type="text" id="search-input" name="keyword" placeholder="검색어를 입력하세요"
+                           th:value="${keyword}" class="search-input"/>
                     <button id="search-button" class="search-button">검색</button>
+                    <input type="hidden" name="sortOption" th:value="${sortOption}">
                 </form>
             </div>
             <div class="filter">
-                <form action="" method="get">
-                    <select>
-                        <option value="">전체 목록</option>
-                        <option value="">최신가입순</option>
-                        <option value="">등급순</option>
-                        <option value="">등업 신청자</option>
+                <form id="sort-form" action="/admin/member/member_list" method="get">
+                    <select id="sortOption" name="sortOption" onchange="this.form.submit()">
+                        <option value="all" th:selected="${sortOption == 'all'}">전체 목록</option>
+                        <option value="recent" th:selected="${sortOption == 'recent'}">최신가입순</option>
+                        <option value="grade" th:selected="${sortOption == 'grade'}">등급순</option>
+                        <option value="promotionRequested" th:selected="${sortOption == 'promotionRequested'}">등업 신청자</option>
                     </select>
+                    <input type="hidden" name="keyword" th:value="${keyword}">
                 </form>
             </div>
         </div>
@@ -34,7 +37,7 @@
                 <th> 지역</th>
                 <th> 가입 일자</th>
                 <th> 등급</th>
-                <th> 등급 신청 여부 </th>
+                <th style="text-align: center"> 등급 신청 여부</th>
             </tr>
             </thead>
             <tbody id="user-table-body">
@@ -49,29 +52,28 @@
                 <td th:text="${user.location.name}"></td>
                 <td th:text="${user.createdAt}"></td>
                 <td th:text="${user.displayName}"></td>
-                <td th:text="   ${user.isPromotionRequested? 'O' : 'X'}"></td>
+                <td th:text="${user.isPromotionRequested? 'O' : 'X'}"></td>
             </tr>
             </tbody>
         </table>
         <div class="pagination">
             <ul id="pagination-links">
                 <li th:if="${allUser.hasPrevious()}" class="page-item">
-                    <a th:href="@{/admin/member/member_list(page=${allUser.number - 1}, size=${allUser.size})}"
+                    <a th:href="@{/admin/member/member_list(page=${allUser.number - 1}, size=${allUser.size}, sortOption=${sortOption})}"
                        class="page-link">이전</a>
                 </li>
                 <li th:each="i : ${#numbers.sequence(0, allUser.totalPages - 1)}"
                     th:classappend="${i == allUser.number} ? 'active'">
-                    <a th:href="@{/admin/member/member_list(page=${i}, size=${allUser.size})}"
+                    <a th:href="@{/admin/member/member_list(page=${i}, size=${allUser.size}, sortOption=${sortOption})}"
                        th:text="${i + 1}" class="page-link">1</a>
                 </li>
                 <li th:if="${allUser.hasNext()}" class="page-item">
-                    <a th:href="@{/admin/member/member_list(page=${allUser.number + 1}, size=${allUser.size})}"
+                    <a th:href="@{/admin/member/member_list(page=${allUser.number + 1}, size=${allUser.size}, sortOption=${sortOption})}"
                        class="page-link">다음</a>
                 </li>
             </ul>
         </div>
     </section>
-    <script src="/js/admin_member.js"></script>
 </th:block>
 </body>
 </html>

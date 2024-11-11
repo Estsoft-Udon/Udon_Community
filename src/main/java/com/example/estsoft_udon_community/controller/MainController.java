@@ -48,7 +48,7 @@ public class MainController {
         }
 
         // 최신 게시글 5개 가져오기
-        List<ArticleDetailResponse> newestPosts = articlesService.findAll(0,5, "createdAt")
+        List<ArticleDetailResponse> newestPosts = articlesService.findTop5(0,5, "createdAt")
                 .stream()
                 .sorted((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt())) // 최신 순 정렬
                 .limit(5)
@@ -82,6 +82,7 @@ public class MainController {
         return "index";
     }
 
+    // HOT한 우동
     public void getTopUsers(Model model) {
         Map<Users, Long> topUserMap = usersService.getTopUsersByLikes(5);
 

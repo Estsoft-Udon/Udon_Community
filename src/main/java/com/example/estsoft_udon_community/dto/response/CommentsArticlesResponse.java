@@ -1,6 +1,7 @@
 package com.example.estsoft_udon_community.dto.response;
 
 import com.example.estsoft_udon_community.entity.Articles;
+import com.example.estsoft_udon_community.util.DateFormatUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,16 +20,16 @@ public class CommentsArticlesResponse {
 
     private String title;
     private String content;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private String createdAt;
+    private String updatedAt;
     private List<CommentsResponse> comments = new ArrayList<>();
 
     public CommentsArticlesResponse(Articles articles, List<CommentsResponse> comments) {
         this.userNickname = articles.getUserId().getNickname();
         this.title = articles.getTitle();
         this.content = articles.getContent();
-        this.createdAt = articles.getCreatedAt();
-        this.updatedAt = articles.getUpdatedAt();
+        this.createdAt = articles.getCreatedAt().format(DateFormatUtil.formatter);
+        this.updatedAt = articles.getUpdatedAt().format(DateFormatUtil.formatter);
         this.comments = comments;
     }
 }

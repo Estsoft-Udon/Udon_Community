@@ -64,7 +64,7 @@ public class CommentsLikeService {
 
         Map<Long, Long> commentsMap = new HashMap<>();      // userId, likeCount;
         for(CommentsLike commentsLike : commentsLikes) {
-            Long userId = commentsLike.getUsers().getId();
+            Long userId = commentsLike.getComments().getUsers().getId();
             commentsMap.merge(userId, 1L, Long::sum);
         }
 

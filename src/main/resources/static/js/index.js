@@ -254,8 +254,11 @@ function redirectToLocationBoard() {
         return;
     }
 
-    console.log(locationId);
-    window.location.href = `/articles?locationId=${locationId}`;
+    // 지역 정보만 URL에 추가
+    let url = `/articles?locationId=${locationId}`;
+
+    // 리디렉션
+    window.location.href = url;
 
     // 선택된 지역 초기화
     document.getElementById('upperLocation').selectedIndex = 0;

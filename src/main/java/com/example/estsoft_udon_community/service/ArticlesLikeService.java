@@ -63,7 +63,7 @@ public class ArticlesLikeService {
 
         Map<Long, Long> articlesMap = new HashMap<>();      // userId, likeCount;
         for(ArticlesLike articlesLike : articlesLikes) {
-            Long userId = articlesLike.getUsers().getId();
+            Long userId = articlesLike.getArticles().getUserId().getId();
             articlesMap.merge(userId, 1L, Long::sum);
         }
 
