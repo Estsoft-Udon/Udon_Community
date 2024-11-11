@@ -88,7 +88,6 @@ form{
     font-size: 1.5rem;
     color: red;
 }
-
 .error-message{
     margin-top: 3rem;
     font-weight: normal;
@@ -152,11 +151,13 @@ form{
     border-color: rgba(0,0,0,0.5);
     color: rgba(0,0,0,0.5);
     cursor: not-allowed;
+    white-space: nowrap;
 }
 
 .grade_box .reversal_btn.on{
     cursor: pointer;
     border-color: rgba(0, 133, 249, 1);
+    white-space: nowrap;
 }
 
 .info-section span.grade_info{

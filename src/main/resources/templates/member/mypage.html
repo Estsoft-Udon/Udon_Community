@@ -15,11 +15,13 @@
                     <div class="grade_box">
                         <span id="grade" th:text="${user.grade.getDisplayName()}"></span>
                         <!--2등급 이상일 시 버튼 활성화 됩니다. 활성화 시 on 클래스 추가-->
-                        <form th:action="@{/request-promotion}" method="POST">
+                        <form th:action="@{/request-promotion}" method="POST" id="promotionForm">
                             <input type="hidden" name="userId" th:value="${user.id}"/>
                             <button id="upgradeRequestBtn" class="reversal_btn"
-                                    th:classappend="${user.grade.ordinal() >= 1} ? 'on' : ''">
-                                등업 요청
+                                    th:classappend="${user.grade.ordinal() == 1} ? 'on' : ''"
+                                    th:disabled="${userPromotion}"
+                                    th:text="${userPromotion ? '등업 요청 완료' : '등업 요청'}"
+                                    onclick="submitUpgradeRequest(event)">
                             </button>
                         </form>
                     </div>
@@ -50,5 +52,6 @@
             </section>
         </div>
     </div>
+    <script src="/js/mypage.js"></script>
 </th:block>
 </html>
