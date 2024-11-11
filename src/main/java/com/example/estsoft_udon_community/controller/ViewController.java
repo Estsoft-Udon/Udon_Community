@@ -36,6 +36,7 @@ public class ViewController {
     public String login(@RequestParam(value = "error", required = false) String error,
                         HttpSession session,
                         Model model) {
+
         // 세션에서 에러 메시지 가져오기
         if (error != null) {
             String errorMessage = (String) session.getAttribute("error");
@@ -59,13 +60,12 @@ public class ViewController {
         // 아이디 검색 서비스 호출
         Users foundUser = usersService.searchId(name, email);
 
-        if (foundUser != null) {
+        if (foundUser != null) { // 아이디가 발견된 경우
             String loginId = foundUser.getLoginId();
-            // 아이디가 발견된 경우
             model.addAttribute("foundId", loginId);
             model.addAttribute("isIdFound", true);
-            // 아이디 발견 여부 플래그
-        } else {
+
+        } else {  // 아이디 발견 여부 플래그
             model.addAttribute("isIdFound", false);
         }
         return "member/find_id";
@@ -82,10 +82,11 @@ public class ViewController {
         Users users = usersService.searchPassword(loginId, passwordHint, passwordAnswer);
         // 비밀번호 찾기 성공
         if (users != null) {
-//            return changePw(model);
+            return changePw(model);
         }
-        // 비밀번호 찾기 실패
         model.addAttribute("errorMessage", "일치하는 정보가 없습니다.");
+        model.addAttribute("passwordHints", PasswordHint.values());
+
         return "member/find_pw";
     }
 
