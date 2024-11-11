@@ -29,7 +29,6 @@ public class ArticleWithLikeResponse {
     private Long likeCount;
 
     public ArticleWithLikeResponse(Articles article, Long likeCount) {
-        // pk primary Key
         this.userId = article.getUserId().getId();
         this.title = article.getTitle();
         this.content = article.getContent();

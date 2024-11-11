@@ -1,6 +1,5 @@
 package com.example.estsoft_udon_community.dto.request;
 
-import com.example.estsoft_udon_community.entity.Location;
 import com.example.estsoft_udon_community.enums.ArticleCategory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

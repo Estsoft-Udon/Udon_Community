@@ -20,5 +20,4 @@ public class ToggleVisibilityRequest {
     public void setVisibility(String visibility) {
         this.visibility = visibility;
     }
-
 }
