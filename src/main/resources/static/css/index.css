@@ -360,3 +360,15 @@ th, td {
     margin-bottom: 1.5rem;
     background-color: rgba(0, 0, 0, 0.1);
 }
+
+.hotplace .info{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 90%;
+}
+
+.hotplace div p{
+   text-align: center;
+    line-height: 1.5;
+}
