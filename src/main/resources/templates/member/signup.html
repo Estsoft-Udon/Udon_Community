@@ -39,11 +39,21 @@
                     <label for="passwordAnswer"></label>
                     <input type="text" id="passwordAnswer" name="passwordAnswer" required placeholder="답변 입력">
 
-                    <label for="nickname"></label>
-                    <input type="text" id="nickname" name="nickname" required placeholder="닉네임">
+                    <!-- 닉네임 입력 및 중복 확인 -->
+                    <div id="nicknameCheckMessage" class="check-message"></div>
+                    <div class="id_box">
+                        <label for="nickname" class="dn"></label>
+                        <input type="text" id="nickname" name="nickname" required placeholder="닉네임">
+                        <button type="button" onclick="checkNickname()" class="reversal_btn">중복 확인</button>
+                    </div>
 
-                    <label for="email"></label>
-                    <input type="email" id="email" name="email" required placeholder="이메일">
+                    <!-- 이메일 중복 확인 메시지 표시 -->
+                    <div id="emailCheckMessage" class="check-message"></div>
+                    <div class="id_box">
+                        <label for="email" class="dn"></label>
+                        <input type="email" id="email" name="email" required placeholder="이메일">
+                        <button type="button" onclick="checkEmail()" class="reversal_btn">중복 확인</button>
+                    </div>
 
                     <label for="upperLocation"></label>
                     <select id="upperLocation" name="upperLocation" onchange="updateLowerLocations()">
@@ -72,7 +82,7 @@
         </div>
     </div>
     <script src="/js/common.js"></script>
-    <script src="/js/id_check.js"></script>
+    <script src="/js/signup.js"></script>
     <script src="/js/password_check.js"></script>
 </th:block>
 </html>

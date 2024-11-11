@@ -77,6 +77,22 @@ public class UsersController {
         return ResponseEntity.ok(isDuplicate);
     }
 
+    // 회원가입시 닉네임 중복체크
+    @PostMapping("/checkNickname")
+    public ResponseEntity<Boolean> checkNickname(@RequestBody Map<String, String> requestBody) {
+        String nickname = requestBody.get("nickname");
+        boolean isDuplicate = usersService.isLoginCheckNickname(nickname);
+        return ResponseEntity.ok(isDuplicate);
+    }
+
+    // 회원가입시 email 중복체크
+    @PostMapping("/checkEmail")
+    public ResponseEntity<Boolean> checkEmail(@RequestBody Map<String, String> requestBody) {
+        String email = requestBody.get("email");
+        boolean isDuplicate = usersService.isLoginCheckEmail(email);
+        return ResponseEntity.ok(isDuplicate);
+    }
+
     // 회원탈퇴
     @PostMapping("/withdrawal")
     public ResponseEntity<Void> doWithdrawal() {

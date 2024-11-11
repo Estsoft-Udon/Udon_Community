@@ -102,6 +102,16 @@ public class UsersService {
         return usersRepository.existsByLoginIdIgnoreCase(loginId);
     }
 
+    // 회원가입시 닉네임 중복체크
+    public boolean isLoginCheckNickname(String nickname) {
+        return usersRepository.existsByNicknameIgnoreCase(nickname);
+    }
+
+    // 회원가입시 email 중복체크
+    public boolean isLoginCheckEmail(String email) {
+        return usersRepository.existsByEmailIgnoreCase(email);
+    }
+
     // 비밀번호 변경
     public boolean changePassword(Long userId, String currentPassword, String newPassword) {
         Users user = usersRepository.findById(userId)
