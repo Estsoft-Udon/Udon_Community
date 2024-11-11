@@ -18,7 +18,7 @@ public class UsersDetailService implements UserDetailsService {
         Users user = usersRepository.findByLoginId(username);
 
         if (user == null || user.getIsDeleted()) {
-            throw new UsernameNotFoundException("User not found with username: " + username);
+            throw new UsernameNotFoundException("헤당 사용자를 찾을 수 없습니다.: " + username);
         }
 
         // 로그인 성공 시 lastLoginAt update

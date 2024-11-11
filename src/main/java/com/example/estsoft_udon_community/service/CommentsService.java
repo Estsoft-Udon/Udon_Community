@@ -1,6 +1,5 @@
 package com.example.estsoft_udon_community.service;
 
-import com.example.estsoft_udon_community.dto.response.CommentsArticlesResponse;
 import com.example.estsoft_udon_community.dto.response.CommentsResponse;
 import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Comments;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -111,10 +109,3 @@ public class CommentsService {
                 .map(CommentsResponse::new);
     }
 }
-
-/*
-댓글 추가	POST	/api/articles/{articleId}/comments
-댓글목록조회	GET	/api/articles/{articleId}/comments
-댓글 수정	PUT	/api/comments/{commentId}
-댓글 삭제	DELETE	/api/comments/{commentId}
- */

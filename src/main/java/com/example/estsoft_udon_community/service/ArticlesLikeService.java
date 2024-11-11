@@ -18,7 +18,8 @@ public class ArticlesLikeService {
     private final UsersRepository usersRepository;
     private final ArticlesRepository articlesRepository;
 
-    public ArticlesLikeService(ArticlesLikeRepository articlesLikeRepository, UsersRepository usersRepository, ArticlesRepository articlesRepository) {
+    public ArticlesLikeService(ArticlesLikeRepository articlesLikeRepository, UsersRepository usersRepository,
+                               ArticlesRepository articlesRepository) {
         this.articlesLikeRepository = articlesLikeRepository;
         this.usersRepository = usersRepository;
         this.articlesRepository = articlesRepository;
@@ -62,7 +63,7 @@ public class ArticlesLikeService {
         List<ArticlesLike> articlesLikes = articlesLikeRepository.findAll();
 
         Map<Long, Long> articlesMap = new HashMap<>();      // userId, likeCount;
-        for(ArticlesLike articlesLike : articlesLikes) {
+        for (ArticlesLike articlesLike : articlesLikes) {
             Long userId = articlesLike.getArticles().getUserId().getId();
             articlesMap.merge(userId, 1L, Long::sum);
         }

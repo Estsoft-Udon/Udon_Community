@@ -30,12 +30,13 @@ public class AdminMemberController {
                                     Model model) {
         Page<UsersResponse> allUser = adminMemberService.getFilteredUsers(page, size, sortOption, keyword)
                 .map(UsersResponse::new);
+
         model.addAttribute("allUser", allUser);
         model.addAttribute("sortOption", sortOption);
         model.addAttribute("keyword", keyword);
-
         return "admin/member/member_list";
     }
+
     // 회원 정보 수정(등급 수정)
     @GetMapping("/member_edit/{id}")
     public String boardEditForAdmin(Model model, @PathVariable Long id) {

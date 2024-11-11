@@ -63,7 +63,6 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(usersResponsePage); // 데이터 없음
         }
 
-
         return ResponseEntity.ok(usersResponsePage); // 필터링된 데이터 반환
     }
 

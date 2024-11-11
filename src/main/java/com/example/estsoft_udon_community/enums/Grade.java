@@ -2,7 +2,6 @@ package com.example.estsoft_udon_community.enums;
 
 import lombok.Getter;
 
-@Getter
 public enum Grade {
     UDON("우동"),
     UDON_FRIEND("우동 친구"),
@@ -19,15 +18,4 @@ public enum Grade {
     public String getDisplayName() {
         return displayName;
     }
-
-    public static Grade fromString(String grade) {
-        for (Grade grade1 : Grade.values()) {
-            if (grade1.name().equalsIgnoreCase(grade)) {
-                return grade1;
-            }
-        }
-        return UDON;  // 기본값 처리
-    }
-
-
 }

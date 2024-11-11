@@ -26,7 +26,6 @@ public class Location {
     private String name;
 
     @Column(name = "upper_location")
-    @Enumerated(EnumType.STRING)  // Enum을 문자열로 저장
+    @Enumerated(EnumType.STRING)
     private UpperLocationEnum upperLocation;
-
 }

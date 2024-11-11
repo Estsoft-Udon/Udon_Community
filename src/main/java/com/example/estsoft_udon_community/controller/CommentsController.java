@@ -6,7 +6,6 @@ import com.example.estsoft_udon_community.dto.response.CommentsArticlesResponse;
 import com.example.estsoft_udon_community.dto.request.CommentsRequest;
 import com.example.estsoft_udon_community.dto.response.CommentsResponse;
 import com.example.estsoft_udon_community.repository.ArticlesRepository;
-import com.example.estsoft_udon_community.service.ArticlesService;
 import com.example.estsoft_udon_community.service.CommentsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,7 +17,6 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class CommentsController {
-    private final ArticlesService articlesService;
     private final CommentsService commentsService;
     private final ArticlesRepository articlesRepository;
 
@@ -49,7 +47,7 @@ public class CommentsController {
         return ResponseEntity.ok(commentsResponseList);
     }
 
-//     코멘트 수정
+    //코멘트 수정
     @PutMapping("/articles/{articleId}/comments/{commentId}")
     public ResponseEntity<CommentsResponse> updateComment(@PathVariable Long articleId,
                                                           @PathVariable Long commentId,
@@ -86,6 +84,4 @@ public class CommentsController {
 
         return commentsResponseList;
     }
-
-
 }

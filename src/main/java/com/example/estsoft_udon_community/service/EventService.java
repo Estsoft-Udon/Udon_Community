@@ -20,8 +20,6 @@ public class EventService {
 
     private final EventRepository eventRepository;
     private final UsersRepository usersRepository;
-    private final UsersService usersService;
-    private final LocationService locationService;
 
     // 캘린더 메인
     public List<Event> getAllEvents() {

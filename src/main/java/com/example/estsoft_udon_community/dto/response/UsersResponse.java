@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UsersResponse {
 
-    // 이걸 추가 했는데 에러가 추가 했으면 오류가 나려나.
     private Long id;
     private String name;
     private String loginId;

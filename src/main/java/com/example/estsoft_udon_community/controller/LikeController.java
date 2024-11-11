@@ -9,7 +9,6 @@ import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Comments;
 import com.example.estsoft_udon_community.service.ArticlesLikeService;
 import com.example.estsoft_udon_community.service.CommentsLikeService;
-import com.example.estsoft_udon_community.service.CommentsService;
 import com.example.estsoft_udon_community.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,7 +25,6 @@ import java.util.Map;
 public class LikeController {
     private final ArticlesLikeService articlesLikeService;
     private final CommentsLikeService commentsLikeService;
-    private final CommentsService commentsService;
 
     // 코멘트 좋아요 등록 / 삭제
     @PostMapping("/commentsLike")

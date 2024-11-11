@@ -11,7 +11,7 @@ import lombok.Setter;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "articles_hashtags")
+@Table(name = "articles_hashtags_join")
 @IdClass(ArticleHashtagJoinId.class)
 public class ArticleHashtagJoin {
     @Id

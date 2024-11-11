@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AdminArticleService {
     private final ArticlesRepository articlesRepository;
-    private final ArticlesService articlesService;
     private final AdminArticleRepository repository;
 
     // 관리자 게시글 조회
@@ -69,6 +68,4 @@ public class AdminArticleService {
         // 상태 변경 후 저장
         return articlesRepository.save(article);  // 변경된 엔티티를 저장
     }
-    
-
 }
