@@ -47,7 +47,7 @@
                     <a th:href="@{/admin/board/board_edit/{id}(id=${article.id})}" th:text="${article.title}">제목</a>
                 </td>
                 <td th:text="${article.getFullLocation()}">지역</td>
-                <td th:text="${article.category}">카테고리</td>
+                <td th:text="${article.category.displayName}">카테고리</td>
                 <td th:text="${article.nickname}">회원ID</td>
                 <td th:text="${article.createdAt}">작성일</td>
                 <td class="visibility-text">
