@@ -78,11 +78,12 @@ public class ViewController {
         return "member/find_pw";
     }
 
-//    @GetMapping("/change_pw")
-//    public String changePw(Model model) {
-//        Users user = SecurityUtil.getLoggedInUser();
-//        model.addAttribute("user", user);
-//    }
+    @GetMapping("/change_pw")
+    public String changePw(Model model) {
+        Users user = SecurityUtil.getLoggedInUser();
+        model.addAttribute("user", user);
+        return "member/change_pw";
+    }
 
     // 비밀번호 변경 처리 (POST)
     @PostMapping("/change_pw")
@@ -134,19 +135,10 @@ public class ViewController {
         return "member/success";
     }
 
+    // 회원 탈퇴
     @GetMapping("/withdrawal")
     public String withdrawal() {
         return "member/withdrawal";
-    }
-
-    @PostMapping("/withdrawal")
-    public String doWithdrawal(HttpServletRequest request, HttpServletResponse response) {
-        Users user = SecurityUtil.getLoggedInUser();
-        usersService.softDelete(user);
-        // 로그아웃
-        new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
-
-        return "index";
     }
 
     @GetMapping("/mypage")
