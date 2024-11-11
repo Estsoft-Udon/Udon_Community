@@ -49,8 +49,7 @@ public class ViewController {
     }
 
     @GetMapping("/find_id")
-    public String findId(Model model) {
-        model.addAttribute("isIdFound", false);
+    public String findId() {
         return "member/find_id";
     }
 
