@@ -78,12 +78,13 @@
                                     <a href="/articles/hotRestaurant">🍚 한 뚝배기 하실래요?</a>
                                 </h2>
                                 <div th:if="${user == null}" class="info">
-                                    <p>
-                                        로그인 후 <br> 우리 동네 맛집을 확인해보세요 😋
-                                    </p>
+                                    <p> 로그인 후 <br> 우리 동네 맛집을 확인해보세요 😋</p>
+                                </div>
+                                <div th:if="${#lists.isEmpty(hotArticles)}" class="info">
+                                    <p>아직 우리 동네 맛집 게시글이 없어요 🥲</p>
                                 </div>
                                 <ul class="post_list">
-                                    <li th:each="article : ${hotArticles}" class="post_item">
+                                    <li th:each="article : ${hotArticles}" th:if="${#lists.size(hotArticles) > 0}" class="post_item">
                                         <div class="l_box">
                                             <div class="top">
                                                 <span class="w_id" th:text="${article.nickname}">아이디</span>
