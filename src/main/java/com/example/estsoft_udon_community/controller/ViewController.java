@@ -157,12 +157,15 @@ public class ViewController {
     public String mypage(Model model) {
         Users userById = usersService.findUserById(getLoggedInUser().getId());
         model.addAttribute("user", userById);
+        model.addAttribute("userPromotion", userById.getIsPromotionRequested());
         return "member/mypage";
     }
 
     @PostMapping("/request-promotion")
     public String requestPromotion(Long userId, Model model) {
-        usersService.requestPromotion(userId);
+        Boolean userPromotion = usersService.requestPromotion(userId);
+        model.addAttribute("userPromotion", userPromotion);
+
 
         return "redirect:/mypage";
     }
