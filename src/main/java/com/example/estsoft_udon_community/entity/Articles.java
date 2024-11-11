@@ -39,7 +39,7 @@ public class Articles {
     private ArticleCategory category;
 
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "articles_hashtags",
+    @JoinTable(name = "articles_hashtags_join",
             joinColumns = @JoinColumn(name = "article_id"),
             inverseJoinColumns = @JoinColumn(name = "hashtag_id"))
     private List<Hashtag> hashtags;
