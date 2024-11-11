@@ -173,7 +173,7 @@ public class ViewController {
     @GetMapping("/edit_profile")
     public String editProfile(Model model) {
         // 로그인 사용자의 정보
-        Users users = getLoggedInUser();
+        Users users = usersService.findUserById(getLoggedInUser().getId());
         model.addAttribute("user", users);
         model.addAttribute("passwordHints", PasswordHint.values());
 
@@ -189,7 +189,6 @@ public class ViewController {
     @PostMapping("/edit_profile")
     public String editProfile(@ModelAttribute UsersRequest request, Model model, Long locationId) {
         request.setLocationId(locationId);
-
         usersService.updateUser(getLoggedInUser().getId(), request);
         return "redirect:/mypage";
     }
