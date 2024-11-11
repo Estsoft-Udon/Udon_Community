@@ -164,7 +164,7 @@
                     </ul>
 
 
-                    <div class="pagination_wr">
+                    <div class="pagination_wr" th:if="${not articles.empty}">
                         <ul class="pagination">
                             <!-- 이전 버튼 활성화/비활성화 -->
                             <li th:classappend="${currentPage == 0 ? 'dn' : ''}" class="prev_btn">

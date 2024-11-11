@@ -59,7 +59,7 @@
                 </tr>
             </tbody>
         </table>
-        <div class="pagination">
+        <div class="pagination" th:if="${not allUser.empty}">
             <ul id="pagination-links">
                 <li th:if="${allUser.hasPrevious()}" class="page-item">
                     <a th:href="@{/admin/member/member_list(page=${allUser.number - 1}, size=${allUser.size}, sortOption=${sortOption})}"
