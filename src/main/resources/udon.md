@@ -10,7 +10,7 @@ CREATE TABLE users
     nickname        VARCHAR(50)  NOT NULL UNIQUE,
     email           VARCHAR(100) NOT NULL UNIQUE,
     grade           VARCHAR(100) NOT NULL,
-    password        VARCHAR(255)  NOT NULL,
+    password        VARCHAR(255) NOT NULL,
     password_hint   VARCHAR(255) NOT NULL,
     password_answer VARCHAR(100) NOT NULL,
     created_at      DATETIME     NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE users
     deleted_at      DATETIME     NULL,
     is_deleted      BOOLEAN      NOT NULL,
     last_login      DATETIME     NULL,
-    location_id     BIGINT,
+    location_id     BIGINT       NOT NULL,
 
     FOREIGN KEY (location_id) REFERENCES location (location_id)
 );
@@ -110,7 +110,7 @@ CREATE TABLE hashtag
     name       VARCHAR(255) NOT NULL UNIQUE
 );
 
-CREATE TABLE articles_hashtags
+CREATE TABLE articles_hashtags_join
 (
     article_id BIGINT,
     hashtag_id BIGINT,

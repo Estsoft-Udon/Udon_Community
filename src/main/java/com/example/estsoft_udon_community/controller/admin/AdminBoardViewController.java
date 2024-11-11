@@ -30,7 +30,7 @@ public class AdminBoardViewController {
     public String boardList(@RequestParam(value = "page", defaultValue = "0") int page,
                             @RequestParam(value = "size", defaultValue = "10") int size,
                             @RequestParam(value = "keyword", required = false) String keyword,
-                            @RequestParam(value = "sort", defaultValue = "createdAt,desc") String sort,
+                            @RequestParam(value = "sort", defaultValue = "createdAt,desc,isBlind") String sort,
                             Model model) {
 
         // 정렬 기준 파라미터를 처리

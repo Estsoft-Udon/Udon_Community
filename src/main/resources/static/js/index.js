@@ -208,7 +208,13 @@ function showEventDetails(event) {
     // 모달에 이벤트 데이터 표시
     eventTitle.textContent = event.title;
     eventType.textContent = getEventTypeText(event.eventType);
-    eventDateTime.textContent = `${new Date(event.dateTime).toLocaleString()}`;
+    eventDateTime.textContent = `${new Date(event.dateTime).toLocaleString("ko-KR", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+    })}`;
     eventUser.textContent = event.userLoginId || '정보 없음';
     eventDescription.textContent = event.content || '상세 설명이 없습니다.';
 

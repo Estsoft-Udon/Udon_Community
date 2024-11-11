@@ -77,6 +77,11 @@
                                 <h2>
                                     <a href="/articles/hotRestaurant">🍚 한 뚝배기 하실래요?</a>
                                 </h2>
+                                <div th:if="${user == null}" class="info">
+                                    <p>
+                                        로그인 후 <br> 우리 동네 맛집을 확인해보세요 😋
+                                    </p>
+                                </div>
                                 <ul class="post_list">
                                     <li th:each="article : ${hotArticles}" class="post_item">
                                         <div class="l_box">
