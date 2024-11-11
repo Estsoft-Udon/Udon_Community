@@ -35,17 +35,3 @@ header ul{
     justify-content: center;
     gap: 3rem;
 }
-
-.logo{
-    display: flex;
-    align-items: flex-end;
-}
-
-.logo span{
-    font-size: 3rem;
-    font-weight: bold;
-}
-
-.logo img{
-    width: 4rem;
-}

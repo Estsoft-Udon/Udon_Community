@@ -174,3 +174,15 @@ async function loadHashtags(articleId) {
         throw error;
     }
 }
+
+function toggleGradeInfo() {
+    const gradeInfo = document.querySelector('.grade_info');
+    const gradeContent = document.querySelector('.grade_content');
+
+    gradeInfo.classList.toggle('open');
+    gradeContent.style.display = gradeContent.style.display === 'none' || !gradeContent.style.display ? 'block' : 'none';
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelector('.grade_content').style.display = 'none';
+});
