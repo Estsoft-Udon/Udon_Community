@@ -77,6 +77,9 @@
                                 <h2>
                                     <a href="/articles/hotRestaurant">🍚 한 뚝배기 하실래요?</a>
                                 </h2>
+                                <div th:if="${user == null}">
+                                    <p>로그인이 필요합니다.</p>
+                                </div>
                                 <ul class="post_list">
                                     <li th:each="article : ${hotArticles}" class="post_item">
                                         <div class="l_box">
