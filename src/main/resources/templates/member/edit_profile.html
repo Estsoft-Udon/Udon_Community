@@ -15,11 +15,21 @@
                             class="reversal_btn pw_change_btn">비밀번호 변경하러가기
                     </button>
 
-                    <label for="nickname">별명</label>
-                    <input type="text" id="nickname" name="nickname" th:value="${user.nickname}">
+                    <!-- 닉네임 -->
+                    <label for="nickname" class="label">닉네임</label>
+                    <div id="nicknameCheckMessage" class="check-message"></div>
+                    <div class="id_box">
+                        <input type="text" id="nickname" name="nickname" th:value="${user.nickname}" required placeholder="닉네임">
+                        <button type="button" onclick="checkNickname()" class="reversal_btn">중복 확인</button>
+                    </div>
 
-                    <label for="email">이메일</label>
-                    <input type="email" id="email" name="email" th:value="${user.email}">
+                    <!-- 이메일 -->
+                    <label for="email" class="label">이메일</label>
+                    <div id="emailCheckMessage" class="check-message"></div>
+                    <div class="id_box">
+                        <input type="email" id="email" name="email" th:value="${user.email}" required placeholder="이메일">
+                        <button type="button" onclick="checkEmail()" class="reversal_btn">중복 확인</button>
+                    </div>
 
                     <!--   Location의 Upper 별로 -->
                     <label for="upperLocation">지역</label>
@@ -52,5 +62,6 @@
         </div>
     </div>
     <script src="/js/common.js"></script>
+    <script src="/js/edit_profile.js"></script>
 </th:block>
 </html>
