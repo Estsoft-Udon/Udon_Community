@@ -110,7 +110,7 @@ CREATE TABLE hashtag
     name       VARCHAR(255) NOT NULL UNIQUE
 );
 
-CREATE TABLE articles_hashtags
+CREATE TABLE articles_hashtags_join
 (
     article_id BIGINT,
     hashtag_id BIGINT,
