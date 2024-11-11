@@ -37,15 +37,15 @@ public class Event {
     private LocalDateTime deletedAt;
 
     @Column(name = "is_accepted", nullable = false)
-    private Boolean isAccepted = false; // 기본값 false로 설정
+    private Boolean isAccepted = false;
 
     @ManyToOne
     @JoinColumn(name = "location_id")
     private Location location;
 
-    @ManyToOne // 작성자와의 관계 설정
+    @ManyToOne
     @JoinColumn(name = "user_id")
-    private Users users; // 작성한 사용자 정보 추가
+    private Users users;
 
     @PrePersist
     public void prePersist() {

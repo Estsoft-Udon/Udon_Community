@@ -31,21 +31,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 @EntityListeners(AuditingEntityListener.class)
 public class Users {
 
-    public Users(String loginId, String password, String name, String nickname,
-                 String email, Grade grade,
-                 PasswordHint passwordHint, String passwordAnswer
-            , Location location) {
-        this.loginId = loginId;
-        this.password = password;
-        this.name = name;
-        this.nickname = nickname;
-        this.email = email;
-        this.grade = grade;
-        this.passwordHint = passwordHint;
-        this.passwordAnswer = passwordAnswer;
-        this.location = location;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -66,13 +51,13 @@ public class Users {
     @Column(nullable = false)
     private String email;
 
-    @Enumerated(EnumType.STRING)  // Enum을 문자열로 저장
+    @Enumerated(EnumType.STRING)
     private Grade grade;
 
     @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)  // Enum을 문자열로 저장
+    @Enumerated(EnumType.STRING)
     @Column(name = "password_hint", nullable = false)
     private PasswordHint passwordHint;
 
@@ -110,5 +95,21 @@ public class Users {
 
     public void updateLastLoginAt() {
         this.lastLoginAt = LocalDateTime.now();
+    }
+
+    public Users(String loginId, String password, String name,
+                 String nickname, String email, Grade grade,
+                 PasswordHint passwordHint,
+                 String passwordAnswer,
+                 Location location) {
+        this.loginId = loginId;
+        this.password = password;
+        this.name = name;
+        this.nickname = nickname;
+        this.email = email;
+        this.grade = grade;
+        this.passwordHint = passwordHint;
+        this.passwordAnswer = passwordAnswer;
+        this.location = location;
     }
 }

@@ -49,7 +49,7 @@ public class Comments {
     }
 
     public void updateCommentsContent(String content) {
-        if(!content.isBlank()) {
+        if (!content.isBlank()) {
             this.content = content;
         }
     }
