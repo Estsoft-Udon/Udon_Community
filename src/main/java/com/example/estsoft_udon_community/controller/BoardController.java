@@ -155,7 +155,6 @@ public class BoardController {
 
         model.addAttribute("article", article);
         model.addAttribute("originLocation", location);
-        System.out.println(model.getAttribute("locations"));
 
         return "board/board_edit";
     }
