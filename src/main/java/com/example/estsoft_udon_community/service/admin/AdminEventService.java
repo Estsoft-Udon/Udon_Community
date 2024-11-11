@@ -8,11 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +27,7 @@ public class AdminEventService {
     public Page<EventResponse> getApprovedEvents(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Event> byIsAcceptedTrue = eventRepository.findByIsAcceptedTrue(pageable);
-        return byIsAcceptedTrue.map(EventResponse::new); // EventResponse로 변환
+        return byIsAcceptedTrue.map(EventResponse::new);
     }
 
     // 승인되지 않은 이벤트 목록 조회
@@ -45,30 +41,32 @@ public class AdminEventService {
     @Transactional
     public void approveEvent(Long eventId) {
         Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new IllegalArgumentException("Event not found"));
+                .orElseThrow(() -> new IllegalArgumentException("이벤트를 찾을 수 없습니다."));
         event.setAccepted(true);
         eventRepository.save(event);
     }
 
     // 이벤트 승인 취소 처리
+    @Transactional
     public void cancelEvent(Long id) {
-        Event event = eventRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid event ID"));
-        event.setIsAccepted(false);  // 승인 취소 처리
+        Event event = eventRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 이벤트 ID입니다."));
+        event.setIsAccepted(false);
         eventRepository.save(event);
     }
 
     // 특정 이벤트 상세 조회
     public EventResponse getEventById(Long eventId) {
         Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new IllegalArgumentException("Event not found"));
+                .orElseThrow(() -> new IllegalArgumentException("이벤트를 찾을 수 없습니다."));
         return new EventResponse(event);
     }
 
-    // 이벤트 삭제 메서드 추가
+    // 이벤트 삭제
     @Transactional
     public void deleteEvent(Long eventId) {
         Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new IllegalArgumentException("Event not found"));
+                .orElseThrow(() -> new IllegalArgumentException("이벤트를 찾을 수 없습니다."));
         eventRepository.delete(event);
     }
 }
