@@ -7,6 +7,7 @@ import com.example.estsoft_udon_community.service.UsersService;
 import java.util.List;
 import java.util.Map;
 
+import com.example.estsoft_udon_community.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -80,5 +81,14 @@ public class UsersController {
         String loginId = requestBody.get("loginId");
         boolean isDuplicate = usersService.isLoginIdDuplicate(loginId);
         return ResponseEntity.ok(isDuplicate);
+    }
+
+    // 회원탈퇴
+    @PostMapping("/withdrawal")
+    public ResponseEntity<Void> doWithdrawal() {
+        Users user = SecurityUtil.getLoggedInUser();
+        usersService.softDelete(user);
+
+        return ResponseEntity.ok().build();
     }
 }

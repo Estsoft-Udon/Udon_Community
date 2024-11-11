@@ -47,6 +47,17 @@ public class ViewCommentController {
             return comment;
         });
 
+        // BEST 댓글
+        List<CommentsResponse> bestComments = commentsPage.stream()
+                .filter(comment -> comment.getLikeCount() > 0)
+                .sorted((c1, c2) -> Long.compare(c2.getLikeCount(), c1.getLikeCount())) // 좋아요 수 기준 내림차순 정렬
+                .limit(3) // 상위 3개만 추출
+                .toList(); // List로 변환
+
+        if(!bestComments.isEmpty()) {
+            model.addAttribute("bestCommentsPage", bestComments);
+        }
+
         if (!commentsPage.isEmpty()) {
             model.addAttribute("commentsPage", commentsPage);
         }

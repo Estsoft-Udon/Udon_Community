@@ -4,6 +4,7 @@ import com.example.estsoft_udon_community.dto.request.AddArticleRequest;
 import com.example.estsoft_udon_community.dto.response.ArticleDetailResponse;
 import com.example.estsoft_udon_community.dto.response.ArticleResponse;
 import com.example.estsoft_udon_community.entity.Hashtag;
+import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.enums.ArticleCategory;
 import com.example.estsoft_udon_community.service.ArticleHashtagService;
 import com.example.estsoft_udon_community.service.ArticlesService;
@@ -19,7 +20,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.estsoft_udon_community.util.SecurityUtil.getLoggedInUser;
 
 @Controller
 @RequiredArgsConstructor
@@ -172,6 +176,7 @@ public class BoardController {
         return "board/board_edit";
     }
 
+    // 기존 해시태그 불러오기
     @GetMapping("/article/{articleId}/hashtags")
     @ResponseBody
     public List<String> getHashtagsByArticleId(@PathVariable Long articleId) {

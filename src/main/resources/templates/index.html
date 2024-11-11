@@ -60,7 +60,7 @@
                                         <div class="l_box">
                                             <div class="top">
                                                 <span class="w_id" th:text="${article.nickname}">아이디</span>
-                                                <span class="w_pw" th:text="|Posted on ${#temporals.format(article.createdAt, 'yyyy-MM-dd HH:mm')}|">작성 시간</span>
+                                                <span class="w_pw" th:text="|Posted on ${article.createdAt}|">작성 시간</span>
                                             </div>
                                             <div class="bot">
                                                 <a th:href="@{/articles/{id}(id=${article.id})}" th:text="${article.title}" class="title">글 제목</a>
@@ -82,7 +82,7 @@
                                         <div class="l_box">
                                             <div class="top">
                                                 <span class="w_id" th:text="${article.nickname}">아이디</span>
-                                                <span class="w_pw" th:text="|Posted on ${#temporals.format(article.createdAt, 'yyyy-MM-dd HH:mm')}|">작성 시간</span>
+                                                <span class="w_pw" th:text="|Posted on ${article.createdAt}|">작성 시간</span>
                                             </div>
                                             <div class="bot">
                                                 <a th:href="@{/articles/{id}(id=${article.id})}" th:text="${article.title}" class="title">글 제목</a>
