@@ -58,8 +58,6 @@ public class AdminBoardViewController {
         return "admin/board/board_list";
     }
 
-
-
     // 게시글 수정(공개/비공개)
     @GetMapping("/board_edit/{id}")
     public String boardEdit(@PathVariable Long id, Model model) {

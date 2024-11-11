@@ -5,9 +5,9 @@ import com.example.estsoft_udon_community.entity.Location;
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.enums.PasswordHint;
 import com.example.estsoft_udon_community.service.ArticlesService;
-import com.example.estsoft_udon_community.service.EventService;
 import com.example.estsoft_udon_community.service.LocationService;
 import com.example.estsoft_udon_community.service.UsersService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,19 +19,12 @@ import java.util.stream.Collectors;
 import static com.example.estsoft_udon_community.util.SecurityUtil.getLoggedInUser;
 
 @Controller
+@RequiredArgsConstructor
 public class MainController {
 
-    private final EventService eventService;
     private final LocationService locationService;
     private final ArticlesService articlesService;
     private final UsersService usersService;
-
-    public MainController(EventService eventService, LocationService locationService, ArticlesService articlesService, UsersService usersService) {
-        this.eventService = eventService;
-        this.locationService = locationService;
-        this.articlesService = articlesService;
-        this.usersService = usersService;
-    }
 
     @GetMapping("/")
     public String index(Model model) {
@@ -85,7 +78,6 @@ public class MainController {
     // HOT한 우동
     public void getTopUsers(Model model) {
         Map<Users, Long> topUserMap = usersService.getTopUsersByLikes(5);
-
         model.addAttribute("topUserMap", topUserMap);
     }
 }

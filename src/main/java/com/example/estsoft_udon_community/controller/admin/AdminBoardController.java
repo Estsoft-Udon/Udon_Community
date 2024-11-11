@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AdminBoardController {
     private final AdminArticleService adminArticleService;
-    private final ArticlesRepository articlesRepository;
 
     // 관리자 게시글 조회
     @GetMapping("/")
@@ -33,7 +32,7 @@ public class AdminBoardController {
         return ResponseEntity.ok(articleResponse);
     }
 
-//    // 관리자 게시글 수정
+    // 관리자 게시글 수정
     @PutMapping("/{id}/toggle-visibility")
     public ResponseEntity<ArticleResponse> toggleArticleVisibility(@PathVariable Long id, @RequestBody ToggleVisibilityRequest request) {
         // 가시성 토글

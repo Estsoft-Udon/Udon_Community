@@ -59,9 +59,6 @@ public class UsersController {
     @PostMapping("/searchId")
     public ResponseEntity<String> findUserBySearchId(@RequestBody UsersRequest user) {
         Users foundUser = usersService.searchId(user.getName(), user.getEmail());
-
-        // 예외 상황은 아직 생각 안함
-
         return ResponseEntity.ok(foundUser.getLoginId());
     }
 
@@ -69,9 +66,6 @@ public class UsersController {
     public ResponseEntity<String> findUserByPassword(@RequestBody UsersRequest user) {
         Users foundUser = usersService.searchPassword(user.getLoginId(), user.getPasswordHint(),
                 user.getPasswordAnswer());
-
-        // 예외 상황은 아직 생각 안함
-
         return ResponseEntity.ok(foundUser.getPassword());
     }
 

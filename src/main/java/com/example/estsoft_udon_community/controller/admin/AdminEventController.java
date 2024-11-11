@@ -52,7 +52,8 @@ public class AdminEventController {
             EventResponse eventResponse = adminEventService.getEventById(id);
             return ResponseEntity.ok(eventResponse);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(null);  // 이벤트를 찾을 수 없을 경우 400 Bad Request
+            // 이벤트를 찾을 수 없을 경우 400 Bad Request
+            return ResponseEntity.badRequest().body(null);
         }
     }
 }
