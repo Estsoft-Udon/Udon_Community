@@ -1,13 +1,9 @@
 package com.example.estsoft_udon_community.controller;
 
-import com.example.estsoft_udon_community.dto.request.AddArticleRequest;
 import com.example.estsoft_udon_community.dto.response.ArticleResponse;
-import com.example.estsoft_udon_community.dto.response.CommentsArticlesResponse;
-import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Comments;
 import com.example.estsoft_udon_community.service.ArticlesLikeService;
 import com.example.estsoft_udon_community.service.ArticlesService;
-import com.example.estsoft_udon_community.service.CommentsLikeService;
 import com.example.estsoft_udon_community.service.CommentsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -16,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,7 +19,6 @@ public class ViewBoardController {
     private final ArticlesService articlesService;
     private final CommentsService commentsService;
     private final ArticlesLikeService articlesLikeService;
-    private final CommentsLikeService commentsLikeService;
 
     @GetMapping("/board_detail/{articleId}")
     public String getArticle(@PathVariable Long articleId, Model model) {
@@ -40,7 +34,6 @@ public class ViewBoardController {
                 model.addAttribute("comment", comments);
             }
             model.addAttribute("articleLikeCount", artilceLikeCount);
-//            model.addAttribute("commentsLikeCount", )
 
             return "board/board_detail";
         }

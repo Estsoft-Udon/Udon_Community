@@ -24,9 +24,7 @@ import org.springframework.stereotype.Service;
 public class UsersService {
     private final UsersRepository usersRepository;
     private final LocationRepository locationRepository;
-    private final BCryptPasswordEncoder passwordEncoder; // BCryptPasswordEncoder 주입
-    private final ArticlesLikeRepository articlesLikeRepository;
-    private final CommentsLikeRepository commentsLikeRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
     private final CommentsLikeService commentsLikeService;
     private final ArticlesLikeService articlesLikeService;
 
@@ -75,7 +73,15 @@ public class UsersService {
         return usersRepository.save(request.updateEntity(user));
     }
 
-    // Delete
+    // 아이디 삭제
+    public void softDelete(Users user) {
+        user.setIsDeleted(true);
+        user.setDeletedAt(LocalDateTime.now());
+
+        user.setGrade(null);
+    }
+
+    // 아이디 완전 삭제
     public void deleteUser(Long userId) {
         Users user = usersRepository.findById(userId).orElseThrow();
         usersRepository.delete(user);
@@ -89,21 +95,6 @@ public class UsersService {
     // 비밀번호 찾기
     public Users searchPassword(String loginId, PasswordHint passwordHint, String passwordAnswer) {
         return usersRepository.findByLoginIdAndPasswordHintAndPasswordAnswer(loginId, passwordHint, passwordAnswer);
-    }
-
-    // LoginId로 User 찾기
-    public Users findByLoginId(String loginId) {
-        Users users = usersRepository.findByLoginId(loginId);
-
-        if (users == null) {
-            System.out.println("findByLoginId: users is null");
-            return null;
-        }
-
-        Location location = users.getLocation(); // location 정보 가져오기
-        users.setLocation(location);
-
-        return users;
     }
 
     // 회원가입시 아이디 중복체크
@@ -126,6 +117,7 @@ public class UsersService {
         return true;
     }
 
+    // Hot 한 우동
     public Map<Users, Long> getTopUsersByLikes(int limit) {
         Map<Users, Long> topUsersMaps = new LinkedHashMap<>();
 
@@ -150,14 +142,6 @@ public class UsersService {
         return topUsersMaps;
     }
 
-    // softDelete
-    public void softDelete(Users user) {
-        user.setIsDeleted(true);
-        user.setDeletedAt(LocalDateTime.now());
-
-        user.setGrade(null);
-    }
-  
     // 등업 요청 버튼을 누르면 등업 isPromotionRequested 값이 true 로 바뀜
     public Boolean requestPromotion(Long userId) {
         Users user = usersRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));

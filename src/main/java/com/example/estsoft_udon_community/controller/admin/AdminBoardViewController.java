@@ -58,8 +58,6 @@ public class AdminBoardViewController {
         return "admin/board/board_list";
     }
 
-
-
     // 게시글 수정(공개/비공개)
     @GetMapping("/board_edit/{id}")
     public String boardEdit(@PathVariable Long id, Model model) {
@@ -72,15 +70,12 @@ public class AdminBoardViewController {
     @PostMapping("/toggle-visibility")
     public String toggleVisibility(@ModelAttribute ToggleVisibilityRequest request, @RequestParam Long articleId) {
         Articles article = articlesService.findById(articleId); // 서비스 호출
-        System.out.println("articleId: " + articleId); // articleId 확인
 
         if (article != null) {
             // 공개 여부 설정
             boolean newVisibility = "private".equals(request.getVisibility());
             article.setBlind(newVisibility);
 
-            // 새로운 상태 출력
-            System.out.println("Updated isBlind value: " + article.isBlind()); // isBlind 값 확인
             articlesService.save(article); // 저장 메서드 호출
         }
 

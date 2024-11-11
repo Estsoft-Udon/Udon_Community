@@ -2,6 +2,7 @@ package com.example.estsoft_udon_community.controller.admin;
 
 import com.example.estsoft_udon_community.dto.response.EventResponse;
 import com.example.estsoft_udon_community.service.admin.AdminEventService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -9,15 +10,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/admin/event")
 public class AdminEventViewController {
 
     private final AdminEventService adminEventService;
-
-    @Autowired
-    public AdminEventViewController(AdminEventService adminEventService) {
-        this.adminEventService = adminEventService;
-    }
 
     // 이벤트 목록 조회 (기본적으로 전체 목록)
     @GetMapping("/event_list")

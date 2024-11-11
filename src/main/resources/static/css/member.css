@@ -1,3 +1,4 @@
+
 h1.tit{
     text-align: center;
     font-weight: bold;
@@ -85,6 +86,14 @@ form{
 .input_bot .txt_box span{
     font-weight: normal;
     font-size: 1.5rem;
+    color: red;
+}
+
+.error-message{
+    margin-top: 3rem;
+    font-weight: normal;
+    font-size: 1.75rem;
+    text-align: center;
     color: red;
 }
 

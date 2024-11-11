@@ -54,7 +54,7 @@ public class ViewCommentController {
                 .limit(3) // 상위 3개만 추출
                 .toList(); // List로 변환
 
-        if(!bestComments.isEmpty()) {
+        if (!bestComments.isEmpty()) {
             model.addAttribute("bestCommentsPage", bestComments);
         }
 
@@ -77,6 +77,7 @@ public class ViewCommentController {
     public String addComment(@PathVariable Long articleId, @RequestBody CommentsRequest request) {
         Articles article = articlesService.findJustArticle(articleId);
         if (article != null) {
+
             // 댓글 추가 로직
             Comments comment = new Comments();
             comment.setContent(request.getContent());
@@ -86,11 +87,11 @@ public class ViewCommentController {
             // 댓글 저장
             commentsService.saveComment(articleId, new CommentsRequest(comment));
 
-            // 댓글 추가 후 리다이렉션
-            return "redirect:/articles/" + articleId; // 댓글이 추가된 후 해당 게시글로 리다이렉트
+            // 댓글이 추가된 후 해당 게시글로 리다이렉트
+            return "redirect:/articles/" + articleId;
         } else {
-            // 게시글이 존재하지 않을 경우 처리
-            return "redirect:/articles"; // 게시글이 없으면 게시판 목록으로 리다이렉트
+            // 게시글이 없으면 게시판 목록으로 리다이렉트
+            return "redirect:/articles";
         }
     }
 }

@@ -114,7 +114,8 @@ public class ArticlesService {
     }
 
     // 특정 지역 게시글 조회
-    public Page<ArticleDetailResponse> findByLocationId(Long locationId, int page, int size, String sortOption, String title) {
+    public Page<ArticleDetailResponse> findByLocationId(Long locationId, int page, int size, String sortOption,
+                                                        String title) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
         Page<Articles> articlesPage;
         if (title == null || title.isEmpty()) {
@@ -125,9 +126,14 @@ public class ArticlesService {
             };
         } else {
             articlesPage = switch (sortOption) {
-                case "likeCount" -> articlesRepository.findByLocationIdAndTitleContainingOrderByLikeCount(locationId, title, pageable);
-                case "commentCount" -> articlesRepository.findByLocationIdAndTitleContainingOrderByCommentCount(locationId, title, pageable);
-                default -> articlesRepository.findByLocationIdAndIsDeletedFalseAndIsBlindFalseAndTitleContaining(locationId, title, pageable);
+                case "likeCount" ->
+                        articlesRepository.findByLocationIdAndTitleContainingOrderByLikeCount(locationId, title,
+                                pageable);
+                case "commentCount" ->
+                        articlesRepository.findByLocationIdAndTitleContainingOrderByCommentCount(locationId, title,
+                                pageable);
+                default -> articlesRepository.findByLocationIdAndIsDeletedFalseAndIsBlindFalseAndTitleContaining(
+                        locationId, title, pageable);
             };
         }
 
@@ -139,19 +145,25 @@ public class ArticlesService {
     }
 
     // 해시태그로 게시글 조회
-    public Page<ArticleDetailResponse> findByHashtag(Long hashtagId, int page, int size, String sortOption, String title) {
+    public Page<ArticleDetailResponse> findByHashtag(Long hashtagId, int page, int size, String sortOption,
+                                                     String title) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
         Page<Articles> articlesPage;
         if (title != null && !title.isEmpty()) {
             articlesPage = switch (sortOption) {
-                case "likeCount" -> hashtagRepository.findArticlesByHashtagIdOrderByLikeCountAndTitleContaining(hashtagId, title, pageable);
-                case "commentCount" -> hashtagRepository.findArticlesByHashtagIdOrderByCommentCountAndTitleContaining(hashtagId, title, pageable);
+                case "likeCount" ->
+                        hashtagRepository.findArticlesByHashtagIdOrderByLikeCountAndTitleContaining(hashtagId, title,
+                                pageable);
+                case "commentCount" ->
+                        hashtagRepository.findArticlesByHashtagIdOrderByCommentCountAndTitleContaining(hashtagId, title,
+                                pageable);
                 default -> hashtagRepository.findArticlesByHashtagIdAndTitleContaining(hashtagId, title, pageable);
             };
         } else {
             articlesPage = switch (sortOption) {
                 case "likeCount" -> hashtagRepository.findArticlesByHashtagIdOrderByLikeCount(hashtagId, pageable);
-                case "commentCount" -> hashtagRepository.findArticlesByHashtagIdOrderByCommentCount(hashtagId, pageable);
+                case "commentCount" ->
+                        hashtagRepository.findArticlesByHashtagIdOrderByCommentCount(hashtagId, pageable);
                 default -> hashtagRepository.findArticlesByHashtagIdAndIsDeletedFalse(hashtagId, pageable);
             };
         }
@@ -164,7 +176,8 @@ public class ArticlesService {
     }
 
     // 카테고리로 게시글 조회
-    public Page<ArticleDetailResponse> findByCategory(String category, int page, int size, String sortOption, String title) {
+    public Page<ArticleDetailResponse> findByCategory(String category, int page, int size, String sortOption,
+                                                      String title) {
         ArticleCategory articleCategory = ArticleCategory.valueOf(category.toUpperCase());
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
@@ -178,8 +191,12 @@ public class ArticlesService {
             };
         } else {
             articlesPage = switch (sortOption) {
-                case "likeCount" -> articlesRepository.findByCategoryAndTitleContainingOrderByLikeCount(articleCategory, title, pageable);
-                case "commentCount" -> articlesRepository.findByCategoryAndTitleContainingOrderByCommentCount(articleCategory, title, pageable);
+                case "likeCount" ->
+                        articlesRepository.findByCategoryAndTitleContainingOrderByLikeCount(articleCategory, title,
+                                pageable);
+                case "commentCount" ->
+                        articlesRepository.findByCategoryAndTitleContainingOrderByCommentCount(articleCategory, title,
+                                pageable);
                 default -> articlesRepository.findByCategoryAndTitleContaining(articleCategory, title, pageable);
             };
         }
@@ -192,7 +209,8 @@ public class ArticlesService {
     }
 
     // 한 뚝빼기 게시글 조회
-    public Page<ArticleDetailResponse> findHotRestaurantArticlesForCurrentUser(int page, int size, String sortOption, String title) {
+    public Page<ArticleDetailResponse> findHotRestaurantArticlesForCurrentUser(int page, int size, String sortOption,
+                                                                               String title) {
         // 접속 중인 유저 확인
         Users loggedInUser = getLoggedInUser();
         if (loggedInUser == null) {
@@ -205,13 +223,19 @@ public class ArticlesService {
         Page<Articles> articlesPage;
         if (title == null || title.isEmpty()) {
             articlesPage = switch (sortOption) {
-                case "commentCount" -> articlesRepository.findByCategoryAndLocationOrderByCommentCountDesc(ArticleCategory.RESTAURANT, userLocation, pageable);
-                default -> articlesRepository.findByCategoryAndLocationOrderByLikeCountDesc(ArticleCategory.RESTAURANT, userLocation, pageable);
+                case "commentCount" ->
+                        articlesRepository.findByCategoryAndLocationOrderByCommentCountDesc(ArticleCategory.RESTAURANT,
+                                userLocation, pageable);
+                default -> articlesRepository.findByCategoryAndLocationOrderByLikeCountDesc(ArticleCategory.RESTAURANT,
+                        userLocation, pageable);
             };
         } else {
             articlesPage = switch (sortOption) {
-                case "commentCount" -> articlesRepository.findByCategoryAndLocationAndTitleContainingOrderByCommentCountDesc(ArticleCategory.RESTAURANT, userLocation, title, pageable);
-                default -> articlesRepository.findByCategoryAndLocationAndTitleContainingOrderByLikeCountDesc(ArticleCategory.RESTAURANT, userLocation, title, pageable);
+                case "commentCount" ->
+                        articlesRepository.findByCategoryAndLocationAndTitleContainingOrderByCommentCountDesc(
+                                ArticleCategory.RESTAURANT, userLocation, title, pageable);
+                default -> articlesRepository.findByCategoryAndLocationAndTitleContainingOrderByLikeCountDesc(
+                        ArticleCategory.RESTAURANT, userLocation, title, pageable);
             };
         }
 
@@ -222,7 +246,7 @@ public class ArticlesService {
         ));
     }
 
-    // main페이지 top 5
+    // main 페이지 top 5
     public Page<ArticleDetailResponse> findTop5(int page, int size, String sortOption) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
 
@@ -239,7 +263,7 @@ public class ArticlesService {
         ));
     }
 
-    // main페이지 한뚝배기 조회
+    // main 페이지 한 뚝배기 조회
     public List<ArticleDetailResponse> findByHotArticles(String locationName) {
         List<Articles> hotArticles = articlesRepository.findTop5ByCategoryAndLocationOrderByLikeCountDesc(
                 ArticleCategory.RESTAURANT, locationName);
@@ -357,6 +381,7 @@ public class ArticlesService {
         return articlesRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Article not found with ID: " + id));
     }
+
     public Articles save(Articles article) {
         return articlesRepository.save(article);
     }

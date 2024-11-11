@@ -27,7 +27,7 @@ public class ArticleHashtagService {
     }
 
     @Transactional
-    public void deleteByArticlesAndHashtag(Articles article, Hashtag hashtag){
+    public void deleteByArticlesAndHashtag(Articles article, Hashtag hashtag) {
         articleHashtagJoinRepository.deleteByArticlesAndHashtag(article, hashtag);
     }
 }
