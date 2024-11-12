@@ -119,6 +119,15 @@ CREATE TABLE articles_hashtags_join
     FOREIGN KEY (hashtag_id) REFERENCES hashtag (hashtag_id) ON DELETE CASCADE
 );
 
+CREATE TABLE festival_datas
+(
+    id         BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    title      VARCHAR(255) NOT NULL,
+    content    TEXT         NOT NULL,
+    start_date VARCHAR(255) NOT NULL,
+    end_date   VARCHAR(255) NOT NULL
+);
+
 
 
 INSERT INTO location (name, upper_location) VALUES

@@ -125,7 +125,9 @@
                                 <button type="button" class="reversal_btn event_apply_btn" onclick="openModal()">일정 등록 신청하기</button>
                             </div>
                         </div>
+                        <button type="button" id="swap_btn" onclick="swap_calendar()">축제 정보 보기</button>
                         <div id="calendar"></div>
+                        <div id="calendar2"></div>
                     </article>
                 </section>
             </main>
@@ -149,6 +151,20 @@
                 <p class="txt_box">
                     <strong>내용</strong>
                     <span id="eventDetailsDescription"></span>
+                </p>
+            </div>
+        </div>
+
+        <!-- 축제 정보 모달 -->
+        <div id="festivalModal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn" id="closeFestivalModal">&times;</span>
+                <div class="modal-header">
+                    <h2 id="festivalDetailsTitle"></h2>
+                </div>
+                <p class="txt_box">
+                    <strong>상세 위치</strong>
+                    <span id="festivalDetailsDescription"></span>
                 </p>
             </div>
         </div>
