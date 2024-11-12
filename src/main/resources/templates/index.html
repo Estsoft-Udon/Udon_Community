@@ -19,7 +19,7 @@
 
                 <label for="locationId" class="dn">상세 지역을 선택</label>
                 <select id="locationId" name="locationId" required>
-                    <option disabled selected>상세 지역을 선택하세요</option>
+                    <option disabled selected></option>
                     <th:block th:each="location : ${locations}">
                         <option th:value="${location.id}" th:text="${location.name}"></option>
                     </th:block>

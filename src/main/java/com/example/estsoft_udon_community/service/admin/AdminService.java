@@ -9,7 +9,6 @@ import com.example.estsoft_udon_community.enums.Grade;
 import com.example.estsoft_udon_community.repository.ArticlesRepository;
 import com.example.estsoft_udon_community.repository.UsersRepository;
 import com.example.estsoft_udon_community.service.ArticlesService;
-import com.example.estsoft_udon_community.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,7 +49,6 @@ public class AdminService {
         user.setGrade(grade);
         usersRepository.save(user);
 
-        SecurityUtil.updateAuthentication(user);
         return user;
     }
 
