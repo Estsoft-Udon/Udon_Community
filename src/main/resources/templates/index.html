@@ -80,7 +80,7 @@
                                 <div th:if="${user == null}" class="info">
                                     <p> 로그인 후 <br> 우리 동네 맛집을 확인해보세요 😋</p>
                                 </div>
-                                <div th:if="${#lists.isEmpty(hotArticles)}" class="info">
+                                <div th:if="${user != null && #lists.isEmpty(hotArticles)}" class="info">
                                     <p>아직 우리 동네 맛집 게시글이 없어요 🥲</p>
                                 </div>
                                 <ul class="post_list">
