@@ -2,6 +2,13 @@
 CREATE DATABASE udon;
 use udon;
 
+CREATE TABLE location
+(
+    location_id    BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name           VARCHAR(255) NOT NULL,
+    upper_location VARCHAR(255) NOT NULL
+);
+
 CREATE TABLE users
 (
     id              BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -19,6 +26,7 @@ CREATE TABLE users
     is_deleted      BOOLEAN      NOT NULL,
     last_login      DATETIME     NULL,
     location_id     BIGINT       NOT NULL,
+    is_promotion_requested BOOLEAN NOT NULL,
 
     FOREIGN KEY (location_id) REFERENCES location (location_id)
 );
@@ -57,7 +65,7 @@ CREATE TABLE comments
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
-CREATE TABLE article_like
+CREATE TABLE articles_like
 (
     article_like_id BIGINT   NOT NULL AUTO_INCREMENT PRIMARY KEY,
     article_id      BIGINT   NOT NULL,
@@ -68,7 +76,7 @@ CREATE TABLE article_like
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
-CREATE TABLE comment_like
+CREATE TABLE comments_like
 (
     comment_like_id BIGINT   NOT NULL AUTO_INCREMENT PRIMARY KEY,
     comment_id      BIGINT   NOT NULL,
@@ -77,13 +85,6 @@ CREATE TABLE comment_like
 
     FOREIGN KEY (comment_id) REFERENCES comments (comment_id),
     FOREIGN KEY (user_id) REFERENCES users (id)
-);
-
-CREATE TABLE location
-(
-    location_id    BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    name           VARCHAR(255) NOT NULL,
-    upper_location VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE event

@@ -179,6 +179,7 @@ function getEventTypeText(eventType) {
 // 캘린더 업데이트 함수
 function updateCalendar() {
     renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
+    renderCalendar2(currentDate.getFullYear(), currentDate.getMonth());
 }
 
 // 월을 변경하는 함수
@@ -276,4 +277,117 @@ document.getElementById('locationId').disabled = true;
 function alertAndRedirect() {
     alert("회원만 작성 가능합니다.");
     window.location.href = '/login';
+}
+
+
+// =======================================================================================
+
+// 특정 날짜의 축제 데이터를 비동기로 가져오는 함수
+async function fetchFestivalDataForDate(date) {
+    const response = await fetch(`/festival?date=${date}`);
+    if (!response.ok) throw new Error("Failed to fetch festival data");
+    return await response.json();
+}
+
+// 캘린더 렌더링 함수 (각 날짜에 비동기 데이터를 적용)
+async function renderCalendar2(year, month) {
+    const calendarElement = document.getElementById('calendar2');
+    calendarElement.innerHTML = ''; // 기존 내용 초기화
+
+    // 캘린더 헤더 렌더링
+    const header = document.createElement('div');
+    header.className = 'calendar-header';
+
+    const prevButton = document.createElement('button');
+    prevButton.textContent = '<';
+    prevButton.onclick = function() {
+        changeMonth(-1);
+    };
+
+    const monthText = document.createElement('p');
+    monthText.className = 'month-text';
+    const monthName = new Date(year, month).toLocaleString('default', { month: 'long' });
+    monthText.textContent = `${year}년 ${monthName}`;
+
+    const nextButton = document.createElement('button');
+    nextButton.textContent = '>';
+    nextButton.onclick = function() {
+        changeMonth(1);
+    };
+
+    header.append(prevButton, monthText, nextButton);
+    calendarElement.appendChild(header);
+
+    const table = document.createElement('table');
+    table.appendChild(createWeekdayHeader());
+
+    const { firstDayIndex, totalDays } = getMonthInfo(year, month);
+    let dateCounter = 1;
+
+    for (let i = 0; i < Math.ceil((totalDays + firstDayIndex) / 7); i++) {
+        const row = document.createElement('tr');
+        for (let j = 0; j < 7; j++) {
+            const cell = document.createElement('td');
+
+            if (i === 0 && j < firstDayIndex || dateCounter > totalDays) {
+                cell.textContent = '';
+            } else {
+                cell.textContent = dateCounter;
+                const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(dateCounter).padStart(2, '0')}`;
+
+                // 각 날짜 셀에 대해 비동기 데이터 적용
+                applyFestivalDataToCell(cell, dateString);
+                highlightToday(cell, year, month, dateCounter);
+
+                dateCounter++;
+            }
+            row.appendChild(cell);
+        }
+        table.appendChild(row);
+    }
+    calendarElement.appendChild(table);
+}
+
+// 요일 헤더 생성
+function createWeekdayHeader() {
+    const headerRow = document.createElement('tr');
+    ['일', '월', '화', '수', '목', '금', '토'].forEach(day => {
+        const th = document.createElement('th');
+        th.textContent = day;
+        headerRow.appendChild(th);
+    });
+    return headerRow;
+}
+
+// 특정 날짜 셀에 축제 데이터를 비동기로 적용하는 함수
+function applyFestivalDataToCell(cell, dateString) {
+    fetchFestivalDataForDate(dateString)
+        .then(festivalData => {
+            console.log(dateString);
+            if (festivalData.length > 0) {
+                const festivalList = document.createElement('ul');
+                festivalData.forEach(festival => {
+                    const festivalItem = document.createElement('li');
+                    festivalItem.textContent = festival.title;
+                    festivalList.appendChild(festivalItem);
+                });
+                cell.appendChild(festivalList);
+            }
+        })
+        .catch(error => console.error("Error fetching data for date:", dateString, error));
+}
+
+// 오늘 날짜 강조
+function highlightToday(cell, year, month, dateCounter) {
+    const today = new Date();
+    if (dateCounter === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+        cell.classList.add('today');
+    }
+}
+
+// 월 정보를 반환
+function getMonthInfo(year, month) {
+    const firstDay = new Date(year, month, 1).getDay();
+    const totalDays = new Date(year, month + 1, 0).getDate();
+    return { firstDayIndex: firstDay, totalDays };
 }
