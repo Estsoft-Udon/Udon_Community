@@ -11,7 +11,7 @@
                     <div class="hash_box">
                         <div th:each="tag : ${topHashtags}" class="flex_box">
                             <a th:href="@{/articles/hashtag/{hashtagId}(hashtagId=${tag.hashtag.id})}"
-                               th:text="'#' + ${tag.hashtag.name}">#해시태그 이름</a>
+                               th:text="${tag.hashtag.name}">#해시태그 이름</a>
                             <span class="count_num" th:text="${tag.usageCount}">사용 횟수</span>
                         </div>
                     </div>
@@ -69,11 +69,12 @@
                             <span th:case="'TRAVEL_DESTINATION'">여행</span>
                             <span th:case="'RESTAURANT'">맛집</span>
                             <span th:case="'WALKING_COURSE'">산책</span>
-                            <span th:case="*">카테고리</span>
                         </h2>
+                        <span th:if="${category != null}">카테고리</span>
 
                         <!-- 해시태그로 조회한 경우 -->
-                        <h2 th:if="${hashtagId != null}" th:text="'#' + ${hashtag}"></h2>
+                        <h2 th:if="${hashtagId != null}" th:text="${hashtag}"></h2>
+                        <span th:if="${hashtagId != null}">해시태그</span>
                     </div>
                     다양한 사람들을 만나고 우리 동네의 모든 정보를 공유해보아요.
                 </div>
