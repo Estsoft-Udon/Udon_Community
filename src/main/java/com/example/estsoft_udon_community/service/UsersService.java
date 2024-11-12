@@ -72,11 +72,21 @@ public class UsersService {
     }
 
     // 아이디 삭제
-    public void softDelete(Users user) {
-        user.setIsDeleted(true);
-        user.setDeletedAt(LocalDateTime.now());
+    public Boolean softDelete(Users user, String password) {
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            return false;
+        }
 
-        user.setGrade(null);
+        UsersRequest request = new UsersRequest();
+        request.updateEntity(user);
+        request.setIsDeleted(true);
+        request.setDeletedAt(LocalDateTime.now());
+
+        Users deletedUser = updateUser(user.getId(), request);
+        deletedUser.setGrade(null);
+        usersRepository.save(deletedUser);
+
+        return true;
     }
 
     // 아이디 완전 삭제
