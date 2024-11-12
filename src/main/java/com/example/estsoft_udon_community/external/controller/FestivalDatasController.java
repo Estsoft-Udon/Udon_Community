@@ -1,6 +1,6 @@
 package com.example.estsoft_udon_community.external.controller;
 
-import com.example.estsoft_udon_community.external.response.FestivalDatasResponse;
+import com.example.estsoft_udon_community.external.dto.response.FestivalDatasResponse;
 import com.example.estsoft_udon_community.external.entity.FestivalDatas;
 import com.example.estsoft_udon_community.external.service.FestivalDatasService;
 import lombok.RequiredArgsConstructor;

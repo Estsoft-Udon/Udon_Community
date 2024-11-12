@@ -1,4 +1,4 @@
-package com.example.estsoft_udon_community.external.response;
+package com.example.estsoft_udon_community.external.dto.response;
 
 import com.example.estsoft_udon_community.external.entity.FestivalDatas;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

@@ -2,7 +2,7 @@ package com.example.estsoft_udon_community.external.service;
 
 import com.example.estsoft_udon_community.external.entity.FestivalDatas;
 import com.example.estsoft_udon_community.external.repository.FestivalDatasRepository;
-import com.example.estsoft_udon_community.external.request.FestivalDatasRequest;
+import com.example.estsoft_udon_community.external.dto.request.FestivalDatasRequest;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;

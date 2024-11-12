@@ -1,6 +1,6 @@
 package com.example.estsoft_udon_community.external.entity;
 
-import com.example.estsoft_udon_community.external.request.FestivalDatasRequest;
+import com.example.estsoft_udon_community.external.dto.request.FestivalDatasRequest;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;

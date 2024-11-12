@@ -1,4 +1,4 @@
-package com.example.estsoft_udon_community.external.request;
+package com.example.estsoft_udon_community.external.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
