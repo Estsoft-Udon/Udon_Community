@@ -4,8 +4,6 @@ import com.example.estsoft_udon_community.entity.Location;
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.dto.request.UsersRequest;
 import com.example.estsoft_udon_community.enums.PasswordHint;
-import com.example.estsoft_udon_community.repository.ArticlesLikeRepository;
-import com.example.estsoft_udon_community.repository.CommentsLikeRepository;
 import com.example.estsoft_udon_community.repository.LocationRepository;
 import com.example.estsoft_udon_community.repository.UsersRepository;
 
