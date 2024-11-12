@@ -310,6 +310,10 @@
     margin-top: 2rem;
     min-height: 40rem;
 }
+.board_detail_wr .container .txt_box pre {
+    white-space: normal;
+    line-height: 1.3;
+}
 .board_detail_wr .container .flex_box {
     display: flex;
     justify-content: space-between;
