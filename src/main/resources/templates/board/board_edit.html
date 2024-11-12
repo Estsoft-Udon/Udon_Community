@@ -104,7 +104,7 @@
     </script>
     <script>
         // 상위 지역 선택에 따라 하위 지역 데이터를 불러오고, 하위 선택 박스를 업데이트하는 함수
-        function updateLowerLocations() {
+        function updateLowerLocations(selectedLowerLocationId = null) {
             const upperLocationSelect = document.getElementById("upperLocation");
             const lowerLocationSelect = document.getElementById("locationId");
 
@@ -118,6 +118,9 @@
                             const option = document.createElement("option");
                             option.value = location.id;
                             option.textContent = location.name;
+                            if (location.id === selectedLowerLocationId) {
+                                option.selected = true;
+                            }
                             lowerLocationSelect.appendChild(option);
                         });
 
@@ -132,8 +135,15 @@
                 lowerLocationSelect.disabled = true;
             }
         }
+
         document.addEventListener("DOMContentLoaded", function() {
-            updateLowerLocations();
+            const originLocationId = [[${originLocation != null ? originLocation.id : 'null'}]];
+
+            if (originLocationId) {
+                updateLowerLocations(originLocationId);
+            } else {
+                updateLowerLocations();
+            }
         });
     </script>
 </th:block>
