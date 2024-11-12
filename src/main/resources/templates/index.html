@@ -166,7 +166,7 @@
                 <form id="eventForm" th:action="@{/api/event}" method="post" onsubmit="return handleSubmit(event)">
                     <div th:if="${user != null}" class="user_info">
                         <p class="tit">신청자 <span>*변경 불가</span></p>
-                        <p id="loginId" th:text="${user.loginId}"></p>
+                        <p id="loginId" th:text="${user.nickname}"></p>
                     </div>
                     <label for="title">제목</label>
                     <input type="text" id="title" name="title" required>

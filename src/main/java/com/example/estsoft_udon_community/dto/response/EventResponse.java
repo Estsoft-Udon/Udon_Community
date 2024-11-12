@@ -34,6 +34,8 @@ public class EventResponse {
 
     private String userGrade;
 
+    private String nickName;
+
     public EventResponse(Event event) {
         this.id = event.getId();
         this.dateTime = event.getDateTime().format(DateFormatUtil.formatter);
@@ -45,5 +47,6 @@ public class EventResponse {
         this.userLoginId = event.getUsers().getLoginId();
         this.userName = event.getUsers().getName();
         this.userGrade = event.getUsers().getGrade().name();
+        this.nickName = event.getUsers().getNickname();
     }
 }
