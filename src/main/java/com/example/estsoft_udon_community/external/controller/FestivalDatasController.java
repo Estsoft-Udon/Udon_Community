@@ -15,20 +15,19 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 public class FestivalDatasController {
-    private final RestTemplate restTemplate;
     private final FestivalDatasService festivalDatasService;
+    private final RestTemplate restTemplate;
 
-    @GetMapping("/festival")
-    public ResponseEntity<List<FestivalDatasResponse>> callApi(@RequestParam String date) throws Exception {
-        festivalDatasService.setFesitvalDatas(date);
-
+    @GetMapping("/api/festival")
+    public ResponseEntity<List<FestivalDatasResponse>> getExternalFestivalDatas(@RequestParam String date) throws Exception {
         List<FestivalDatas> datas = festivalDatasService.getFestivalsByStartDate(date);
-        List<FestivalDatasResponse> festivalDatasRespons = datas.stream()
+
+        List<FestivalDatasResponse> festivalDatasResponse = datas.stream()
                 .map(FestivalDatasResponse::new)  // FestivalDatas를 ApiResponse로 변환
                 .toList();  // 리스트로 수집
 
         // apiDTOList를 HTTP 응답 본문으로 반환
-        return ResponseEntity.ok(festivalDatasRespons);
+        return ResponseEntity.ok(festivalDatasResponse);
     }
 }
 
