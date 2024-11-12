@@ -80,7 +80,7 @@
                                 <div th:if="${user == null}" class="info">
                                     <p> 로그인 후 <br> 우리 동네 맛집을 확인해보세요 😋</p>
                                 </div>
-                                <div th:if="${#lists.isEmpty(hotArticles)}" class="info">
+                                <div th:if="${user != null && #lists.isEmpty(hotArticles)}" class="info">
                                     <p>아직 우리 동네 맛집 게시글이 없어요 🥲</p>
                                 </div>
                                 <ul class="post_list">
@@ -167,7 +167,7 @@
                 <form id="eventForm" th:action="@{/api/event}" method="post" onsubmit="return handleSubmit(event)">
                     <div th:if="${user != null}" class="user_info">
                         <p class="tit">신청자 <span>*변경 불가</span></p>
-                        <p id="loginId" th:text="${user.loginId}"></p>
+                        <p id="loginId" th:text="${user.nickname}"></p>
                     </div>
                     <label for="title">제목</label>
                     <input type="text" id="title" name="title" required>

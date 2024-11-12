@@ -216,7 +216,7 @@ function showEventDetails(event) {
         hour: "2-digit",
         minute: "2-digit"
     })}`;
-    eventUser.textContent = event.userLoginId || '정보 없음';
+    eventUser.textContent = event.nickName || '정보 없음';
     eventDescription.textContent = event.content || '상세 설명이 없습니다.';
 
     // 모달 표시

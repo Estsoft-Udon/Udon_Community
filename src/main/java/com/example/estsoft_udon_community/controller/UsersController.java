@@ -96,7 +96,7 @@ public class UsersController {
     // 회원탈퇴
     @PostMapping("/withdrawal")
     public ResponseEntity<Void> doWithdrawal() {
-        Users user = SecurityUtil.getLoggedInUser();
+        Users user = usersService.findUserById(SecurityUtil.getLoggedInUser().getId());
         usersService.softDelete(user);
 
         return ResponseEntity.ok().build();

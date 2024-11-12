@@ -7,16 +7,16 @@ function checkId() {
     if (!loginId) {
         messageElement.textContent = '아이디를 입력하세요.';
         messageElement.style.color = 'red';
-        return false;
+        return Promise.resolve(false);
     }
 
     if (!idPattern.test(loginId)) {
         messageElement.textContent = '4자 이상 20자 이하, 영문자와 숫자만 포함';
         messageElement.style.color = 'red';
-        return false;
+        return Promise.resolve(false);
     }
 
-    fetch('/api/checkId', {
+    return fetch('/api/checkId', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
