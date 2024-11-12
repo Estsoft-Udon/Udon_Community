@@ -1,21 +1,16 @@
 package com.example.estsoft_udon_community.controller;
 
-import com.example.estsoft_udon_community.dto.request.AddArticleRequest;
 import com.example.estsoft_udon_community.dto.request.CommentsRequest;
 import com.example.estsoft_udon_community.dto.response.ArticleResponse;
 import com.example.estsoft_udon_community.dto.response.CommentsResponse;
 import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Comments;
-import com.example.estsoft_udon_community.entity.Location;
-import com.example.estsoft_udon_community.entity.Users;
-import com.example.estsoft_udon_community.security.CustomUserDetails;
 import com.example.estsoft_udon_community.service.*;
 import com.example.estsoft_udon_community.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +25,7 @@ public class ViewCommentController {
     private final ArticlesLikeService articlesLikeService;
     private final CommentsService commentsService;
     private final CommentsLikeService commentsLikeService;
+    private final UsersService usersService;
 
     // 게시글 조회 / 댓글 조회
     @GetMapping("/articles/{id}")
@@ -85,7 +81,8 @@ public class ViewCommentController {
             Comments comment = new Comments();
             comment.setContent(request.getContent());
             comment.setArticles(article); // 게시글 ID 설정
-            comment.setUsers(SecurityUtil.getLoggedInUser());
+
+            comment.setUsers(usersService.findUserById(SecurityUtil.getLoggedInUser().getId()));
 
             // 댓글 저장
             commentsService.saveComment(articleId, new CommentsRequest(comment));

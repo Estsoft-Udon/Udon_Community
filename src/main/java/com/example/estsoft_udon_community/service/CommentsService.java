@@ -9,6 +9,7 @@ import com.example.estsoft_udon_community.enums.Grade;
 import com.example.estsoft_udon_community.repository.ArticlesRepository;
 import com.example.estsoft_udon_community.repository.CommentsRepository;
 import com.example.estsoft_udon_community.repository.UsersRepository;
+import com.example.estsoft_udon_community.util.SecurityUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -41,6 +42,8 @@ public class CommentsService {
         if (users.getGrade() == Grade.UDON) {
             users.setGrade(Grade.UDON_FRIEND);
             usersRepository.save(users);
+            // 세션의 권한 정보 업데이트
+            SecurityUtil.updateAuthentication(users);
         }
 
         return saveComment;

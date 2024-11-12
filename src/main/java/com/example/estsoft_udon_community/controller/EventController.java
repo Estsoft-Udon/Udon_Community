@@ -1,10 +1,15 @@
 package com.example.estsoft_udon_community.controller;
 
+import static com.example.estsoft_udon_community.util.SecurityUtil.*;
+
 import com.example.estsoft_udon_community.dto.response.EventResponse;
 import com.example.estsoft_udon_community.dto.request.EventRequest;
 import com.example.estsoft_udon_community.entity.Users;
+import com.example.estsoft_udon_community.repository.UsersRepository;
 import com.example.estsoft_udon_community.service.EventService;
+import com.example.estsoft_udon_community.service.UsersService;
 import com.example.estsoft_udon_community.util.SecurityUtil;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EventController {
     private final EventService eventService;
+    private final UsersService usersService;
 
     // 캘린더 메인(이벤트 전체 조회)
     @GetMapping
@@ -53,11 +59,7 @@ public class EventController {
     // 캘린더 추가
     @PostMapping
     public ResponseEntity<String> addEvent(@ModelAttribute EventRequest eventRequest) {
-        Users loggedInUser = SecurityUtil.getLoggedInUser();
-        if (loggedInUser == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("등록 요청 실패: 로그인 필요.");
-        }
+        Users loggedInUser = usersService.findUserById(getLoggedInUser().getId());
 
         eventRequest.setUsersId(loggedInUser.getId());
         eventService.addEvent(eventRequest);

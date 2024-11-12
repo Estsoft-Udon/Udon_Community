@@ -92,7 +92,7 @@ public class ViewController {
 
     @GetMapping("/change_pw")
     public String changePw(Model model) {
-        Users user = SecurityUtil.getLoggedInUser();
+        Users user = usersService.findUserById(SecurityUtil.getLoggedInUser().getId());
         model.addAttribute("user", user);
         return "member/change_pw";
     }

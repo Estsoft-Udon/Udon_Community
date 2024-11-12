@@ -7,8 +7,10 @@ import com.example.estsoft_udon_community.dto.response.CommentsResponse;
 import com.example.estsoft_udon_community.dto.response.CommentsWithLikeResponse;
 import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Comments;
+import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.service.ArticlesLikeService;
 import com.example.estsoft_udon_community.service.CommentsLikeService;
+import com.example.estsoft_udon_community.service.UsersService;
 import com.example.estsoft_udon_community.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,11 +27,12 @@ import java.util.Map;
 public class LikeController {
     private final ArticlesLikeService articlesLikeService;
     private final CommentsLikeService commentsLikeService;
+    private final UsersService usersService;
 
     // 코멘트 좋아요 등록 / 삭제
     @PostMapping("/commentsLike")
     public ResponseEntity<Map<String, Object>> pressCommentsLike(@RequestBody CommentsLikeRequest request) {
-        request.setUserId(SecurityUtil.getLoggedInUser().getId());
+        request.setUserId(usersService.findUserById(SecurityUtil.getLoggedInUser().getId()).getId());
         Long newLikeCount = commentsLikeService.pressCommentsLike(request.getCommentId(), request.getUserId());
 
         Map<String, Object> response = new HashMap<>();
@@ -42,7 +45,7 @@ public class LikeController {
     // 게시글 좋아요 등록 / 삭제
     @PostMapping("/articlesLike")
     public ResponseEntity<Map<String, Object>> pressArticlesLike(@RequestBody ArticlesLikeRequest request) {
-        request.setUserId(SecurityUtil.getLoggedInUser().getId());
+        request.setUserId(usersService.findUserById(SecurityUtil.getLoggedInUser().getId()).getId());
         Long newLikeCount = articlesLikeService.pressArticlesLike(request.getArticleId(), request.getUserId());
 
         Map<String, Object> response = new HashMap<>();
