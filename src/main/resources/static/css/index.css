@@ -328,6 +328,13 @@ th, td {
     padding: 2rem;
 }
 
+#eventDetailsDescription{
+    white-space: pre-wrap;
+    max-height: 30rem;
+    overflow-y: auto;
+    min-height: 10rem;
+}
+
 #eventModal .modal-header{
     display: flex;
     gap: 1rem;

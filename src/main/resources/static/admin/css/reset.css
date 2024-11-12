@@ -343,6 +343,13 @@ td a:hover {
     display: block;
 }
 
+.info_item.txt_item pre{
+    white-space: pre-wrap;
+    max-height: 30rem;
+    min-height: 10rem;
+    overflow-y: auto;
+}
+
 /* 마지막 항목에는 구분선 제거 */
 .info_item:last-child {
     border-bottom: none;
