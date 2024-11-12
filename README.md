@@ -1,11 +1,9 @@
 # 🚶‍♀️‍➡️우리 동네는 (우동)🚶‍♂️
 
----
 #### 우동은 사용자가 자신이 사는 지역을 소개하고 정보를 공유할 수 있는 <span style = "background : orange; color : #000;">현지인 주도형 커뮤니티</span>입니다.
 
 ![Image 1](docs/logo.png)
 
----
 ## ➡️ 프로젝트 소개
 
 우동 커뮤니티에서는 **맛집, 건강 등 생활밀착형 정보**를 실시간으로 주고받으며, 서로 유용한 정보를 공유함으로써 신뢰도를 쌓아갑니다. 이를 통해, 일정 신뢰도를 기반으로 **참여자 등급**을 부여해 사용자들이 더욱 활발히 커뮤니티에 기여할 수 있도록 유도합니다.
@@ -14,12 +12,10 @@
 
 또한, 우동을 통해 타 지역 사용자도 다양한 동네에 대한 정보를 얻어 **여행 계획을 세우거나 맛집과 장소를 탐색**하는 데 활용할 수 있습니다.
 
----
 
 ## ⛓️ 배포 URL
 [서비스 링크](/)
 
----
 
 ## ⌛ 개발 기간
 
@@ -58,8 +54,6 @@ gantt
     프로젝트 발표 :active, 2024-11-14, 2024-11-14
 ```
 
----
-
 ## 🏔️ 개발 환경
 
 ### Development
@@ -73,7 +67,6 @@ gantt
 ### Communication
 ![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white)
 
----
 
 ## 🍜 기능 정의서
 ➡️ [notion 에서 확인하기](https://oreumi.notion.site/5c13836699aa43c6a92a8f6c0b4b1abf?pvs=4)
@@ -93,28 +86,20 @@ gantt
 ![기능 정의 동네 한바퀴](docs/func9.png)
 ![기능 정의 관리자](docs/func10.png)
 
----
 
 ## 👀 화면 설계
 ➡️ [figma 에서 확인하기](https://www.figma.com/design/7KKhs0UJg8gFVFtwkWIFaV/%EC%9A%B0%EB%8F%99---%EC%99%80%EC%9D%B4%EC%96%B4%ED%94%84%EB%A0%88%EC%9E%84?node-id=0-1&t=DmdOUcsVNphem6eZ-1)
 
-✅ 프론트
+### ✅ 프론트
 ![프론트 화면 설계](docs/figma_front.jpg)
 
-✅ 관리자
+### ✅ 관리자
 ![관리자 화면 설계](docs/figma_admin.jpg)
-
----
-
-## ⚙️ 시스템 구성도
-
----
 
 ## 🛫 ERD(Entity Relationship Diagram)
 
 ![ERD](docs/erd.png)
 
----
 
 ## 🚩 API 명세서
 ### ✅ REST API
@@ -251,10 +236,10 @@ gantt
 | 12                                                          | 이벤트 승인 취소 | POST | /admin/event/{id}/cancel | event_edit.html로 리디렉션 | event_list.html로 리디렉션 <br> (에러메시지포함) |
 | 13                                                          | 이벤트 요청 취소 | POST | /admin/event/{id} | event_list.html | event_list.html로 리디렉션 <br> (에러메시지포함) |
 
----
 
 ## 👾 프로젝트 구조
 ### 🚶‍♀️‍➡️Front-End
+
 ```
 📁 src
  └── 📁 main
@@ -275,7 +260,9 @@ gantt
          └── 📁 member
 
 ```
+
 ### 🚶‍♂️ Back-End
+
 ```
 📁 src
  ├── 📁 config
@@ -304,9 +291,6 @@ gantt
  │   └── 📁 handler
  └── 📁 service
 ```
-
----
-
 
 ### 🖲️ 화면 설계 (시연 영상)
 
@@ -353,7 +337,6 @@ gantt
 
 ### 🌟 시연 영상
 
----
 
 ## 👍 UDON 팀원 소개
 
@@ -363,7 +346,6 @@ gantt
 |                       👑팀장                       |                        팀원                        |                       팀원                        |                       팀원                        |                       팀원                        |
 |      [GitHub](https://github.com/SongJwans)      |       [GitHub](https://github.com/jingun0516)       |       [GitHub](https://github.com/SangWon-Lee1)       |      [GitHub](https://github.com/goldsonge)      |                   [GitHub](https://github.com/jeongggggg)                    |
 
----
 
 ## 🫡 작업 및 역할 분담
 | 이름   | 이미지  |                        역할                         |
@@ -374,19 +356,17 @@ gantt
 | 장금송 | <img src="docs/mem4.jpg" alt="장금송" width="150"> |  - 역할을<br/> - 이런식으로 <br/>  - 작성하면 <br/> - 됩니다   |
 | 조아정 | <img src="docs/mem5.png" alt="조아정" width="150"> |  - 역할을<br/> - 이런식으로 <br/>  - 작성하면 <br/> - 됩니다  |
 
----
 
 ## 🤝 추가 구현 예정
 
 - 음
 - 네..
 
----
 
 ## 🗨️ 프로젝트 회고 및 배운 점
 
-- 송주환 : 
-- 김진건 : 
-- 이상원 : 
-- 장금송 : 
-- 조아정 :
+- **송주환** : 
+- **김진건** : 
+- **이상원** : 
+- **장금송** : 
+- **조아정** :
