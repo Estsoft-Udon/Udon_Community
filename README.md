@@ -292,6 +292,8 @@ gantt
  └── 📁 service
 ```
 
+### 
+
 ### 🖲️ 화면 설계 (시연 영상)
 
 <table>
@@ -338,23 +340,19 @@ gantt
 ### 🌟 시연 영상
 
 
-## 👍 UDON 팀원 소개
+## 🧵 코딩 컨벤션
+- Java Coding Convention
+
+
+
+## 🫡 UDON 팀원 소개 및 역할 분담
 
 |                       송주환                        |                       김진건                        |                       이상원                       |                       장금송                       |                       조아정                       |
 |:------------------------------------------------:|:------------------------------------------------:|:-----------------------------------------------:|:-----------------------------------------------:|:-----------------------------------------------:|
 | <img src="/docs/mem1.jpg" alt="송주환" width="150"> | <img src="/docs/mem2.jpg" alt="이상원" width="150"> | <img src="docs/mem3.png" alt="이상원" width="150"> | <img src="docs/mem4.jpg" alt="장금송" width="150"> | <img src="docs/mem5.png" alt="조아정" width="150"> |
 |                       👑팀장                       |                        팀원                        |                       팀원                        |                       팀원                        |                       팀원                        |
 |      [GitHub](https://github.com/SongJwans)      |       [GitHub](https://github.com/jingun0516)       |       [GitHub](https://github.com/SangWon-Lee1)       |      [GitHub](https://github.com/goldsonge)      |                   [GitHub](https://github.com/jeongggggg)                    |
-
-
-## 🫡 작업 및 역할 분담
-| 이름   | 이미지  |                        역할                         |
-|:------:|:-------:|:-------------------------------------------------:|
-| 송주환 | <img src="/docs/mem1.jpg" alt="송주환" width="150"> |   - 역할을<br/> - 이런식으로 <br/>  - 작성하면 <br/> - 됩니다    |
-| 김진건 | <img src="/docs/mem2.jpg" alt="김진건" width="150"> |  - 역할을<br/> - 이런식으로 <br/>  - 작성하면 <br/> - 됩니다  |
-| 이상원 | <img src="docs/mem3.png" alt="이상원" width="150"> | - 역할을<br/> - 이런식으로 <br/>  - 작성하면 <br/> - 됩니다 |
-| 장금송 | <img src="docs/mem4.jpg" alt="장금송" width="150"> |  - 역할을<br/> - 이런식으로 <br/>  - 작성하면 <br/> - 됩니다   |
-| 조아정 | <img src="docs/mem5.png" alt="조아정" width="150"> |  - 역할을<br/> - 이런식으로 <br/>  - 작성하면 <br/> - 됩니다  |
+| - 프로젝트 관리 및 리딩<br/>- GitHub 관리<br/>- 커뮤니케이션 | - 기능 구현<br/>- 버그 수정<br/>- 테스트 | - 기능 구현<br/>- 코드 리뷰<br/>- 디자인 및 UI | - 기능 구현<br/>- QA 작업<br/>- 문서 작성 | - 기능 구현<br/>- 디자인 지원<br/>- 프로젝트 문서화 |
 
 
 ## 🤝 추가 구현 예정
