@@ -15,7 +15,7 @@ CREATE TABLE users
     name            VARCHAR(50)  NOT NULL,
     nickname        VARCHAR(50)  NOT NULL UNIQUE,
     email           VARCHAR(100) NOT NULL UNIQUE,
-    grade           VARCHAR(100) NOT NULL,
+    grade           VARCHAR(100) NULL,
     password        VARCHAR(255) NOT NULL,
     password_hint   VARCHAR(255) NOT NULL,
     password_answer VARCHAR(100) NOT NULL,
