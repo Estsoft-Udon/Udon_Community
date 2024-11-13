@@ -367,7 +367,8 @@ gantt
 
 ### 🌟 시연 영상
 
-[![이스트소프트 백엔드6기 오르미 2차 프로젝트_우동 (우리동네는)](/docs/image.png)](https://www.youtube.com/watch?v=_sJ3SVEHA3M&ab_channel=%EC%A7%95%EA%B2%85)
+[![이스트소프트 백엔드6기 오르미 2차 프로젝트_우동 (우리동네는)](/docs/image.png)](https://youtu.be/u_yuvxA35_w)
+클릭하면 동영상이 재생됩니다.
 
 <br>
 <br>
