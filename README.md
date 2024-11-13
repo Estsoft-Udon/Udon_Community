@@ -17,7 +17,7 @@
 
 ## ⛓️ 배포 URL
 
-[서비스 링크](http://13.124.44.64/)
+[서비스 링크](http://ourudon.kro.kr/)
 
 <br>
 <br>
@@ -290,40 +290,29 @@ gantt
 ### 🚶‍♂️ Back-End
 
 ```
-📁 src
-├── 📃 EstsoftUdonCommunityApplication.java
-├── 📁 config
-│   └── 📃 SecurityConfig.java
-├── 📁 controller
-│   ├── 📃 ArticlesController.java
-│   ├── 📃 BoardController.java
-│   ├── 📃 CommentsController.java
-│   ├── 📃 EventController.java
-│   ├── 📃 LikeController.java
-│   ├── 📃 LocationController.java
-│   ├── 📃 MainController.java
-│   ├── 📃 UsersController.java
-│   ├── 📃 ViewBoardController.java
-│   ├── 📃 ViewCommentController.java
-│   ├── 📃 ViewController.java
-│   └── 📁 admin
-│       ├── 📃 AdminBoardController.java
-│       ├── 📃 AdminBoardViewController.java
-│       ├── 📃 AdminController.java
-│       ├── 📃 AdminEventController.java
-│       ├── 📃 AdminEventViewController.java
-│       ├── 📃 AdminMemberController.java
-│       └── 📃 AdminViewController.java
-├── 📁 dto
-│   ├── 📁 request
-│   └── 📁 response
-├── 📁 entity
-├── 📁 enums
-├── 📁 repository
-├── 📁 security
-├── 📁 service
-│   └── 📁 admin
-├── 📁 util
+📂 src
+ ├── 📂 main
+ │    ├── 📂 java
+ │    │    └── 📂 com.example.estsoft_udon_community
+ │    │        ├── 📂 config
+ │    │        ├── 📂 controller
+ │    │        │    └── 📂 admin
+ │    │        ├── 📂 dto
+ │    │        │    ├── 📂 request
+ │    │        │    └── 📂 response
+ │    │        ├── 📂 entity
+ │    │        ├── 📂 enums
+ │    │        ├── 📂 external
+ │    │        │    ├── 📂 config
+ │    │        │    ├── 📂 controller
+ │    │        │    ├── 📂 dto
+ │    │        │    ├── 📂 entity
+ │    │        │    └── 📂 repository
+ │    │        ├── 📂 repository
+ │    │        ├── 📂 security
+ │    │        ├── 📂 service
+ │    │        │    └── 📂 admin
+ │    │        └── 📂 util
 
 ```
 
