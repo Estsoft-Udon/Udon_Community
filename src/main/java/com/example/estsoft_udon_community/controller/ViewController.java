@@ -5,23 +5,16 @@ import static com.example.estsoft_udon_community.util.SecurityUtil.*;
 import com.example.estsoft_udon_community.dto.request.UsersRequest;
 import com.example.estsoft_udon_community.entity.Location;
 import com.example.estsoft_udon_community.entity.Users;
-import com.example.estsoft_udon_community.enums.ArticleCategory;
 import com.example.estsoft_udon_community.enums.PasswordHint;
 import com.example.estsoft_udon_community.service.LocationService;
 import com.example.estsoft_udon_community.service.UsersService;
 
 import com.example.estsoft_udon_community.util.SecurityUtil;
 import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.example.estsoft_udon_community.util.ModelUtil;
-import com.example.estsoft_udon_community.util.SecurityUtil;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
