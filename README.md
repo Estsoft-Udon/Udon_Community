@@ -16,7 +16,8 @@
 <br>
 
 ## ⛓️ 배포 URL
-[우리 동네 커뮤니티](/)
+
+[서비스 링크](http://13.124.44.64/)
 
 <br>
 <br>
@@ -166,6 +167,11 @@ gantt
 | 5                                                           | 게시글 좋아요 순 조회         | GET | /api/like/articles | 200 OK | 400 Bad Request, 404 Not Found      |
 | 6                                                           | 댓글 좋아요 순 조회          | GET | /api/like/comments | 200 OK | 400 Bad Request, 404 Not Found      |
 | 7                                                           | 게시글 별로 댓글 좋아요 순 정렬조회 | GET | /api/like/comments/{articleId} | 200 OK | 400 Bad Request, 404 Not Found      |
+
+
+| <span style = "color : pink; font-weight: bold;">행사</span> | API기능 | HTTP메소드 | URL | 응답 | 에러                                  |
+|-------------------------------------------------------------|-------| --- | --- | --- |-------------------------------------|
+| 1                                                           | 외부 행사 | GET | /api/event | 200 OK | 400 Bad Request,<br> 404 Not Found  |
 
 | <span style = "color : pink; font-weight: bold;">이벤트</span> | API기능 | HTTP메소드 | URL | 응답 | 에러                                  |
 |-------------------------------------------------------------| --- | --- | --- | --- |-------------------------------------|

@@ -6,6 +6,8 @@ import com.example.estsoft_udon_community.enums.Grade;
 import com.example.estsoft_udon_community.enums.PasswordHint;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 public class UsersRequest {
     private String name;
@@ -28,6 +30,9 @@ public class UsersRequest {
     private String upperLocation; // UpperLocation 정보
 
     private String locationName; // Location 이름
+
+    private Boolean isDeleted;
+    private LocalDateTime deletedAt;
 
     // UserRequest -> Users
     public Users convert(Location location) {
@@ -63,6 +68,13 @@ public class UsersRequest {
         if (passwordAnswer != null) {
             user.setPasswordAnswer(passwordAnswer);
         }
+        if(isDeleted != null) {
+            user.setIsDeleted(isDeleted);
+        }
+        if(deletedAt != null) {
+            user.setDeletedAt(deletedAt);
+        }
+
         return user;
     }
 }

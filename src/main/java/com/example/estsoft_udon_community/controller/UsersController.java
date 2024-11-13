@@ -9,6 +9,7 @@ import java.util.Map;
 
 import com.example.estsoft_udon_community.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -95,10 +96,14 @@ public class UsersController {
 
     // 회원탈퇴
     @PostMapping("/withdrawal")
-    public ResponseEntity<Void> doWithdrawal() {
-        Users user = usersService.findUserById(SecurityUtil.getLoggedInUser().getId());
-        usersService.softDelete(user);
+    public ResponseEntity<Void> doWithdrawal(@RequestBody Map<String, String> request) {
+        String password = request.get("password");
 
-        return ResponseEntity.ok().build();
+        Users user = usersService.findUserById(SecurityUtil.getLoggedInUser().getId());
+        if(usersService.softDelete(user, password)) {
+            return ResponseEntity.ok().build();
+        }
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }

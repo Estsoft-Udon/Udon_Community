@@ -31,13 +31,9 @@
                             </th:block>
                         </select>
 
-                        <label for="locationId" class="dn"> 상세 지역을 선택</label>
-                        <select id="locationId" name="locationId" class="input-field" required>
-                            <th:block th:each="location : ${locations}">
-                                <option th:value="${location.id}" th:text="${location.name}"
-                                        th:selected="${originLocation != null and originLocation.id == location.id}">
-                                </option>
-                            </th:block>
+                        <label for="locationId" class="dn">상세 지역을 선택</label>
+                        <select id="locationId" name="locationId" class="input-field" required disabled>
+                            <option value="" disabled selected>상위 지역을 선택하세요</option>
                         </select>
                     </div>
 
@@ -105,6 +101,50 @@
                 submitText.innerText = "작성하기";
             }
         };
+    </script>
+    <script>
+        // 상위 지역 선택에 따라 하위 지역 데이터를 불러오고, 하위 선택 박스를 업데이트하는 함수
+        function updateLowerLocations(selectedLowerLocationId = null) {
+            const upperLocationSelect = document.getElementById("upperLocation");
+            const lowerLocationSelect = document.getElementById("locationId");
+
+            if (upperLocationSelect.value) {
+                fetch(`/getLowerLocations?upperLocation=${upperLocationSelect.value}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        lowerLocationSelect.innerHTML = '<option value="" disabled selected> 상세 지역을 선택하세요</option>';
+
+                        data.forEach(location => {
+                            const option = document.createElement("option");
+                            option.value = location.id;
+                            option.textContent = location.name;
+                            if (location.id === selectedLowerLocationId) {
+                                option.selected = true;
+                            }
+                            lowerLocationSelect.appendChild(option);
+                        });
+
+                        lowerLocationSelect.disabled = false;
+                    })
+                    .catch(error => {
+                        console.error('하위 지역 정보 로드 오류:', error);
+                        lowerLocationSelect.disabled = true;
+                    });
+            } else {
+                lowerLocationSelect.innerHTML = '<option value="" disabled selected> 상위 지역을 선택하세요</option>';
+                lowerLocationSelect.disabled = true;
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const originLocationId = [[${originLocation != null ? originLocation.id : 'null'}]];
+
+            if (originLocationId) {
+                updateLowerLocations(originLocationId);
+            } else {
+                updateLowerLocations();
+            }
+        });
     </script>
 </th:block>
 </html>
