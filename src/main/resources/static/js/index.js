@@ -287,7 +287,7 @@ function alertAndRedirect() {
 
 // 특정 날짜의 축제 데이터를 비동기로 가져오는 함수
 async function fetchFestivalDataForDate(date) {
-    const response = await fetch(`/festival?date=${date}`);
+    const response = await fetch(`/api/festival?date=${date}`);
     if (!response.ok) throw new Error("Failed to fetch festival data");
     return await response.json();
 }
