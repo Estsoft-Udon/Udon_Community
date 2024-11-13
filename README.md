@@ -378,11 +378,7 @@ gantt
 
 ### 🌟 시연 영상
 
-#### ✅ 회원 가입 / 로그인
-
-#### ✅ 게시판 / 게시글 작성
-
-#### ✅ 캘린더 / 승인 요청 및 수락
+[![이스트소프트 백엔드6기 오르미 2차 프로젝트_우동 (우리동네는)](/docs/image.png)](https://www.youtube.com/watch?v=_sJ3SVEHA3M&ab_channel=%EC%A7%95%EA%B2%85)
 
 <br>
 <br>
