@@ -1,21 +1,26 @@
-# 🚶‍♀️‍➡️우리 동네는 (우동)🚶‍♂️
+# <img src="/docs/logo_tran.png" alt="로고" width="30"> 우리 동네는 (우동)
 
 #### 우동은 사용자가 자신이 사는 지역을 소개하고 정보를 공유할 수 있는 <span style = "background : orange; color : #000;">현지인 주도형 커뮤니티</span>입니다.
 
-![Image 1](docs/logo.png)
+![우동 대표 이미지](docs/logo.png)
 
-## ➡️ 프로젝트 소개
+## 🍚  프로젝트 소개
 
-우동 커뮤니티에서는 **맛집, 건강 등 생활밀착형 정보**를 실시간으로 주고받으며, 서로 유용한 정보를 공유함으로써 신뢰도를 쌓아갑니다. 이를 통해, 일정 신뢰도를 기반으로 **참여자 등급**을 부여해 사용자들이 더욱 활발히 커뮤니티에 기여할 수 있도록 유도합니다.
+우동 커뮤니티에서는 **맛집, 건강 등 생활밀착형 정보**를 실시간으로 주고받으며, 서로 유용한 정보를 공유함으로써 신뢰도를 쌓아갑니다. 이를 통해, 일정 참여도를 기반으로 **참여자 등급**을 부여해 사용자들이 더욱 활발히 커뮤니티에 기여할 수 있도록 유도합니다.
 
-등급이 높아지면, 보다 엄격한 검증을 거친 후 **소모임(동호회) 개설 및 운영**이 가능해지며, 관심사에 따라 지역 내에서 다른 사용자들과 함께 활동할 수 있는 기회가 열립니다.
+등급이 높아지면, 보다 엄격한 검증을 거친 후 👟**동네 한바퀴  일정 신청 및 일정 추가**가 가능해지며, 관심사에 따라 지역 내에서 다른 사용자들과 함께 활동할 수 있는 기회가 열립니다.
 
 또한, 우동을 통해 타 지역 사용자도 다양한 동네에 대한 정보를 얻어 **여행 계획을 세우거나 맛집과 장소를 탐색**하는 데 활용할 수 있습니다.
 
+<br>
+<br>
 
 ## ⛓️ 배포 URL
+
 [서비스 링크](http://13.124.44.64/)
 
+<br>
+<br>
 
 ## ⌛ 개발 기간
 
@@ -42,17 +47,20 @@ gantt
     HTML 구현 시작 :active, 2024-11-04, 2024-11-04
     HTML 데이터 삽입 :active, 2024-11-05, 2024-11-05
 
-    section 테스트 및 QA
-    테스트 진행, QA :active, 2024-11-07, 2024-11-08
+    section 테스트 및 버그 수정
+    테스트 진행, 버그 수정 :active, 2024-11-07, 2024-11-08
 
     section 문서 작성 및 코드 정리
     프로젝트 관련 문서 수정, 코드 정리 :done, 2024-11-11, 2024-11-11
-    문서 작성, 추가 QA 진행 완료 :done, 2024-11-12, 2024-11-12
+    문서 작성, 추가 버그 수정 :done, 2024-11-12, 2024-11-12
 
     section 프로젝트 배포 및 발표 준비
     프로젝트 배포, 시연영상, 발표 준비 :active, 2024-11-13, 2024-11-13
     프로젝트 발표 :active, 2024-11-14, 2024-11-14
 ```
+
+<br>
+<br>
 
 ## 🏔️ 개발 환경
 
@@ -64,9 +72,12 @@ gantt
 ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
 ![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)
 
+
 ### Communication
 ![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white)
 
+<br>
+<br>
 
 ## 🍜 기능 정의서
 ➡️ [notion 에서 확인하기](https://oreumi.notion.site/5c13836699aa43c6a92a8f6c0b4b1abf?pvs=4)
@@ -86,6 +97,9 @@ gantt
 ![기능 정의 동네 한바퀴](docs/func9.png)
 ![기능 정의 관리자](docs/func10.png)
 
+<br>
+<br>
+
 
 ## 👀 화면 설계
 ➡️ [figma 에서 확인하기](https://www.figma.com/design/7KKhs0UJg8gFVFtwkWIFaV/%EC%9A%B0%EB%8F%99---%EC%99%80%EC%9D%B4%EC%96%B4%ED%94%84%EB%A0%88%EC%9E%84?node-id=0-1&t=DmdOUcsVNphem6eZ-1)
@@ -96,10 +110,15 @@ gantt
 ### ✅ 관리자
 ![관리자 화면 설계](docs/figma_admin.jpg)
 
+<br>
+<br>
+
 ## 🛫 ERD(Entity Relationship Diagram)
 
 ![ERD](docs/erd.png)
 
+<br>
+<br>
 
 ## 🚩 API 명세서
 ### ✅ REST API
@@ -241,6 +260,8 @@ gantt
 | 12                                                          | 이벤트 승인 취소 | POST | /admin/event/{id}/cancel | event_edit.html로 리디렉션 | event_list.html로 리디렉션 <br> (에러메시지포함) |
 | 13                                                          | 이벤트 요청 취소 | POST | /admin/event/{id} | event_list.html | event_list.html로 리디렉션 <br> (에러메시지포함) |
 
+<br>
+<br>
 
 ## 👾 프로젝트 구조
 ### 🚶‍♀️‍➡️Front-End
@@ -270,34 +291,44 @@ gantt
 
 ```
 📁 src
- ├── 📁 config
- │   ├── 📃 SecurityConfig.java
- │   └── 📃 SwaggerConfig.java
- ├── 📁 controller
- │   ├── 📃 AdminController.java
- │   ├── 📃 BoardController.java
- │   ├── 📃 CommentController.java
- │   ├── 📃 CompanyController.java
- │   ├── 📃 DocumentController.java
- │   ├── 📃 IndustryController.java
- │   ├── 📃 LikeItController.java
- │   ├── 📃 MemberController.java
- │   ├── 📃 PasswordQuestionController.java
- │   ├── 📃 ReportController.java
- │   └── 📃 ViewershipController.java
- ├── 📁 domain
- │   ├── 📁 dto
- │   └── 📁 entity
- ├── 📁 repository
- ├── 📁 security
- │   ├── 📃 MemberDetailsService.java
- │   ├── 📁 exception
- │   ├── 📁 filter
- │   └── 📁 handler
- └── 📁 service
+├── 📃 EstsoftUdonCommunityApplication.java
+├── 📁 config
+│   └── 📃 SecurityConfig.java
+├── 📁 controller
+│   ├── 📃 ArticlesController.java
+│   ├── 📃 BoardController.java
+│   ├── 📃 CommentsController.java
+│   ├── 📃 EventController.java
+│   ├── 📃 LikeController.java
+│   ├── 📃 LocationController.java
+│   ├── 📃 MainController.java
+│   ├── 📃 UsersController.java
+│   ├── 📃 ViewBoardController.java
+│   ├── 📃 ViewCommentController.java
+│   ├── 📃 ViewController.java
+│   └── 📁 admin
+│       ├── 📃 AdminBoardController.java
+│       ├── 📃 AdminBoardViewController.java
+│       ├── 📃 AdminController.java
+│       ├── 📃 AdminEventController.java
+│       ├── 📃 AdminEventViewController.java
+│       ├── 📃 AdminMemberController.java
+│       └── 📃 AdminViewController.java
+├── 📁 dto
+│   ├── 📁 request
+│   └── 📁 response
+├── 📁 entity
+├── 📁 enums
+├── 📁 repository
+├── 📁 security
+├── 📁 service
+│   └── 📁 admin
+├── 📁 util
+
 ```
 
-### 
+<br>
+<br>
 
 ### 🖲️ 화면 설계 (시연 영상)
 
@@ -342,34 +373,54 @@ gantt
     </tbody>
 </table>
 
+<br>
+<br>
+
 ### 🌟 시연 영상
 
+#### ✅ 회원 가입 / 로그인
+
+#### ✅ 게시판 / 게시글 작성
+
+#### ✅ 캘린더 / 승인 요청 및 수락
+
+<br>
+<br>
 
 ## 🧵 코딩 컨벤션
 - Java Coding Convention
 
+<br>
+<br>
 
 
 ## 🫡 UDON 팀원 소개 및 역할 분담
 
-|                       송주환                        |                       김진건                        |                       이상원                       |                       장금송                       |                       조아정                       |
-|:------------------------------------------------:|:------------------------------------------------:|:-----------------------------------------------:|:-----------------------------------------------:|:-----------------------------------------------:|
-| <img src="/docs/mem1.jpg" alt="송주환" width="150"> | <img src="/docs/mem2.jpg" alt="이상원" width="150"> | <img src="docs/mem3.png" alt="이상원" width="150"> | <img src="docs/mem4.jpg" alt="장금송" width="150"> | <img src="docs/mem5.png" alt="조아정" width="150"> |
-|                       👑팀장                       |                        팀원                        |                       팀원                        |                       팀원                        |                       팀원                        |
-|      [GitHub](https://github.com/SongJwans)      |       [GitHub](https://github.com/jingun0516)       |       [GitHub](https://github.com/SangWon-Lee1)       |      [GitHub](https://github.com/goldsonge)      |                   [GitHub](https://github.com/jeongggggg)                    |
-| - 프로젝트 관리 및 리딩<br/>- GitHub 관리<br/>- 커뮤니케이션 | - 기능 구현<br/>- 버그 수정<br/>- 테스트 | - 기능 구현<br/>- 코드 리뷰<br/>- 디자인 및 UI | - 기능 구현<br/>- QA 작업<br/>- 문서 작성 | - 기능 구현<br/>- 디자인 지원<br/>- 프로젝트 문서화 |
+|                       송주환                        |                       김진건                        |                       이상원                       |                       장금송                       |                        조아정                         |
+|:------------------------------------------------:|:------------------------------------------------:|:-----------------------------------------------:|:-----------------------------------------------:|:--------------------------------------------------:|
+| <img src="/docs/mem1.jpg" alt="송주환" width="150"> | <img src="/docs/mem2.jpg" alt="이상원" width="150"> | <img src="docs/mem3.png" alt="이상원" width="150"> | <img src="docs/mem4.jpg" alt="장금송" width="150"> |  <img src="docs/mem5.png" alt="조아정" width="150">   |
+|                       👑팀장                       |                        팀원                        |                       팀원                        |                       팀원                        |                         팀원                         |
+|      [GitHub](https://github.com/SongJwans)      |     [GitHub](https://github.com/jingun0516)      |    [GitHub](https://github.com/SangWon-Lee1)    |     [GitHub](https://github.com/goldsonge)      |      [GitHub](https://github.com/jeongggggg)       |
+|        - 기능 구현<br/>- 버그 수정<br/>- 프로젝트 관리         |       - 기능 구현<br/>- 버그 수정<br/>- 외부 API 구현        |       - 기능 구현<br/>- 버그 수정<br/>- GitHub 관리       |       - 기능 구현<br/>- 버그 수정<br/>- 디자인 및 UI        | - 기능 구현<br/>- 버그 수정<br/>- 디자인 및 UI <br/>- 프로젝트 문서화 |
 
+<br>
+<br>
 
 ## 🤝 추가 구현 예정
 
-- 음
-- 네..
+- 메신저, 채팅, 알림
+- 지역 인증, 회원가입 시 이메일 인증
 
+<br>
+<br>
 
-## 🗨️ 프로젝트 회고 및 배운 점
+## 🗨️ 프로젝트를 마치며...
 
-- **송주환** : 
-- **김진건** : 
-- **이상원** : 
-- **장금송** : 
-- **조아정** :
+- **송주환** : 처음 팀장 역할을 맡으면서 부족한 점이 많았지만, 믿고 응원해주셔서 감사합니다.
+  저는 다 차려진 밥상에 숟가락만 🥄 ..
+- **김진건** : 빼기는 커녕 더 하고 싶어하는 좋은 분들을 만나 재밌게 진행할 수 있어서 좋았습니다.
+  이제 출시 준비하시죠
+- **이상원** : 좋은 팀원분들을 만나 스트레스없이 재밌게 진행한 프로젝트였습니다. 일 중독자들..👍
+- **장금송** : 너 나 할 것 없이 서로 도움을 주려고 하는 팀원들을 만나 정말 감사한 시간들이었습니다 :-)
+- **조아정** : 열정적이고 함께 노력하는 좋은 팀원분들을 만나 많이 배우고 즐거운 프로젝트를 진행할 수 있었습니다.
+  우동 최고 🍀
