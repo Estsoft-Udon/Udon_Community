@@ -407,3 +407,7 @@ th, td {
         padding: 1.1rem 2.4rem;
     }
 }
+
+.today ul li{
+    color: #000;
+}
