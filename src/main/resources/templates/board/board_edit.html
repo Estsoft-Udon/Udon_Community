@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/layout">
+<th:block layout:fragment="content">
+    <link rel="stylesheet" href="/css/board.css">
+    <div class="wrap board_detail_wr">
+        <div class="w_1280">
+            <div class="form_wr">
+                <form id="articleForm" method="post">
+                    <!-- 카테고리 선택 -->
+                    <div class="form_cont">
+                        <span>카테고리</span>
+                        <label for="category" class="dn">카테고리 선택</label>
+                        <select id="category" name="category" class="input-field">
+                            <option value="" disabled selected>카테고리 선택</option>
+                            <th:block th:each="category : ${articleCategories}">
+                                <option th:value="${category}" th:text="${category.getDisplayName()}"
+                                        th:selected="${article != null and article.category==category}"></option>
+                            </th:block>
+                        </select>
+                    </div>
+
+                    <!-- 작성자 지역 노출 -->
+                    <div class="form_cont">
+                        <span>지역</span>
+                        <label for="upperLocation" class="dn">지역을 선택</label>
+                        <select id="upperLocation" name="upperLocation" onchange="updateLowerLocations()">
+                            <option value="" disabled selected> 지역을 선택하세요</option>
+                            <th:block th:each="upperLocation : ${upperLocations}">
+                                <option th:value="${upperLocation}" th:text="${upperLocation}"
+                                        th:selected="${article != null and originLocation != null and originLocation.upperLocation.name==upperLocation}"></option>
+                            </th:block>
+                        </select>
+
+                        <label for="locationId" class="dn">상세 지역을 선택</label>
+                        <select id="locationId" name="locationId" class="input-field" required disabled>
+                            <option value="" disabled selected>상위 지역을 선택하세요</option>
+                        </select>
+                    </div>
+
+                    <!-- 제목 작성 -->
+                    <div class="form_cont">
+                        <span>제목</span>
+                        <label for="title" class="dn">제목 작성</label>
+                        <input type="text" id="title" name="title" class="input-field" placeholder="제목 입력" required
+                               th:value="${article != null ? article.title : ''}" >
+                    </div>
+
+                    <!-- 해시 태그 작성 -->
+                    <div class="form_cont">
+                        <span>해시 태그 작성</span>
+                        <p>* 해시 태그는 아래 입력창에서 해시 태그할 단어를 기입 후 엔터를 눌러 추가시키고 없애고 싶은 해시 태그는 단어 옆 x 버튼을 누르면 지울 수 있습니다.</p>
+                        <div class="hash_box">
+                            <div class="hash_wr"></div>
+                            <input type="text" class="hash_field" placeholder="해시태그 입력">
+                        </div>
+                    </div>
+
+                    <!-- 글 입력 -->
+                    <div class="text-area-section">
+                        <span>글 입력</span>
+                        <textarea name="content" class="input-field" id="edit_content" placeholder="내용을 입력하세요" required
+                                  th:if="${article != null}" th:text="${article.content}" ></textarea>
+                        <textarea name="content" class="input-field" id="post_content" placeholder="내용을 입력하세요" required
+                                  th:unless="${article != null}"></textarea>
+                    </div>
+
+                    <!-- 버튼 영역 -->
+                    <div class="btn_wr">
+                        <button type="button" class="cancel_btn" onclick="history.back()">취소하기</button>
+                        <button type="submit" class="submit_btn" id="submit_btn">
+                            작성하기
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="/js/common.js"></script>
+    <script src="/js/board.js"></script>
+    <script th:inline="javascript">
+        window.onload = function() {
+            const exist_article = [[${article != null}]]; // article이 null이 아닌 경우 true로 설정
+            const form = document.getElementById('articleForm');
+            const submitText = document.getElementById('submit_btn');
+            const article = [[${article}]];
+
+            if (exist_article) {
+                // 수정 모드
+                loadHashtags(article.id);
+                form.onsubmit = function(event) {
+                    event.preventDefault();  // 폼 제출 기본 동작을 막고
+                    edit_article(article.id);  // 수정 함수 호출
+                };
+                submitText.innerText = "수정하기";
+            } else {
+                // 작성 모드
+                form.onsubmit = function(event) {
+                    event.preventDefault();  // 폼 제출 기본 동작을 막고
+                    post_article();  // 게시글 작성 함수 호출
+                };
+                submitText.innerText = "작성하기";
+            }
+        };
+    </script>
+    <script>
+        // 상위 지역 선택에 따라 하위 지역 데이터를 불러오고, 하위 선택 박스를 업데이트하는 함수
+        function updateLowerLocations(selectedLowerLocationId = null) {
+            const upperLocationSelect = document.getElementById("upperLocation");
+            const lowerLocationSelect = document.getElementById("locationId");
+
+            if (upperLocationSelect.value) {
+                fetch(`/getLowerLocations?upperLocation=${upperLocationSelect.value}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        lowerLocationSelect.innerHTML = '<option value="" disabled selected> 상세 지역을 선택하세요</option>';
+
+                        data.forEach(location => {
+                            const option = document.createElement("option");
+                            option.value = location.id;
+                            option.textContent = location.name;
+                            if (location.id === selectedLowerLocationId) {
+                                option.selected = true;
+                            }
+                            lowerLocationSelect.appendChild(option);
+                        });
+
+                        lowerLocationSelect.disabled = false;
+                    })
+                    .catch(error => {
+                        console.error('하위 지역 정보 로드 오류:', error);
+                        lowerLocationSelect.disabled = true;
+                    });
+            } else {
+                lowerLocationSelect.innerHTML = '<option value="" disabled selected> 상위 지역을 선택하세요</option>';
+                lowerLocationSelect.disabled = true;
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const originLocationId = [[${originLocation != null ? originLocation.id : 'null'}]];
+
+            if (originLocationId) {
+                updateLowerLocations(originLocationId);
+            } else {
+                updateLowerLocations();
+            }
+        });
+    </script>
+</th:block>
+</html>

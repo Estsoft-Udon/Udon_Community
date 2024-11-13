@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="admin/layout/layout">
+<body>
+<th:block layout:fragment="content">
+    <link rel="stylesheet" href="/admin/css/calender.css">
+    <section>
+        <h1>캘린더 승인 요청 목록</h1>
+        <div class="filter">
+            <form th:action="@{/admin/event/event_list}" method="get">
+                <select name="approved" th:value="${approved}" onchange="this.form.submit()">
+                    <option value="" th:selected="${approved == null}">전체 목록</option>
+                    <option value="true" th:selected="${approved == true}">승인된 이벤트</option>
+                    <option value="false" th:selected="${approved == false}">승인되지 않은 이벤트</option>
+                </select>
+            </form>
+        </div>
+        <table>
+            <thead>
+            <tr>
+                <th>No.</th>
+                <th>신청자 ID</th>
+                <th>신청자 이름</th>
+                <th>신청자 닉네임</th>
+                <th>제목</th>
+                <th>내용</th>
+                <th>이벤트 날짜</th>
+                <th>타입</th>
+                <th>승인 여부</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="event, iterStat : ${events}">
+                <td th:text="${startIndex + iterStat.index}"></td>
+                <td th:text="${event.userLoginId}"></td>
+                <td th:text="${event.userName}"></td>
+                <td th:text="${event.nickName}"></td>
+                <td>
+                    <a th:href="@{/admin/event/event_edit/{id}(id=${event.id})}" th:text="${event.title}"></a>
+                </td>
+                <td th:text="${event.content}"></td>
+                <td th:text="${event.dateTime}"></td>
+                <td th:text="${event.eventType.displayName}"></td>
+                <td th:text="${event.isAccepted ? '승인' : '미승인'}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            <ul>
+                <li th:if="${events.hasPrevious()}">
+                    <a th:href="@{/admin/event/event_list(page=${events.number - 1}, size=${events.size}, approved=${approved})}">이전</a>
+                </li>
+                <li th:each="pageNumber : ${#numbers.sequence(0, events.totalPages - 1)}"
+                    th:classappend="${pageNumber == events.number} ? 'active'">
+                    <a th:href="@{/admin/event/event_list(page=${pageNumber}, size=${events.size}, approved=${approved})}"
+                       th:text="${pageNumber + 1}">1</a>
+                </li>
+                <li th:if="${events.hasNext()}">
+                    <a th:href="@{/admin/event/event_list(page=${events.number + 1}, size=${events.size}, approved=${approved})}">다음</a>
+                </li>
+            </ul>
+        </div>
+    </section>
+</th:block>
+</body>
+</html>

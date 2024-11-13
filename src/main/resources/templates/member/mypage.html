@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/layout">
+<th:block layout:fragment="content">
+    <link rel="stylesheet" href="/css/member.css">
+    <div class="wrap member">
+        <div class="w_1280">
+            <h1 class="tit">마이페이지</h1>
+            <section>
+                <div class="info-section mw_50">
+                    <label for="grade">
+                        등급
+                        <span class="grade_info def_c">*우동 친구 등급 이상일 때 등업 요청 버튼이 활성화 됩니다.</span>
+                    </label>
+                    <div class="grade_box">
+                        <span id="grade" th:text="${user.grade.getDisplayName()}"></span>
+                        <!--2등급 이상일 시 버튼 활성화 됩니다. 활성화 시 on 클래스 추가-->
+                        <form th:action="@{/request-promotion}" method="POST" id="promotionForm">
+                            <input type="hidden" name="userId" th:value="${user.id}"/>
+                            <button id="upgradeRequestBtn" class="reversal_btn"
+                                    th:classappend="${user.grade.ordinal() == 1} ? 'on' : ''"
+                                    th:disabled="${userPromotion}"
+                                    th:text="${userPromotion ? '등업 요청 완료' : '등업 요청'}"
+                                    onclick="submitUpgradeRequest(event)">
+                            </button>
+                        </form>
+                    </div>
+
+                    <label for="name">이름</label>
+                    <span id="name" th:text="${user.name}"></span>
+
+                    <label for="userId">아이디</label>
+                    <span id="userId" th:text="${user.loginId}"></span>
+
+                    <label for="nickname">설정된 닉네임</label>
+                    <span id="nickname" th:text="${user.nickname}"></span>
+
+                    <label for="email">설정된 이메일</label>
+                    <span id="email" th:text="${user.email}"></span>
+
+                    <label for="location">거주하는 지역</label>
+                    <span id="locationUpper" th:text="${user.location.getUpperLocation()}"></span>
+
+                    <label for="location">상세 지역</label>
+                    <span id="location" th:text="${user.location.getName()}"></span>
+                </div>
+
+                <div class="btn_box mw_50">
+                    <button onclick="location.href='/'" class="reversal_btn">취소하기</button>
+                    <button onclick="location.href='edit_profile'" class="default_btn">정보수정하기</button>
+                </div>
+            </section>
+        </div>
+    </div>
+    <script src="/js/mypage.js"></script>
+</th:block>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<th:block th:fragment="headerFragment">
+    <head>
+        <title>udon</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link rel="stylesheet" href="/css/reset.css">
+        <link rel="stylesheet" href="/css/header.css">
+        <link rel="stylesheet" href="/css/footer.css">
+    </head>
+    <header>
+        <div class="inner w_1280">
+            <h1>
+                <a href="/" class="logo">
+                    <picture>
+                        <img th:src="@{/img/logo.png}" alt="logo">
+                        <span>UDON</span>
+                    </picture>
+                </a>
+            </h1>
+            <div>
+                <!-- 로그인 전 -->
+                <ul sec:authorize="isAnonymous()">
+                    <li>
+                        <a href="/login">로그인</a>
+                    </li>
+                    <li>
+                        <a href="/signup">회원가입</a>
+                    </li>
+                </ul>
+                <!-- 로그인 후 -->
+                <ul sec:authorize="isAuthenticated()">
+                    <li>
+                        <a href="/mypage">마이페이지</a>
+                    </li>
+                    <li>
+                        <a href="/logout">로그아웃</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <script src="/js/layout.js"></script>
+</th:block>
+</html>

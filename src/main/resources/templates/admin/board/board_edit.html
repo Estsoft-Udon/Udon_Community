@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="admin/layout/layout">
+<body>
+<th:block layout:fragment="content">
+    <section>
+        <h1>게시글 수정</h1>
+        <form id="toggleVisibilityForm" action="/admin/board/toggle-visibility" method="post">
+            <div class="btn_box">
+                <a href="/admin/board/board_list">
+                    <button type="button" class="reversal_btn">목록으로</button>
+                </a>
+                <button type="submit" class="default_btn">저장하기</button>
+            </div>
+            <div class="info">
+                <div class="info_item">
+                    <p class="info_label">공개 여부</p>
+                    <div class="radio_box">
+                        <div class="radio">
+                            <label for="public">공개</label>
+                            <input type="radio" id="public" name="visibility" value="public" required
+                                   th:checked="${!article.isBlind}">
+                        </div>
+                        <div class="radio">
+                            <label for="private">비공개</label>
+                            <input type="radio" id="private" name="visibility" value="private"
+                                   th:checked="${article.isBlind}">
+                        </div>
+                    </div>
+                </div>
+                <div class="info_item">
+                    <p class="info_label">작성자 ID</p>
+                    <span th:text="${article.nickname}">작성자 아이디 텍스트로</span>
+                </div>
+                <div class="info_item">
+                    <p class="info_label">카테고리</p>
+                    <span th:text="${article.category.displayName}">카테고리가 들어갑니다</span>
+                </div>
+                <div class="info_item">
+                    <p class="info_label">제목</p>
+                    <span th:text="${article.title}">글 제목이 들어갑니다</span>
+                </div>
+                <div class="info_item">
+                    <p class="info_label">지역</p>
+                    <span th:text="${article.getFullLocation()}">작성자 지역이 들어갑니다</span>
+                </div>
+                <div class="info_item txt_item">
+                    <p class="info_label">내용</p>
+                    <p th:text="${article.content}">작성된 내용의 글이 들어갑니다</p>
+                </div>
+                <!-- 게시글 ID를 서버로 전송하기 위해 hidden input 추가 -->
+                <input type="hidden" name="articleId" th:value="${article.id}">
+            </div>
+        </form>
+    </section>
+</th:block>
+</body>
+<script>
+    $('#toggleVisibilityForm').submit(function(event) {
+        event.preventDefault();  // 폼 제출을 막고
+        const visibility = $("input[name='visibility']:checked").val();
+        const articleId = $("input[name='articleId']").val();
+
+        $.ajax({
+            url: '/admin/board/toggle-visibility', // AJAX 전송 URL
+            method: 'POST',
+            data: {
+                visibility: visibility,
+                articleId: articleId
+            },
+            success: function(response) {
+                console.log("Visibility updated", response);
+                // 페이지 갱신
+                window.location.href = "/admin/board/board_list";
+            },
+            error: function(err) {
+                console.error("Error updating visibility", err);
+            }
+        });
+    });
+</script>
+</html>

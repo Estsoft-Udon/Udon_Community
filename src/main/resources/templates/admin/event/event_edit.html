@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="admin/layout/layout">
+<body>
+<th:block layout:fragment="content">
+    <section>
+        <h1>캘린더 승인 요청 수정</h1>
+        <div class="btn_box">
+            <a href="/admin/event/event_list">
+                <button type="button" class="reversal_btn">목록으로</button>
+            </a>
+
+            <form th:action="@{/admin/event/{id}(id=${event.id})}" method="post" onsubmit="return confirmDelete();">
+                <input type="hidden" name="_method" value="delete">
+                <button type="submit" class="default_btn delete_btn">요청 삭제</button>
+            </form>
+
+            <form th:action="@{/admin/event/{id}/approve(id=${event.id})}" method="post" th:if="${!event.isAccepted}">
+                <button type="submit" class="default_btn" th:text="'요청 승인'"></button>
+            </form>
+
+            <form th:action="@{/admin/event/{id}/cancel(id=${event.id})}" method="post" th:if="${event.isAccepted}">
+                <button type="submit" class="default_btn" th:text="'승인 취소'"></button>
+            </form>
+        </div>
+        <div class="info">
+            <div class="info_item">
+                <p class="info_label">신청자 ID</p>
+                <span th:text="${event.userLoginId}"></span>
+            </div>
+            <div class="info_item">
+                <p class="info_label">신청자 이름</p>
+                <span th:text="${event.userName}"></span>
+            </div>
+            <div class="info_item">
+                <p class="info_label">신청자 닉네임</p>
+                <span th:text="${event.nickName}"></span>
+            </div>
+            <div class="info_item">
+                <p class="info_label">제목</p>
+                <span th:text="${event.title}"></span>
+            </div>
+            <div class="info_item">
+                <p class="info_label">신청 날짜</p>
+                <span th:text="${event.dateTime}"></span>
+            </div>
+            <div class="info_item txt_item">
+                <p class="info_label">내용</p>
+                <pre th:text="${event.content}"></pre>
+            </div>
+        </div>
+    </section>
+    <script>
+        function confirmDelete() {
+            return confirm("정말로 삭제하시겠습니까?");
+        }
+    </script>
+</th:block>
+</body>
+</html>

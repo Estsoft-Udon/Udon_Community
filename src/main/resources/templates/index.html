@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.w3.org/1999/xhtml" layout:decorate="layout/layout">
+<head>
+    <link rel="stylesheet" href="/css/index.css">
+</head>
+<body>
+<th:block layout:fragment="content">
+    <div class="wrap main">
+        <div class="w_1280">
+            <section class="location_filter">
+                <label for="upperLocation" class="dn">지역을 선택</label>
+                <select id="upperLocation" name="upperLocation" onchange="updateLowerLocations(); toggleLocationName();">
+                    <option disabled selected>지역을 선택하세요</option>
+                    <th:block th:each="upperLocation : ${upperLocations}">
+                        <option th:value="${upperLocation}" th:text="${upperLocation}"></option>
+                    </th:block>
+                </select>
+
+                <label for="locationId" class="dn">상세 지역을 선택</label>
+                <select id="locationId" name="locationId" required>
+                    <option disabled selected></option>
+                    <th:block th:each="location : ${locations}">
+                        <option th:value="${location.id}" th:text="${location.name}"></option>
+                    </th:block>
+                </select>
+
+                <button class="default_btn" onclick="redirectToLocationBoard()">보러가기</button>
+            </section>
+
+            <main>
+                <section class="top_section">
+                    <aside class="left_sec">
+                        <h2>
+                            <a href="javascript:void(0)">🔥 HOT 한 우동</a>
+                        </h2>
+                        <ul class="post_list">
+                            <li th:each="user, iterStat : ${topUserMap}" class="post_item">
+                                <div class="l_box">
+                                    <div class="ranking" th:text="${iterStat.index + 1} + '.'"></div>
+                                    <div class="id" th:text="${user.key.nickname}">아이디</div>
+                                    <div class="grade" th:text="'(' + ${user.key.grade.getDisplayName()} + ')'">(등급)</div>
+                                </div>
+                                <div class="post_stats">
+                                    <div class="icon thumb_icon on"></div>
+                                    <div class="likes" th:text="${user.value}">누적 좋아요 수</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </aside>
+
+                    <section class="right_sec">
+                        <div class="board_list">
+                            <article class="newest">
+                                <h2>
+                                    <a href="/articles">🔺최신 게시글</a>
+                                </h2>
+                                <ul class="post_list" id="newest">
+                                    <li th:each="article : ${articles}" class="post_item">
+                                        <div class="l_box">
+                                            <div class="top">
+                                                <span class="w_id" th:text="${article.nickname}">아이디</span>
+                                                <span class="w_pw" th:text="|Posted on ${article.createdAt}|">작성 시간</span>
+                                            </div>
+                                            <div class="bot">
+                                                <a th:href="@{/articles/{id}(id=${article.id})}" th:text="${article.title}" class="title">글 제목</a>
+                                                <div class="post_stats">
+                                                    <div class="icon thumb_icon"></div>
+                                                    <div class="likes" th:text="${article.likeCount}">좋아요 수</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </article>
+                            <article class="hotplace">
+                                <h2>
+                                    <a href="/articles/hotRestaurant">🍚 한 뚝배기 하실래요?</a>
+                                </h2>
+                                <div th:if="${user == null}" class="info">
+                                    <p> 로그인 후 <br> 우리 동네 맛집을 확인해보세요 😋</p>
+                                </div>
+                                <div th:if="${user != null && #lists.isEmpty(hotArticles)}" class="info">
+                                    <p>아직 우리 동네 맛집 게시글이 없어요 🥲</p>
+                                </div>
+                                <ul class="post_list">
+                                    <li th:each="article : ${hotArticles}" th:if="${#lists.size(hotArticles) > 0}" class="post_item">
+                                        <div class="l_box">
+                                            <div class="top">
+                                                <span class="w_id" th:text="${article.nickname}">아이디</span>
+                                                <span class="w_pw" th:text="|Posted on ${article.createdAt}|">작성 시간</span>
+                                            </div>
+                                            <div class="bot">
+                                                <a th:href="@{/articles/{id}(id=${article.id})}" th:text="${article.title}" class="title">글 제목</a>
+                                                <div class="post_stats">
+                                                    <div class="icon thumb_icon"></div>
+                                                    <div class="likes" th:text="${article.likeCount}">좋아요 수</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </article>
+                        </div>
+                    </section>
+                </section>
+                <section class="bot_section">
+                    <article class="event calendar">
+                        <h2>
+                            <a href="/">👟 동네 한바퀴</a>
+                        </h2>
+                        <div class="btn_sec">
+                            <!-- 비회원 상태 -->
+                            <div th:if="${user == null}">
+                                <button type="button" class="reversal_btn event_apply_btn" onclick="alertAndRedirect()">일정 등록 신청하기</button>
+                            </div>
+
+                            <!-- 로그인 상태이며 등급이 UDON 또는 UDON_FRIEND일 때 -->
+                            <div th:if="${user != null and (user.grade.name() == 'UDON' or user.grade.name() == 'UDON_FRIEND')}">
+                                <button type="button" class="reversal_btn event_apply_btn" onclick="alert('우동 보안관 등급 이상부터 신청 가능합니다.');">일정 등록 신청하기</button>
+                            </div>
+
+                            <!-- 로그인 상태이며 등급이 UDON 또는 UDON_FRIEND가 아닐 때 -->
+                            <div th:if="${user != null and (user.grade.name() != 'UDON' and user.grade.name() != 'UDON_FRIEND')}">
+                                <button type="button" class="reversal_btn event_apply_btn" onclick="openModal()">일정 등록 신청하기</button>
+                            </div>
+                        </div>
+                        <button type="button" id="swap_btn" onclick="swap_calendar()">축제 정보 보기</button>
+                        <div id="calendar"></div>
+                        <div id="calendar2"></div>
+                    </article>
+                </section>
+            </main>
+        </div>
+        <!-- 일정 정보 모달 -->
+        <div id="eventModal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn" id="closeModal">&times;</span>
+                <div class="modal-header">
+                    <span id="eventDetailsType"></span>
+                    <h2 id="eventDetailsTitle"></h2>
+                </div>
+                <p>
+                    <strong>일시 : </strong>
+                    <span id="eventDetailsDateTime"></span>
+                </p>
+                <p>
+                    <strong>주최자 : </strong>
+                    <span id="eventDetailsUser"></span>
+                </p>
+                <div class="txt_box">
+                    <strong>내용</strong>
+                    <pre id="eventDetailsDescription"></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- 축제 정보 모달 -->
+        <div id="festivalModal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn" id="closeFestivalModal">&times;</span>
+                <div class="modal-header">
+                    <h2 id="festivalDetailsTitle"></h2>
+                </div>
+                <p class="txt_box">
+                    <strong>상세 위치</strong>
+                    <span id="festivalDetailsDescription"></span>
+                </p>
+            </div>
+        </div>
+
+        <!-- 일정 등록 신청 모달 -->
+        <dialog class="modal-overlay" id="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>일정 추가 요청</h2>
+                    <p>
+                        관리자 승인 후 캘린더 노출 됩니다.
+                    </p>
+                    <button type="button" class="close-btn" onclick="closeModal()">&times;</button>
+                </div>
+                <form id="eventForm" th:action="@{/api/event}" method="post" onsubmit="return handleSubmit(event)">
+                    <div th:if="${user != null}" class="user_info">
+                        <p class="tit">신청자 <span>*변경 불가</span></p>
+                        <p id="loginId" th:text="${user.nickname}"></p>
+                    </div>
+                    <label for="title">제목</label>
+                    <input type="text" id="title" name="title" required>
+
+                    <label for="eventType">일정 타입</label>
+                    <select id="eventType" name="eventType" required>
+                        <option value="GATHERING">소모임</option>
+                        <option value="FESTIVAL">축제</option>
+                    </select>
+
+                    <label for="dateTime">신청 날짜</label>
+                    <input type="datetime-local" id="dateTime" name="dateTime" required>
+
+                    <label for="content">내용</label>
+                    <textarea id="content" name="content" rows="4" required></textarea>
+
+                    <div class="btn_sec">
+                        <button type="submit" class="submit-btn default_btn">신청하기</button>
+                    </div>
+                </form>
+            </div>
+        </dialog>
+    </div>
+    <script src="/js/index.js"></script>
+    <script src="/js/common.js"></script>
+</th:block>
+</body>
+</html>

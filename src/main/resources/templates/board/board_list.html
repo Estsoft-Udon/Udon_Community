@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/layout">
+<th:block layout:fragment="content">
+    <link rel="stylesheet" href="/css/board.css">
+    <div class="wrap board_list_wr">
+        <div class="w_1280">
+            <div class="l_box">
+                <div class="t_box">
+                    <h3>#인기 태그</h3>
+                    <div class="hash_box">
+                        <div th:each="tag : ${topHashtags}" class="flex_box">
+                            <a th:href="@{/articles/hashtag/{hashtagId}(hashtagId=${tag.hashtag.id})}"
+                               th:text="${tag.hashtag.name}">#해시태그 이름</a>
+                            <span class="count_num" th:text="${tag.usageCount}">사용 횟수</span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="b_box">
+                    <div class="cate_box">
+                        <h3>카테고리</h3>
+                        <div class="link_box">
+                            <a th:href="@{/articles/category/{category}(category='GATHERING')}">소모임</a>
+                            <a th:href="@{/articles/category/{category}(category='FESTIVITIES')}">축제</a>
+                            <a th:href="@{/articles/category/{category}(category='TRAVEL_DESTINATION')}">여행</a>
+                            <a th:href="@{/articles/category/{category}(category='RESTAURANT')}">맛집</a>
+                            <a th:href="@{/articles/category/{category}(category='WALKING_COURSE')}">산책</a>
+                        </div>
+                    </div>
+                    <div class="grade_info" onclick="toggleGradeInfo()">
+                        <h3>등업 조건 <span class="toggle-icon">▼</span></h3>
+                        <div class="grade_content">
+                            <ul>
+                                <li>
+                                    <p>우동</p>
+                                    <span>가입 시 자동 등급 <br> 댓글 작성만 가능</span>
+                                </li>
+                                <li>
+                                    <p>우동 친구</p>
+                                    <span>댓글 1개 작성 시 자동 등업 <br>게시글 작성 가능</span>
+                                </li>
+                                <li>
+                                    <p>우동 보안관</p>
+                                    <span>등업 요청 신청 필요 관리자 승인 후 등업 <br> 캘린더 일정 승인 요청 가능</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="r_box">
+                <div class="tit_wr">
+                    <div class="tit_box">
+                        <!-- '한뚝배기'로 접근했을 때 -->
+                        <h2 th:if="${currentPageContext == 'hotRestaurant'}">한 뚝배기 하실래요?</h2>
+                        <span th:if="${currentPageContext == 'hotRestaurant'}">우리 동네 맛집 목록</span>
+
+                        <!-- 기본 텍스트 -->
+                        <h2 th:if="${currentPageContext != 'hotRestaurant' and category == null and hashtagId == null}">
+                            <span th:text="${location != null ? location.upperLocation : '대한민국'}"></span>
+                            <span th:text="${location != null ? location.name : '우리동네'}"></span>
+                        </h2>
+
+                        <!-- 카테고리로 조회한 경우 -->
+                        <h2 th:if="${category != null}" th:switch="${category}">
+                            <span th:case="'GATHERING'">소모임</span>
+                            <span th:case="'FESTIVITIES'">축제</span>
+                            <span th:case="'TRAVEL_DESTINATION'">여행</span>
+                            <span th:case="'RESTAURANT'">맛집</span>
+                            <span th:case="'WALKING_COURSE'">산책</span>
+                        </h2>
+                        <span th:if="${category != null}">카테고리</span>
+
+                        <!-- 해시태그로 조회한 경우 -->
+                        <h2 th:if="${hashtagId != null}" th:text="${hashtag}"></h2>
+                        <span th:if="${hashtagId != null}">해시태그</span>
+                    </div>
+                    다양한 사람들을 만나고 우리 동네의 모든 정보를 공유해보아요.
+                </div>
+
+                <div class="container">
+                    <!-- Navigation and Search Bar -->
+                    <div class="table_hd">
+                        <div class="btn_wr">
+                            <!-- 일반 게시글일 때 -->
+                            <div th:if="${currentPageContext != 'hotRestaurant' and category == null and hashtagId == null and searchQuery == null}">
+                                <a th:href="@{${location != null ? '/articles?locationId=' + location.id + '&sortOption=likeCount&page=' + currentPage + '&size=5&title=' + (title != null ? title : '') : '/articles?sortOption=likeCount&page=' + currentPage + '&size=5&title=' + (title != null ? title : '')}}" class="nav_btn">좋아요 많은 순</a>
+                                /
+                                <a th:href="@{${location != null ? '/articles?locationId=' + location.id + '&sortOption=commentCount&page=' + currentPage + '&size=5&title=' + (title != null ? title : '') : '/articles?sortOption=commentCount&page=' + currentPage + '&size=5&title=' + (title != null ? title : '')}}" class="nav_btn">댓글 많은 순</a>
+                            </div>
+
+                            <!-- 한 뚝배기일 때 -->
+                            <div th:if="${currentPageContext == 'hotRestaurant'}">
+                                <a th:href="@{/articles/hotRestaurant(sortOption='likeCount', page=${currentPage}, size=5, title=${title != null ? title : ''})}" class="nav_btn">좋아요 많은 순</a>
+                                /
+                                <a th:href="@{/articles/hotRestaurant(sortOption='commentCount', page=${currentPage}, size=5, title=${title != null ? title : ''})}" class="nav_btn">댓글 많은 순</a>
+                            </div>
+
+                            <!-- 해시태그 게시글일 때 -->
+                            <div th:if="${hashtagId != null}">
+                                <a th:href="@{/articles/hashtag/{hashtagId}(hashtagId=${hashtagId}, sortOption='likeCount', page=${currentPage}, size=5, title=${title != null ? title : ''})}" class="nav_btn">좋아요 많은 순</a>
+                                /
+                                <a th:href="@{/articles/hashtag/{hashtagId}(hashtagId=${hashtagId}, sortOption='commentCount', page=${currentPage}, size=5, title=${title != null ? title : ''})}" class="nav_btn">댓글 많은 순</a>
+                            </div>
+
+                            <!-- 카테고리 게시글일 때 -->
+                            <div th:if="${category != null}">
+                                <a th:href="@{/articles/category/{category}(category=${category}, sortOption='likeCount', page=${currentPage}, size=5, title=${title != null ? title : ''})}" class="nav_btn">좋아요 많은 순</a>
+                                /
+                                <a th:href="@{/articles/category/{category}(category=${category}, sortOption='commentCount', page=${currentPage}, size=5, title=${title != null ? title : ''})}" class="nav_btn">댓글 많은 순</a>
+                            </div>
+                        </div>
+
+
+                        <form th:action="@{${(currentPageContext == 'hotRestaurant')
+                        ? '/articles/hotRestaurant' + (location != null && location.id != null ? '?locationId=' + location.id : '')
+                        : (category != null
+                            ? '/articles/category/' + category + (location != null && location.id != null ? '?locationId=' + location.id : '')
+                            : (hashtagId != null
+                                ? '/articles/hashtag/' + hashtagId + (location != null && location.id != null ? '?locationId=' + location.id : '')
+                                : (location != null && location.id != null
+                                    ? '/articles?locationId=' + location.id
+                                    : '/articles')))}}"
+                              method="get">
+                            <div class="search_box">
+                                <input type="text" name="title" placeholder="검색어를 입력하세요." class="search-bar" th:value="${title}">
+                                <input type="hidden" name="locationId" th:value="${location != null ? location.id : ''}">
+                                <button type="submit">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                         stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon"
+                                         class="h-3.5 w-3.5 text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-200">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </form>
+                        <button class="write_btn" onclick="location.href='/articles/new'">글쓰기</button>
+                    </div>
+
+                    <ul class="post_list">
+                        <li th:if="${articles.empty}" style="text-align: center; color: #888; padding: 20px;">
+                            검색된 결과가 없습니다.
+                        </li>
+                        <li th:each="article, iterStat : ${articles}" class="post_item">
+                            <div class="l_box">
+                                <div class="t_box">
+                                    <!-- 페이지 번호 표시 -->
+                                    <span class="post_num" th:text="${(currentPage * 5) + iterStat.index + 1}">1.</span>
+                                    <a th:href="@{/articles/{id}(id=${article.id})}" th:text="${article.title}" class="post_title">글 제목</a>
+
+                                </div>
+                                <div class="post_author" th:text="${article.nickname}">작성자 닉네임</div>
+                            </div>
+                            <div class="r_box">
+                                <span th:text="${article.location}"></span>
+                                <div class="post_stats">
+                                    <div class="views"><span class="view_icon icon_box"></span><span th:text="${article.viewCount}">조회수</span></div>
+                                    <div class="likes"><span class="thumb_icon icon_box"></span><span th:text="${article.likeCount}">좋아요 수</span></div>
+                                    <div class="comments"><span class="comment_icon icon_box"></span><span th:text="${article.commentCount}">댓글 수</span></div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+
+                    <div class="pagination_wr" th:if="${not articles.empty}">
+                        <ul class="pagination">
+                            <!-- 이전 버튼 활성화/비활성화 -->
+                            <li th:classappend="${currentPage == 0 ? 'dn' : ''}" class="prev_btn">
+                                <button type="button" th:onclick="'loadArticlesByPage(' + (${currentPage} - 1) + ')'" aria-label="Previous">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="arrow">
+                                        <path d="M15 19l-7-7 7-7" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                            </li>
+
+                            <!-- 페이지 번호 생성 -->
+                            <li th:if="${totalPages > 0}" th:each="page : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${page == currentPage ? 'on' : ''}">
+                                <!-- 기본 -->
+                                <a th:if="${currentPageContext != 'hotRestaurant' and category == null and hashtagId == null and searchQuery == null}"
+                                   th:href="@{/articles(locationId=${location != null ? location.id : ''}, sortOption=${sortOption != null && sortOption != '' ? sortOption : ''}, title=${title != null ? title : ''}, page=${page}, size=${5})}"
+                                   th:text="${page + 1}"></a>
+
+                                <!-- 한 뚝배기 -->
+                                <a th:if="${currentPageContext == 'hotRestaurant'}"
+                                   th:href="@{/articles/hotRestaurant(sortOption=${sortOption != null && sortOption != '' ? sortOption : ''}, title=${title != null ? title : ''}, page=${page}, size=${5})}"
+                                   th:text="${page + 1}"></a>
+
+                                <!-- 카테고리로 조회한 경우 -->
+                                <a th:if="${category != null}"
+                                   th:href="@{/articles/category/{category}(category=${category}, sortOption=${sortOption != null && sortOption != '' ? sortOption : ''}, title=${title != null ? title : ''}, page=${page}, size=${5})}"
+                                   th:text="${page + 1}"></a>
+
+                                <!-- 해시태그로 조회한 경우 -->
+                                <a th:if="${hashtagId != null}"
+                                   th:href="@{/articles/hashtag/{hashtagId}(hashtagId=${hashtagId}, sortOption=${sortOption != null && sortOption != '' ? sortOption : ''}, title=${title != null ? title : ''}, page=${page}, size=${5})}"
+                                   th:text="${page + 1}"></a>
+                            </li>
+
+                            <!-- 다음 버튼 활성화/비활성화 -->
+                            <li th:classappend="${currentPage == totalPages - 1 ? 'dn' : ''}" class="next_btn">
+                                <button type="button" th:onclick="'loadArticlesByPage(' + (${currentPage} + 1) + ')'" aria-label="Next">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="arrow">
+                                        <path d="M9 5l7 7-7 7" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/js/board.js" defer></script>
+</th:block>
+</html>

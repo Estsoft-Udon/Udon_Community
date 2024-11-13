@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="admin/layout/layout">
+<body>
+<th:block layout:fragment="content">
+    <link rel="stylesheet" href="/admin/css/calender.css">
+    <section>
+        <h1>게시글 목록</h1>
+        <div class="top">
+            <div class="search">
+                <form action="" method="get">
+                    <input type="text" name="keyword" placeholder="검색어를 입력하세요" class="search-input"/>
+                    <button type="submit" class="search-button">검색</button>
+                </form>
+            </div>
+            <div class="filter">
+                <form action="" method="get">
+                    <select name="sort" onchange="this.form.submit()">
+                        <option value="createdAt,desc" th:selected="${sort == 'createdAt,desc'}">최신순</option>
+                        <option value="title,asc" th:selected="${sort == 'title,asc'}">제목순</option>
+                        <option value="isBlind,asc" th:selected="${sort == 'isBlind,asc'}">공개 여부</option>
+                    </select>
+                    <input type="hidden" name="keyword" th:value="${keyword}" /> <!-- 기존 검색어 유지 -->
+                </form>
+            </div>
+        </div>
+
+        <!-- 게시글 목록 테이블 -->
+        <table>
+            <thead>
+            <tr>
+                <th>No.</th>
+                <th>제목</th>
+                <th>지역</th>
+                <th>카테고리</th>
+                <th>회원 ID</th>
+                <th>작성일</th>
+                <th>공개 여부</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${articles.empty}">
+                <td colspan="6" style="text-align: center;">검색된 결과가 없습니다</td>
+            </tr>
+            <tr th:each="article, iterStat : ${articles.content}" th:if="${not articles.empty}">
+                <td th:text="${(page != null ? page : 0) * (size != null ? size : 10) + iterStat.index + 1}"></td>
+                <td>
+                    <a th:href="@{/admin/board/board_edit/{id}(id=${article.id})}" th:text="${article.title}">제목</a>
+                </td>
+                <td th:text="${article.getFullLocation()}">지역</td>
+                <td th:text="${article.category.displayName}">카테고리</td>
+                <td th:text="${article.nickname}">회원ID</td>
+                <td th:text="${article.createdAt}">작성일</td>
+                <td class="visibility-text">
+                    <span th:text="${article.isBlind() ? '비공개' : '공개'}"></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div th:if="${not articles.empty}" class="pagination">
+            <ul>
+                <!-- 이전 페이지 -->
+                <li th:if="${articles.hasPrevious()}">
+                    <a th:href="@{/admin/board/board_list(page=${articles.number - 1}, size=${articles.size}, keyword=${keyword}, sort=${sort})}">이전</a>
+                </li>
+
+                <!-- 페이지 번호 출력 -->
+                <li th:each="pageNumber : ${#numbers.sequence(0, articles.totalPages - 1)}"
+                    th:classappend="${pageNumber == articles.number} ? 'active'">
+                    <a th:href="@{/admin/board/board_list(page=${pageNumber}, size=${articles.size}, keyword=${keyword}, sort=${sort})}"
+                       th:text="${pageNumber + 1}"></a>
+                </li>
+
+                <!-- 다음 페이지 -->
+                <li th:if="${articles.hasNext()}">
+                    <a th:href="@{/admin/board/board_list(page=${articles.number + 1}, size=${articles.size}, keyword=${keyword}, sort=${sort})}">다음</a>
+                </li>
+            </ul>
+        </div>
+
+    </section>
+</th:block>
+</body>
+</html>
