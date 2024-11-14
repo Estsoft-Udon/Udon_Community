@@ -12,6 +12,8 @@ import com.example.estsoft_udon_community.dto.request.UpdateArticleRequest;
 import com.example.estsoft_udon_community.enums.ArticleCategory;
 import com.example.estsoft_udon_community.repository.*;
 import com.example.estsoft_udon_community.util.SecurityUtil;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,6 +42,9 @@ public class ArticlesService {
     private final LocationService locationService;
     private final ArticleHashtagService articleHashtagService;
     private final UsersService usersService;
+
+    private final Map<String, LocalDateTime> viewHistory = new ConcurrentHashMap<>();
+    private static final long VIEW_INTERVAL_MINUTES = 1;
 
     // 게시글 등록 - api
     public Articles saveArticle(AddArticleRequest request) {
@@ -81,10 +86,22 @@ public class ArticlesService {
 
     // 특정 게시글 조회
     public Optional<ArticleResponse> findByArticleId(Long id) {
+        Long userId = getLoggedInUser().getId();
+        String viewKey = userId + "_" + id;
+
+        if (viewHistory.containsKey(viewKey)) {
+            LocalDateTime lastViewed = viewHistory.get(viewKey);
+            if (lastViewed.plusMinutes(VIEW_INTERVAL_MINUTES).isAfter(LocalDateTime.now())) {
+                return articlesRepository.findByIdAndIsDeletedFalse(id)
+                        .map(ArticleResponse::new);
+            }
+        }
+
         return articlesRepository.findByIdAndIsDeletedFalse(id)
                 .map(articles -> {
                     articles.incrementViewCount();
                     articlesRepository.save(articles);
+                    viewHistory.put(viewKey, LocalDateTime.now());
                     return new ArticleResponse(articles);
                 });
     }
