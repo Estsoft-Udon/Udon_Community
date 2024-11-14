@@ -370,7 +370,7 @@ public class ArticlesService {
     public void updateArticle2(Long id, AddArticleRequest request) {
         Articles article = findJustArticle(id);
         article.setUpdatedAt(LocalDateTime.now());
-        article.updateArticle2(request);
+        article.updateArticle(request);
         article.setLocation(locationService.getLocationById(request.getLocationId()));
         List<Hashtag> hashtagList = getOrCreateHashtags(request.getHashtagName());
 
