@@ -2,8 +2,6 @@ package com.example.estsoft_udon_community.dto.response;
 
 import com.example.estsoft_udon_community.dto.LocationDTO;
 import com.example.estsoft_udon_community.entity.Users;
-import com.example.estsoft_udon_community.enums.Grade;
-import java.time.LocalDateTime;
 
 import com.example.estsoft_udon_community.util.DateFormatUtil;
 import lombok.AllArgsConstructor;

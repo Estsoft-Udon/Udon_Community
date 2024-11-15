@@ -7,7 +7,6 @@ import com.example.estsoft_udon_community.dto.response.CommentsResponse;
 import com.example.estsoft_udon_community.dto.response.CommentsWithLikeResponse;
 import com.example.estsoft_udon_community.entity.Articles;
 import com.example.estsoft_udon_community.entity.Comments;
-import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.service.ArticlesLikeService;
 import com.example.estsoft_udon_community.service.CommentsLikeService;
 import com.example.estsoft_udon_community.service.UsersService;
