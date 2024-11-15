@@ -8,7 +8,6 @@ import com.example.estsoft_udon_community.enums.ArticleCategory;
 import com.example.estsoft_udon_community.service.ArticleHashtagService;
 import com.example.estsoft_udon_community.service.ArticlesService;
 import com.example.estsoft_udon_community.service.HashtagService;
-import com.example.estsoft_udon_community.util.ModelUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -106,25 +105,10 @@ public class BoardController {
         return "board/board_list";
     }
 
-    // model 관련 처리
-    private void setArticleModel(Model model, Page<ArticleDetailResponse> articles, int page, String sortOption,
-                                 String title) {
-        model.addAttribute("articles", articles);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", articles.getTotalPages());
-        model.addAttribute("totalItems", articles.getTotalElements());
-        model.addAttribute("sortOption", sortOption);
-        model.addAttribute("title", title);
-
-        List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();
-        model.addAttribute("topHashtags", topHashtags);
-    }
-
     // 게시글 생성
     @GetMapping("/articles/new")
     public String createBoard(Model model) {
-        ModelUtil modelUtil = new ModelUtil(locationService);
-        modelUtil.setCategoriesAndLocations(model);
+        locationService.setCategoriesAndLocations(model);
 
         return "board/board_edit";
     }
@@ -144,8 +128,7 @@ public class BoardController {
     // 게시글 수정
     @GetMapping("/articles/edit/{articleId}")
     public String editBoard(@PathVariable Long articleId, Model model) {
-        ModelUtil modelUtil = new ModelUtil(locationService);
-        modelUtil.setCategoriesAndLocations(model);
+        locationService.setCategoriesAndLocations(model);
 
         // 기존 게시글 데이터를 조회하여 모델에 추가
         ArticleResponse article = articlesService.findByArticleId(articleId)
@@ -180,5 +163,19 @@ public class BoardController {
         return articleHashtagService.getHashtagsByArticleId(articleId).stream()
                 .map(Hashtag::getName)  // Hashtag 객체에서 name을 추출
                 .toList();  // List<String>으로 수집
+    }
+
+    // model 관련 처리
+    private void setArticleModel(Model model, Page<ArticleDetailResponse> articles, int page, String sortOption,
+                                 String title) {
+        model.addAttribute("articles", articles);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", articles.getTotalPages());
+        model.addAttribute("totalItems", articles.getTotalElements());
+        model.addAttribute("sortOption", sortOption);
+        model.addAttribute("title", title);
+
+        List<HashtagService.PopularHashtag> topHashtags = hashtagService.getTopUsedHashtags();
+        model.addAttribute("topHashtags", topHashtags);
     }
 }
