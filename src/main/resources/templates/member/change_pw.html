@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/layout">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/layout">
 <th:block layout:fragment="content">
     <link rel="stylesheet" href="/css/member.css">
     <div class="wrap member">
@@ -16,7 +17,8 @@
 
                     <div id="passwordMatchMessage"></div>
                     <label for="confirmPassword"></label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="변경할 비밀번호 확인">
+                    <input type="password" id="confirmPassword" name="confirmPassword" required
+                           placeholder="변경할 비밀번호 확인">
 
                     <button type="submit" class="default_btn btn_layout change_btn">확인</button>
                 </form>
@@ -24,7 +26,7 @@
 
             <section>
                 <form id="changePasswordForm2" method="POST" action="/change_pw_find" th:if="${user == null}">
-                    <input type="hidden" name="loginId" th:value="${loginId}" />
+                    <input type="hidden" name="loginId" th:value="${loginId}"/>
 
                     <div id="passwordMessage2"></div>
                     <label for="newPassword"></label>
@@ -32,7 +34,8 @@
 
                     <div id="passwordMatchMessage2"></div>
                     <label for="confirmPassword"></label>
-                    <input type="password" id="confirmPassword2" name="confirmPassword" required placeholder="변경할 비밀번호 확인">
+                    <input type="password" id="confirmPassword2" name="confirmPassword" required
+                           placeholder="변경할 비밀번호 확인">
 
                     <button type="submit" class="default_btn btn_layout change_btn">확인</button>
                 </form>
@@ -48,5 +51,66 @@
     </script>
     <script src="/js/common.js"></script>
     <script src="/js/password_change.js"></script>
+    <script>
+        function validatePassword2() {
+            const newPassword = document.getElementById('newPassword2').value.trim();
+            const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+            const passwordMessage = document.getElementById('passwordMessage2');
+
+            // 비밀번호 패턴 검증
+            if (!passwordPattern.test(newPassword)) {
+                passwordMessage.textContent = '최소 8자 이상, 영문자, 숫자, 특수문자가 포함되어야 합니다.';
+                passwordMessage.style.color = 'red';
+                return false;
+            }  else {
+                passwordMessage.textContent = '';
+                return true;
+            }
+        }
+        // 비밀번호 확인
+        function checkPasswordMatch2() {
+            const newPassword = document.getElementById('newPassword2').value.trim();
+            const confirmPassword = document.getElementById('confirmPassword2').value.trim();
+            const messageElement = document.getElementById('passwordMatchMessage2');
+            if (!newPassword || !confirmPassword) {
+                messageElement.textContent = '';
+                return true;
+            }
+            if (newPassword !== confirmPassword) {
+                messageElement.textContent = '비밀번호가 일치하지 않습니다.';
+                messageElement.style.color = 'red';
+                return false;
+            } else {
+                messageElement.textContent = '비밀번호가 일치합니다.';
+                messageElement.style.color = 'green';
+                return true;
+            }
+        }
+
+        // 폼 제출 시 비밀번호 확인과 검증
+        document.getElementById('changePasswordForm2').addEventListener('submit', function(event) {
+            const isPasswordValid = validatePassword2();
+            const isPasswordMatch = checkPasswordMatch2();
+
+            // 검증 실패 시 폼 제출 막기
+            if (!isPasswordValid || !isPasswordMatch) {
+                event.preventDefault();
+                if (!isPasswordValid) {
+                    alert('비밀번호가 정규식에 맞지 않습니다.');
+                } else if (!isPasswordMatch) {
+                    alert('비밀번호가 일치하지 않습니다.');
+                }
+            }
+        });
+
+
+        // 비밀번호 입력 시 실시간 정규식 검사
+        document.getElementById('newPassword2').addEventListener('input', function() {
+            validatePassword2();
+            checkPasswordMatch2();
+        });
+        // 실시간으로 비밀번호 확인 입력 시 검증
+        document.getElementById('confirmPassword2').addEventListener('input', checkPasswordMatch2);
+    </script>
 </th:block>
 </html>
