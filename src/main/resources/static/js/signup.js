@@ -121,6 +121,18 @@ async function checkEmail() {
         } else {
             messageElement.textContent = '사용 가능한 이메일입니다.';
             messageElement.style.color = 'green';
+            fetch('/send-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    email: document.getElementById('email').value, // 이메일 입력값
+                })
+            })
+
+            showEmailModal();
+
             return true;
         }
     } catch (error) {
@@ -128,6 +140,31 @@ async function checkEmail() {
         return false;
     }
 }
+
+// 모달 띄우기
+function showEmailModal() {
+    const modal = document.getElementById("emailAuthModal");
+    const email = document.getElementById("email").value; // 이메일 입력 필드 값 가져오기
+    document.getElementById('authEmail').value = email; // 숨겨진 필드에 이메일 값 설정
+    modal.style.display = "block";  // 모달을 보이게 설정
+}
+
+// 모달 닫기
+function closeEmailModal() {
+    const modal = document.getElementById("emailAuthModal");
+    modal.style.display = "none";  // 모달을 숨기기
+}
+
+// 모달 외부 클릭 시 닫기
+window.onclick = function(event) {
+    const modal = document.getElementById("emailAuthModal");
+    if (event.target == modal) {
+        modal.style.display = "none";  // 모달을 숨기기
+    }
+}
+
+
+
 
 // 폼 제출 시 아이디, 닉네임, 이메일 유효성 체크
 document.getElementById('signupForm').addEventListener('submit', async function(event) {
@@ -140,3 +177,34 @@ document.getElementById('signupForm').addEventListener('submit', async function(
         alert('아이디, 닉네임, 이메일을 확인 해주세요');
     }
 });
+
+
+
+document.getElementById("emailAuthForm").addEventListener("submit", function (event) {
+    event.preventDefault(); // 폼 기본 동작 중단
+
+    const authCode = document.getElementById("emailAuthCode").value;
+    const email = document.getElementById("email").value; // 이메일 입력 필드 값 가져오기
+
+    fetch('/api/auth/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `authCode=${encodeURIComponent(authCode)}&email=${encodeURIComponent(email)}`,
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.text(); // 응답이 성공적일 경우, 응답 본문을 텍스트로 반환
+            } else {
+                throw new Error('인증번호 확인 실패'); // 응답이 실패한 경우
+            }
+        })
+        .then(result => {
+            alert(result); // 서버 응답 메시지 표시
+            closeEmailModal(); // 모달 닫기 (옵션)
+
+        })
+        .catch(error => {
+            alert(error.message); // 오류 메시지 표시
+        });
+});
+
