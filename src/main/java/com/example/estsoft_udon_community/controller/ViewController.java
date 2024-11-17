@@ -1,10 +1,9 @@
 package com.example.estsoft_udon_community.controller;
 
-import static com.example.estsoft_udon_community.util.SecurityUtil.*;
 import static com.example.estsoft_udon_community.util.SecurityUtil.getLoggedInUser;
 
 import com.example.estsoft_udon_community.dto.request.UsersRequest;
-import com.example.estsoft_udon_community.email.AuthCodeService;
+import com.example.estsoft_udon_community.email.service.AuthService;
 import com.example.estsoft_udon_community.entity.Location;
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.enums.PasswordHint;
@@ -27,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
 public class ViewController {
     private final UsersService usersService;
     private final LocationService locationService;
-    private final AuthCodeService authCodeService;
+    private final AuthService authService;
 
     @GetMapping("/login")
     public String login(@RequestParam(value = "error", required = false) String error,
@@ -146,7 +145,7 @@ public class ViewController {
     public String signup(@ModelAttribute UsersRequest request,
                          Model model, Long locationId) {
         try {
-            if (!authCodeService.isEmailVerified(request.getEmail())) {
+            if (!authService.isEmailVerified(request.getEmail())) {
                 model.addAttribute("error", "이메일 인증이 완료되지 않았습니다.");
                 return "member/signup";
             }

@@ -1,4 +1,4 @@
-package com.example.estsoft_udon_community.email;
+package com.example.estsoft_udon_community.email.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

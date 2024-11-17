@@ -1,5 +1,6 @@
-package com.example.estsoft_udon_community.email;
+package com.example.estsoft_udon_community.email.controller;
 
+import com.example.estsoft_udon_community.email.service.AuthService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,16 +13,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private final AuthCodeService authCodeService;
+    private final AuthService authService;
 
-    public AuthController(AuthCodeService authCodeService) {
-        this.authCodeService = authCodeService;
+    public AuthController(AuthService authService) {
+        this.authService = authService;
     }
 
     @PostMapping("/verify")
     public ResponseEntity<String> verifyAuthCode(@RequestParam String email, @RequestParam String authCode) {
-        if (authCodeService.validateAuthCode(email, authCode)) {
-            authCodeService.updateAuthStatus(email); // 인증 상태 업데이트
+        if (authService.validateAuthCode(email, authCode)) {
+            authService.updateAuthStatus(email); // 인증 상태 업데이트
             return ResponseEntity.ok("인증 성공!");
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("인증 실패: 인증번호가 올바르지 않거나 만료되었습니다.");
@@ -29,10 +30,10 @@ public class AuthController {
     }
 
     @PostMapping("/updateAuthStatus")
-    public ResponseEntity<String> updateAuthStatus(@RequestParam String email, HttpSession session) {
+    public ResponseEntity<String> updateAuthStatus(@RequestParam String email) {
         // 인증 상태를 세션에 저장
         System.out.println(email);
-        authCodeService.updateAuthStatus(email);
+        authService.updateAuthStatus(email);
 
         return ResponseEntity.ok("인증 상태가 세션에 저장되었습니다.");
     }

@@ -1,4 +1,4 @@
-package com.example.estsoft_udon_community.email;
+package com.example.estsoft_udon_community.email.service;
 
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -7,11 +7,11 @@ import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class AuthCodeService {
+public class AuthService {
 
     private final StringRedisTemplate redisTemplate;
 
-    public AuthCodeService(StringRedisTemplate redisTemplate) {
+    public AuthService(StringRedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 
