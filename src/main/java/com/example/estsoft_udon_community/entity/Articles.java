@@ -77,7 +77,7 @@ public class Articles {
         this.location = location;
     }
 
-    public void updateArticle2(AddArticleRequest request) {
+    public void updateArticle(AddArticleRequest request) {
         this.title = request.getTitle();
         this.content = request.getContent();
         this.category = request.getCategory();

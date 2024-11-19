@@ -13,7 +13,6 @@ import com.example.estsoft_udon_community.util.SecurityUtil;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
-import com.example.estsoft_udon_community.util.ModelUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -172,8 +171,8 @@ public class ViewController {
         model.addAttribute("user", users);
         model.addAttribute("passwordHints", PasswordHint.values());
 
-        ModelUtil modelUtil = new ModelUtil(locationService);
-        modelUtil.setLocations(model);
+        // 상위 지역 목록을 가져와서 모델에 추가
+        locationService.setLocations(model);
 
         Location location = users.getLocation();
         model.addAttribute("originLocation", location);
@@ -182,7 +181,7 @@ public class ViewController {
     }
 
     @PostMapping("/edit_profile")
-    public String editProfile(@ModelAttribute UsersRequest request, Model model, Long locationId) {
+    public String editProfile(@ModelAttribute UsersRequest request, Long locationId) {
         request.setLocationId(locationId);
         usersService.updateUser(getLoggedInUser().getId(), request);
         return "redirect:/mypage";

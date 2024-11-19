@@ -19,10 +19,7 @@
 
                 <label for="locationId" class="dn">상세 지역을 선택</label>
                 <select id="locationId" name="locationId" required>
-                    <option disabled selected></option>
-                    <th:block th:each="location : ${locations}">
-                        <option th:value="${location.id}" th:text="${location.name}"></option>
-                    </th:block>
+
                 </select>
 
                 <button class="default_btn" onclick="redirectToLocationBoard()">보러가기</button>
