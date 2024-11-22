@@ -170,4 +170,10 @@ public class UsersService {
         usersRepository.save(user);
         return true;
     }
+
+    public void changePasswordAfterFind(String loginId, String newPassword) {
+        Users user = usersRepository.findByLoginId(loginId);
+        user.setPassword(passwordEncoder.encode(newPassword));
+        usersRepository.save(user);
+    }
 }

@@ -78,6 +78,19 @@
                         <button type="submit" class="default_btn">회원가입</button>
                     </div>
                 </form>
+
+                <div id="emailAuthModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close" onclick="closeEmailModal()">&times;</span>
+                        <p>인증번호가 발송되었습니다.</p>
+                        <form id="emailAuthForm">
+                            <input type="hidden" id="authEmail" name="email" value=""> <!-- 숨겨진 이메일 필드 -->
+                            <label for="emailAuthCode"></label>
+                            <input type="text" id="emailAuthCode" name="authCode" required placeholder="인증번호를 입력하세요">
+                            <button type="submit">인증번호 확인</button>
+                        </form>
+                    </div>
+                </div>
             </section>
         </div>
     </div>

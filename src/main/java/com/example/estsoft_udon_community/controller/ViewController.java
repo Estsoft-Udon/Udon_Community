@@ -1,8 +1,9 @@
 package com.example.estsoft_udon_community.controller;
 
-import static com.example.estsoft_udon_community.util.SecurityUtil.*;
+import static com.example.estsoft_udon_community.util.SecurityUtil.getLoggedInUser;
 
 import com.example.estsoft_udon_community.dto.request.UsersRequest;
+import com.example.estsoft_udon_community.email.service.AuthService;
 import com.example.estsoft_udon_community.entity.Location;
 import com.example.estsoft_udon_community.entity.Users;
 import com.example.estsoft_udon_community.enums.PasswordHint;
@@ -11,6 +12,7 @@ import com.example.estsoft_udon_community.service.UsersService;
 
 import com.example.estsoft_udon_community.util.SecurityUtil;
 import jakarta.servlet.http.HttpSession;
+
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 public class ViewController {
     private final UsersService usersService;
     private final LocationService locationService;
+    private final AuthService authService;
 
     @GetMapping("/login")
     public String login(@RequestParam(value = "error", required = false) String error,
@@ -74,20 +77,22 @@ public class ViewController {
         Users users = usersService.searchPassword(loginId, passwordHint, passwordAnswer);
         // 비밀번호 찾기 성공
         if (users != null) {
-            return changePw(model);
+            return changePw(model, loginId);
+        } else {
+            return "redirect:/find_pw";
         }
-        model.addAttribute("errorMessage", "일치하는 정보가 없습니다.");
-        model.addAttribute("passwordHints", PasswordHint.values());
 
-        return "member/find_pw";
     }
 
     @GetMapping("/change_pw")
-    public String changePw(Model model) {
-        if(SecurityUtil.getLoggedInUser() != null) {
+    public String changePw(Model model, String loginId) {
+        if (SecurityUtil.getLoggedInUser() != null) {
             Users user = usersService.findUserById(SecurityUtil.getLoggedInUser().getId());
             model.addAttribute("user", user);
+        } else {
+            model.addAttribute("loginId", loginId);
         }
+
         return "member/change_pw";
     }
 
@@ -96,7 +101,10 @@ public class ViewController {
     public String changePassword(@RequestParam String currentPassword,
                                  @RequestParam String newPassword,
                                  Model model) {
-        boolean isUpdated = usersService.changePassword(getLoggedInUser().getId(), currentPassword, newPassword);
+        boolean isUpdated = false;
+        if (getLoggedInUser() != null) {
+            isUpdated = usersService.changePassword(getLoggedInUser().getId(), currentPassword, newPassword);
+        }
 
         if (isUpdated) {
             model.addAttribute("successMessage", "비밀번호가 성공적으로 변경되었습니다.");
@@ -105,6 +113,15 @@ public class ViewController {
             model.addAttribute("errorMessage", "현재 비밀번호가 일치하지 않습니다.");
             return "redirect:/change_pw";
         }
+    }
+
+    @PostMapping("/change_pw_find")
+    public String changePasswordAfterFind(@RequestParam String newPassword,
+                                          @ModelAttribute("loginId") String loginId) {
+
+        usersService.changePasswordAfterFind(loginId, newPassword);
+
+        return "member/change_pw";
     }
 
     // 회원가입
@@ -127,6 +144,11 @@ public class ViewController {
     public String signup(@ModelAttribute UsersRequest request,
                          Model model, Long locationId) {
         try {
+            if (!authService.isEmailVerified(request.getEmail())) {
+                model.addAttribute("error", "이메일 인증이 완료되지 않았습니다.");
+                return "member/signup";
+            }
+
             request.setLocationId(locationId);
             usersService.registerUser(request);
             return "redirect:/success";
