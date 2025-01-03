@@ -392,6 +392,12 @@ gantt
 <br>
 <br>
 
+## 🎉 상장
+<img src="/docs/award.png">
+
+<br>
+<br>
+
 ## 🤝 추가 구현 예정
 
 - 메신저, 채팅, 알림
